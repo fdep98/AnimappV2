@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">AnimApp</string>
+    <string-array name="unite_array">
+        <item>Namur</item>
+        <item>LLN</item>
+        <item>BXL</item>
+        <item>Créer une unité</item>
+    </string-array>
+
+    <string-array name="section_array">
+        <item>N1</item>
+        <item>L1</item>
+        <item>B1</item>
+        <item>Créer une section</item>
+    </string-array>
+
+    <!-- BOTTOM NAVIGATION VIEW -->
+    <string name="signout">Signout</string>
+    <string name="menu">Menu</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
+</resources>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.animapp.profil">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="15dp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:id="@+id/vpa_photo"
+            android:layout_width="121dp"
+            android:layout_height="148dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/vpa_nom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="nom"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/vpa_pseudo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Pseudo"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/vpa_totem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:text="Totem"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/vpa_unite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Unité : exemple"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/vpa_section"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:text="Section exemple"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/vpa_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="email"
+            android:textAlignment="textEnd"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/vpa_ngsm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:text="n° gsm"
+            android:textAlignment="textEnd"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/vpa_birth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:text="Date de naissance"
+            android:textAlignment="textEnd"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_margin="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/update"
+                style="@style/FirebaseUI.Button.AccountChooser.GitHubButton"
+                android:layout_width="85dp"
+                android:layout_height="38dp"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:onClick="update"
+                android:text="Update"
+                android:textColor="@color/fui_bgTwitter" />
+
+            <Button
+                android:id="@+id/delete"
+                style="@style/FirebaseUI.Button.AccountChooser.GitHubButton"
+                android:layout_width="85dp"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:onClick="delete"
+                android:text="Delete" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/signout"
+                style="@style/FirebaseUI.Button.AccountChooser.GitHubButton"
+                android:layout_width="85dp"
+                android:layout_height="38dp"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:onClick="signout"
+                android:text="SignOut"
+                android:textColor="@color/browser_actions_bg_grey" />
+
+            <Button
+                android:id="@+id/menu"
+                style="@style/FirebaseUI.Button.AccountChooser.GitHubButton"
+                android:layout_width="85dp"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:onClick="takePic"
+                android:text="Menu"
+                android:textColor="#50F0F0" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

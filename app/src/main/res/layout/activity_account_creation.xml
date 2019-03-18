@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.animapp.AccountCreation">
+        android:layout_width="395dp"
+        android:layout_height="715dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="6dp">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="60dp"
+            android:text="Création du Profil"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp"
+            android:textStyle="bold|italic" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="15dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="6dp">
+
+
+                <EditText
+                    android:id="@+id/nom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Nom"
+                    android:inputType="textPersonName"
+                    android:outlineSpotShadowColor="@color/colorPrimary"
+                    android:textAllCaps="true"
+                    android:textColorLink="@color/colorAccent" />
+
+                <EditText
+                    android:id="@+id/pseudo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Pseudo"
+                    android:inputType="textPersonName"
+                    android:textColorLink="@color/colorPrimaryDark" />
+
+                <EditText
+                    android:id="@+id/mdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Mot de passe"
+                    android:inputType="textPassword"
+                    android:textColorLink="@color/colorPrimaryDark" />
+
+                <EditText
+                    android:id="@+id/totem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Totem"
+                    android:inputType="textPersonName"
+                    android:textColorLink="@color/colorPrimaryDark" />
+
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:textColorLink="@color/colorPrimaryDark" />
+
+                <EditText
+                    android:id="@+id/ngsm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="N° de téléphone"
+                    android:inputType="phone"
+                    android:textColorLink="@color/colorPrimaryDark" />
+
+                <EditText
+                    android:id="@+id/dob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Date de naissance"
+                    android:inputType="date"
+                    android:textColorLink="@color/colorPrimaryDark" />
+
+
+                <CheckBox
+                    android:id="@+id/animateur"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Animateur" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:text="Unite"
+                        android:textSize="17sp" />
+
+                    <Spinner
+                        android:id="@+id/uniteSpinner"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:dropDownWidth="wrap_content"
+                        android:spinnerMode="dropdown"
+                        android:visibility="visible" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:text="Section"
+                        android:textSize="17sp"
+                        tools:ignore="DuplicateIds" />
+
+                    <Spinner
+                        android:id="@+id/sectionSpinner"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:dropDownWidth="wrap_content"
+                        android:spinnerMode="dropdown"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/profil"
+                    style="@style/Widget.AppCompat.Button.Small"
+                    android:layout_width="98dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:onClick="goToMain"
+                    android:text="Profil"
+                    android:textColor="#fff" />
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>
