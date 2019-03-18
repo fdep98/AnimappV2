@@ -31,7 +31,7 @@ public class profil extends AppCompatActivity {
     private static final int DELETE_USER_TASK = 20;
     private static final int RC_SIGN_IN = 123;
     private FirebaseFirestore db = FirebaseFirestore.getInstance(); //instance de la BDD firestore
-    private DocumentReference userRef;
+    private DocumentReference userRef; //référence vers un document
     public FirebaseAuth mAuth;
     private FirebaseUser currentUser;
 

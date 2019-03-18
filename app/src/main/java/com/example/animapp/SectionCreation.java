@@ -24,7 +24,7 @@ public class SectionCreation extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_unite_creation);
+        setContentView(R.layout.activity_section_creation);
 
         db = FirebaseDatabase.getInstance().getReference(); //instance de la BDD
 
