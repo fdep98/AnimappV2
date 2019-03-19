@@ -47,6 +47,8 @@ dependencies {
     //picasso lib
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    //bottombutton
+    //compile 'com.android.support:design:25.1.1'
 
 }
 apply plugin: 'com.google.gms.google-services'

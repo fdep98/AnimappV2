@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -35,6 +38,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //bottomNavigation
+        BottomNavigationView BottomNavigationView = (BottomNavigationView) findViewById(R.id.BottomNav);
+        BottomNavigationView.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.action_profil:
+                        Toast.makeText(MainActivity.this,"Action Profil Clicked",Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case R.id.action_photo:
+                        Toast.makeText(MainActivity.this,"Action Photo Clicked",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.action_list:
+                        Toast.makeText(MainActivity.this,"Action List Clicked",Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case R.id.action_menu:
+                        Toast.makeText(MainActivity.this,"Action Menu Clicked",Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                //return true;
+            }
+        });
 
         addImage1 = findViewById(R.id.addImage1);
         addImage2 = findViewById(R.id.addImage2);
