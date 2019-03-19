@@ -29,8 +29,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AccountCreation extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -39,7 +41,8 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
     public DatabaseReference db;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance(); //instance de la BDD firestore
-    private DocumentReference userRef;
+    private DocumentReference unitRef; //reference vers un document de l'unite
+    private DocumentReference secRef; //reference vers un document de la section
 
     EditText nom,pseudo,mdp,totem,email,ngsm, dob;
     Spinner unite,section;
@@ -79,20 +82,20 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
 
 //-------------------------------------------SPINNER---------------------------------------------//
 
-        //récupérer les noms des section et ceux des unités
-
         //adapter pour l'unité
         Spinner uSpinner = (Spinner) findViewById(R.id.uniteSpinner);
         Spinner sSpinner = (Spinner) findViewById(R.id.sectionSpinner);
 
         ArrayAdapter<String> uAdapter, sAdapter;
 
-        uAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, unitList);        uAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        uAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, unitList);
+        uAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         uSpinner.setAdapter(uAdapter);
         uSpinner.setOnItemSelectedListener(this);
 
         //adapter pour la section
-        sAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, sectionList);        sAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, sectionList);
+        sAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sSpinner.setAdapter(sAdapter);
         sSpinner.setOnItemSelectedListener(this);
 
@@ -126,6 +129,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
         }
     }
 
+    //lance une intent pour acceder au menu principale
     public void goToMain(View view){
         addData();
     }
@@ -172,7 +176,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        Toast.makeText(this, "veuillez selectionner une unite et une section", Toast.LENGTH_SHORT).show();
     }
 
     //ajoute l'email et le mot de passe de l'utilisateur dans Firebase Auth(utile pour la connexion via email et mdp)
@@ -210,49 +214,40 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
      */
     public void bindUniteSpinner(){
         //on va à la référence du doc unite
-        userRef = firestoreDb.collection("unites").document();
-        //le snapshot contient toute les données de l'unite
-        userRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        firestoreDb.collection("unites")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if(documentSnapshot.exists()){
-                            String unitName = documentSnapshot.getString("nom");
-                            unitList.add(unitName);
-                        }else{
-                            Toast.makeText(AccountCreation.this, "le document n'existe pas", Toast.LENGTH_SHORT).show();
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            List<DocumentSnapshot> unitDocList = task.getResult().getDocuments();
+                            for(DocumentSnapshot doc : unitDocList){
+                                String unitName = doc.getString("nom");
+                                unitList.add(unitName);
+                            }
+                            //Toast.makeText(AccountCreation.this, unitDocList.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(AccountCreation.this, "Erreur", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+                });
     }
 
     public void bindSectionSpinner(){
-        //on va à la référence du doc unite
-        userRef = firestoreDb.collection("sections").document();
-        //le snapshot contient toute les données de l'unite
-        userRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        //on va à la référence du doc section
+        firestoreDb.collection("sections")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if(documentSnapshot.exists()){
-                            String unitName = documentSnapshot.getString("nom");
-                            sectionList.add(unitName);
-                        }else{
-                            Toast.makeText(AccountCreation.this, "le document n'existe pas", Toast.LENGTH_SHORT).show();
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            List<DocumentSnapshot> unitDocList = task.getResult().getDocuments();
+                            for(DocumentSnapshot doc : unitDocList){
+                                String unitName = doc.getString("nom");
+                                sectionList.add(unitName);
+                            }
+                            //Toast.makeText(AccountCreation.this, unitDocList.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(AccountCreation.this, "Erreur", Toast.LENGTH_SHORT).show();
-            }
-        });
+                });
 
     }
 }
