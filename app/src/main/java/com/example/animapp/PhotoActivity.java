@@ -26,7 +26,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 
-public class MainActivity extends AppCompatActivity {
+public class PhotoActivity extends AppCompatActivity {
     private Button addImage1;
     private Button addImage2;
     FirebaseStorage storage;
@@ -46,26 +46,27 @@ public class MainActivity extends AppCompatActivity {
             public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.action_profil:
-                        Toast.makeText(MainActivity.this,"Action Profil Clicked",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(MainActivity.this, profil.class));
+                        Toast.makeText(PhotoActivity.this,"Action Profil Clicked",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(PhotoActivity.this, profil.class));
                         break;
 
                     case R.id.action_photo:
-                        Toast.makeText(MainActivity.this,"Action Photo Clicked",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(MainActivity.this, PhotoActivity.class));
+                        Toast.makeText(PhotoActivity.this,"Action Photo Clicked",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(PhotoActivity.this, PhotoActivity.class));
                         break;
                     case R.id.action_list:
-                        Toast.makeText(MainActivity.this,"Action List Clicked",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PhotoActivity.this,"Action List Clicked",Toast.LENGTH_SHORT).show();
                         break;
 
                     case R.id.action_menu:
-                        Toast.makeText(MainActivity.this,"Action Menu Clicked",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(MainActivity.this, MainActivity.class));
+                        Toast.makeText(PhotoActivity.this,"Action Menu Clicked",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(PhotoActivity.this, MainActivity.class));
                         break;
                 }
                 //return true;
             }
         });
+
 
         addImage1 = findViewById(R.id.addImage1);
         addImage2 = findViewById(R.id.addImage2);
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             st.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(MainActivity.this, "photo added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PhotoActivity.this, "photo added", Toast.LENGTH_SHORT).show();
                     prog.dismiss();
                 }
             });
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             st.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(MainActivity.this, "photo added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PhotoActivity.this, "photo added", Toast.LENGTH_SHORT).show();
                     prog.dismiss();
                 }
             });

@@ -26,6 +26,7 @@
         <activity android:name="com.example.animapp.UniteCreation" />
         <activity android:name="com.example.animapp.AccountCreation" />
         <activity android:name="com.example.animapp.profil" />
+        <activity android:name="com.example.animapp.PhotoActivity" />
     </application>
 
 </manifest>
