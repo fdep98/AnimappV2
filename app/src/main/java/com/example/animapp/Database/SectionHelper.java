@@ -17,18 +17,18 @@ public class SectionHelper {
     //Task permet de réaliser des appels asynchrones
     public static Task<Void> createSection(String name, String categorie, String desc) {
         Section section = new Section(name, categorie, desc);
-        return UserHelper.getUserCollection().document(name).set(section);
+        return SectionHelper.getSectionCollection().document(name).set(section);
     }
 
     public static Task<DocumentSnapshot> getSection(String uid){
-        return UserHelper.getUserCollection().document(uid).get(); //permet de récupérer la référence du document contenu dans la collection
+        return SectionHelper.getSectionCollection().document(uid).get(); //permet de récupérer la référence du document contenu dans la collection
     }
 
     public static Task<Void> updateSection(String name, String uid) {
-        return UserHelper.getUserCollection().document(uid).update("nom", name);
+        return SectionHelper.getSectionCollection().document(uid).update("nom", name);
     }
 
     public static Task<Void> deleteSection(String uid) {
-        return UserHelper.getUserCollection().document(uid).delete();
+        return SectionHelper.getSectionCollection().document(uid).delete();
     }
 }

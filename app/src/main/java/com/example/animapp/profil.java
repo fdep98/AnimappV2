@@ -33,7 +33,7 @@ public class profil extends AppCompatActivity {
     private static final int DELETE_USER_TASK = 20;
     private static final int RC_SIGN_IN = 123;
     private FirebaseFirestore db = FirebaseFirestore.getInstance(); //instance de la BDD firestore
-    private DocumentReference userRef;
+    private DocumentReference userRef; //référence vers un document
     public FirebaseAuth mAuth;
     private FirebaseUser currentUser;
 
@@ -56,13 +56,15 @@ public class profil extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         //currentUser = (FirebaseUser) getIntent().getSerializableExtra("CURRENT_USER");
-        setup();
+        //update();
+
     }
 
     //verifie si le user est déja connecté
     @Override
     public void onStart() {
         super.onStart();
+        setup();
         if(mAuth.getCurrentUser() != null){
             currentUser = mAuth.getCurrentUser();
             update();
@@ -175,6 +177,7 @@ public class profil extends AppCompatActivity {
         // [END set_firestore_settings]
     }
 
+    //lance une activité qui permet à l'utilisateur de choisir une photo de la gallerie et de l'affiché
     public  void takePic(View v){
         Intent intent = new Intent(profil.this, MainActivity.class);
         startActivity(intent);
