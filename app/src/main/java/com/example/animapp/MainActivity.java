@@ -27,6 +27,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 
 public class MainActivity extends AppCompatActivity {
+    /*
     private Button addImage1;
     private Button addImage2;
     FirebaseStorage storage;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int GALLERY_INTENT = 123;
     public static final int CAMERA_INTENT = 12;
     private ProgressDialog prog;
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, PhotoActivity.class));
                         break;
                     case R.id.action_list:
-                        Toast.makeText(MainActivity.this,"Action List Clicked",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this,"Action List Clicked(En cours de dévellopement)",Toast.LENGTH_SHORT).show();
                         break;
 
                     case R.id.action_menu:
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 //return true;
             }
         });
-
+/*
         addImage1 = findViewById(R.id.addImage1);
         addImage2 = findViewById(R.id.addImage2);
         storage = FirebaseStorage.getInstance(); //instance de firebaseStorage;
@@ -91,8 +93,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        */
     }
-
+/*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -133,4 +136,5 @@ public class MainActivity extends AppCompatActivity {
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
+    */
 }

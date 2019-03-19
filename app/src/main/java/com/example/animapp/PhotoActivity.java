@@ -37,7 +37,7 @@ public class PhotoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_photo);
 
         //bottomNavigation
         BottomNavigationView BottomNavigationView = (BottomNavigationView) findViewById(R.id.BottomNav);
@@ -55,11 +55,11 @@ public class PhotoActivity extends AppCompatActivity {
                         startActivity(new Intent(PhotoActivity.this, PhotoActivity.class));
                         break;
                     case R.id.action_list:
-                        Toast.makeText(PhotoActivity.this,"Action List Clicked",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PhotoActivity.this,"Action List Clicked(En cours de dévellopement)",Toast.LENGTH_SHORT).show();
                         break;
 
                     case R.id.action_menu:
-                        Toast.makeText(PhotoActivity.this,"Action Menu Clicked",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PhotoActivity.this,"Action Menu Clicked ",Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(PhotoActivity.this, MainActivity.class));
                         break;
                 }
@@ -85,6 +85,7 @@ public class PhotoActivity extends AppCompatActivity {
         addImage2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(PhotoActivity.this,"En cours de dévellopement",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (intent.resolveActivity(getPackageManager()) != null) {
 //                    startActivityForResult(intent, CAMERA_INTENT);

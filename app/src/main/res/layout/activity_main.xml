@@ -4,38 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     tools:context="com.example.animapp.MainActivity">
 
+  <android.support.design.widget.BottomNavigationView
+      android:id="@+id/BottomNav"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      app:itemBackground="@color/fui_bgGitHub"
+      app:itemIconTint="@drawable/bottom_nav"
+      app:itemTextColor="@drawable/bottom_nav"
+      app:menu="@menu/bottom_nav_menu"></android.support.design.widget.BottomNavigationView>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:gravity="center"
+      android:orientation="vertical">
+<!--
     <Button
         android:id="@+id/addImage1"
         android:layout_width="354dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:text="Add via gallerie"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="123dp"
-        tools:layout_editor_absoluteY="302dp" />
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/addImage2"
         android:layout_width="354dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="60dp"
         android:background="@color/colorPrimary"
         android:text="Add via camera"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="123dp"
-        tools:layout_editor_absoluteY="302dp" />
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/BottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:itemBackground="@color/colorPrimary"
-        app:itemIconTint="@drawable/bottom_nav"
-        app:itemTextColor="@drawable/bottom_nav"
-        app:menu="@menu/bottom_nav_menu"
-        ></android.support.design.widget.BottomNavigationView>
+        tools:ignore="MissingConstraints" />
+-->
+  </LinearLayout>
 </RelativeLayout>
