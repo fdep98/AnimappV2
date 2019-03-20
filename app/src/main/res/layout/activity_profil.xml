@@ -35,40 +35,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="nom"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:text="Nom" />
 
         <TextView
             android:id="@+id/vpa_pseudo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Pseudo"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:text="Pseudo" />
 
         <TextView
             android:id="@+id/vpa_totem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
-            android:text="Totem"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:text="Totem" />
 
         <TextView
             android:id="@+id/vpa_unite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Unité : exemple"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            tools:text="Unité : exemple" />
 
         <TextView
             android:id="@+id/vpa_section"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
-            android:text="Section exemple"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:text="Section exemple" />
 
         <TextView
             android:id="@+id/vpa_email"
@@ -76,30 +76,30 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
-            android:text="email"
             android:textAlignment="textEnd"
             android:textSize="18sp"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            tools:text="email" />
 
         <TextView
             android:id="@+id/vpa_ngsm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:text="n° gsm"
             android:textAlignment="textEnd"
             android:textSize="18sp"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            tools:text="n° gsm" />
 
         <TextView
             android:id="@+id/vpa_birth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:text="Date de naissance"
             android:textAlignment="textEnd"
             android:textSize="18sp"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            tools:text="Date de naissance" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -108,7 +108,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <Button
+            <!--<Button
                 android:id="@+id/update"
                 style="@style/FirebaseUI.Button.AccountChooser.GitHubButton"
                 android:layout_width="85dp"
@@ -117,16 +117,8 @@
                 android:gravity="center"
                 android:onClick="update"
                 android:text="Update"
-                android:textColor="@color/fui_bgTwitter" />
+                android:textColor="@color/fui_bgTwitter" />-->
 
-            <Button
-                android:id="@+id/delete"
-                style="@style/FirebaseUI.Button.AccountChooser.GitHubButton"
-                android:layout_width="85dp"
-                android:layout_height="38dp"
-                android:gravity="center"
-                android:onClick="delete"
-                android:text="Delete" />
 
 
         </LinearLayout>
@@ -144,7 +136,6 @@
                 style="@style/FirebaseUI.Button.AccountChooser.GitHubButton"
                 android:layout_width="85dp"
                 android:layout_height="38dp"
-                android:layout_margin="10dp"
                 android:gravity="center"
                 android:onClick="signout"
                 android:text="SignOut"
@@ -157,8 +148,19 @@
                 android:layout_height="38dp"
                 android:gravity="center"
                 android:onClick="takePic"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:text="Menu"
                 android:textColor="#50F0F0" />
+
+            <Button
+                android:id="@+id/delete"
+                style="@style/FirebaseUI.Button.AccountChooser.GitHubButton"
+                android:layout_width="85dp"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:onClick="delete"
+                android:text="Delete" />
 
         </LinearLayout>
 

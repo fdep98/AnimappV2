@@ -3,9 +3,7 @@ package com.example.animapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +22,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class profil extends AppCompatActivity {
 
@@ -37,12 +36,12 @@ public class profil extends AppCompatActivity {
     public FirebaseAuth mAuth;
     private FirebaseUser currentUser;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profil);
 
-       
 
         IVphoto = findViewById(R.id.vpa_photo);
         TVnom = findViewById(R.id.vpa_nom);
@@ -55,8 +54,7 @@ public class profil extends AppCompatActivity {
         TVemail = findViewById(R.id.vpa_email);
 
         mAuth = FirebaseAuth.getInstance();
-        //currentUser = (FirebaseUser) getIntent().getSerializableExtra("CURRENT_USER");
-        //update();
+        update();
 
     }
 
@@ -82,6 +80,7 @@ public class profil extends AppCompatActivity {
                         .into(IVphoto);
             }
             //le snapshot contient toute les données de l'utilisateur
+
             userRef.get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -106,7 +105,15 @@ public class profil extends AppCompatActivity {
                                 TVsection.setText(inSection);
 
                             }else{
-                                Toast.makeText(profil.this, "le document n'existe pas", Toast.LENGTH_SHORT).show();
+                                TVnom.setText(currentUser.getDisplayName());
+                                //TVpseudo.setText(currentUser);
+                                //TVtotem.setText(inTotem);
+                                TVemail.setText(currentUser.getEmail());
+                                TVngsm.setText(currentUser.getPhoneNumber());
+                                //TVdob.setText(currentUser.get);
+                                //TVunite.setText(inUnite);
+                                //TVsection.setText(inSection);
+                                //Toast.makeText(profil.this, "le document n'existe pas", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -116,7 +123,7 @@ public class profil extends AppCompatActivity {
                 }
             });
         }else{
-            Toast.makeText(this, "current user null", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "current user null", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -22,22 +22,22 @@
         android:gravity="center"
         android:orientation="vertical">
 
-            <Button
-                android:id="@+id/addImage1"
-                android:layout_width="354dp"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:text="Add via gallerie"
-                tools:ignore="MissingConstraints" />
+        <Button
+            android:id="@+id/addImage1"
+            android:layout_width="278dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:text="Add via gallerie"
+            tools:ignore="MissingConstraints" />
 
-            <Button
-                android:id="@+id/addImage2"
-                android:layout_width="354dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                android:background="@color/colorPrimary"
-                android:text="Add via camera"
-                tools:ignore="MissingConstraints" />
+        <Button
+            android:id="@+id/addImage2"
+            android:layout_width="278dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:background="@color/colorPrimary"
+            android:text="Add via camera"
+            tools:ignore="MissingConstraints" />
 
     </LinearLayout>
 </RelativeLayout>

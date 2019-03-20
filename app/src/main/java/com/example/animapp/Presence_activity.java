@@ -57,10 +57,10 @@ public class Presence_activity extends ListActivity{
                 R.id.blocCheck);
 
         //On change la couleur
-        if (cb.isChecked()) {
+       /* if (cb.isChecked()) {
             o.setBackgroundResource(R.color.green);
         } else {
             o.setBackgroundResource(R.color.blue);
-        }
+        }*/
     }
 }
