@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<android.support.constraint.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Tableau permettant d'afficher tout le contenu d'un bloc -->
+
+    <TableLayout android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginBottom="25px"
+        android:layout_marginTop="25px"
+        android:id="@+id/blocCheck"
+        tools:ignore="MissingConstraints">
+    <!-- La première ligne affiche deux libellés côte à côte (le nom et sa valeur) -->
+
+    <TableRow android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:paddingBottom="4sp"
+        android:paddingLeft="4sp">
+
+    <LinearLayout android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal"
+        android:paddingLeft="20sp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1">
+
+    <TextView android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginRight="5sp"
+        android:text="@string/nom"
+        android:textSize="20sp"/>
+
+    <TextView android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/nom"
+        android:layout_gravity="left"
+        android:textSize="20sp"/>
+</LinearLayout>
+
+</TableRow>
+    <!-- Cette ligne affiche les deux libellés du prénom et la checkbox -->
+    <TableRow android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:paddingLeft="4sp"
+        android:baselineAligned="true">
+
+    <LinearLayout android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal"
+        android:paddingLeft="20sp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1">
+
+    <TextView android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginRight="5sp"
+        android:text="@string/prenom"
+        android:textSize="20sp"/>
+
+    <TextView android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/prenom"
+        android:layout_gravity="left"
+        android:textSize="20sp"/>
+</LinearLayout>
+
+    <CheckBox android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/check"
+        android:layout_gravity="right"
+        android:layout_marginRight="10sp"
+        android:onClick="MyHandler"/>
+</TableRow>
+</TableLayout>
+</android.support.constraint.ConstraintLayout>
