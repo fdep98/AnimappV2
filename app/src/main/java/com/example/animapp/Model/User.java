@@ -2,6 +2,8 @@ package com.example.animapp.Model;
 
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
+
 
 public class User {
 
@@ -25,9 +27,9 @@ public class User {
         //constructeur par défault, required for calls to DataSnapshot.getValue(User.class)
     }
 
-
-    public User(String id, String nom, String pseudo, String totem, String email, String ngsm, String dob, boolean isAnimateur, String unite, String section){
-        this.id = id;
+    //constructeur animé
+    public User(String nom, String pseudo, String totem, String email, String ngsm, String dob, String unite, String section){
+        //this.id = id;
         this.nom = nom;
         this.pseudo = pseudo;
         this.totem = totem;
@@ -35,10 +37,11 @@ public class User {
         this.email = email;
         this.ngsm = ngsm;
         this.dateOfBirth = dob;
-        this.isAnimateur = isAnimateur;
         this.section = section;
         this.unite = unite;
     }
+
+    //constructeur moniteur
     public User(String nom, String pseudo, String totem, String email, String ngsm, String dob, boolean isAnimateur, String unite, String section){
         this.nom = nom;
         this.pseudo = pseudo;

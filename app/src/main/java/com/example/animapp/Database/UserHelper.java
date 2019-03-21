@@ -9,15 +9,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class UserHelper {
 
 
-    private static final String COLLECTION_NAME = "users";
+    private static final String COLLECTION_NAME_USER = "users";
 
     public static CollectionReference getUserCollection(){
-        return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
+        return FirebaseFirestore.getInstance().collection(COLLECTION_NAME_USER);
     }
+
 
     //Task permet de réaliser des appels asynchrones
     //set est utilisé pour créer un document, on doit lui spécifié un id en paramètre
 
+    //insertion d'un moniteur dans la bdd
     public static Task<Void> createUser(String nom, String pseudo, String totem, String email, String ngsm, String dob, boolean isAnim, String unite, String section) {
         User userToCreate = new User(nom,pseudo,totem,email,ngsm,dob, isAnim, unite, section);
         return UserHelper.getUserCollection().document(email).set(userToCreate);
