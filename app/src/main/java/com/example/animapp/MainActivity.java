@@ -26,7 +26,44 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 
+
+
+//test
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Button;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.graphics.drawable.Drawable;
+import android.widget.ListView;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
+import android.widget.ListAdapter;
+import android.widget.ArrayAdapter;
+
+
 public class MainActivity extends AppCompatActivity {
+
+    //test
+    private EditText edit = null;
+    private String stat = null;
+    private Button pub = null;
+    private ListView list = null ;
+    ListView vue;
+    private ArrayList<String>  statut = new ArrayList<>();
+
+
+
+
+
+
+
+
     /*
     private Button addImage1;
     private Button addImage2;
@@ -40,6 +77,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //test fil actu
+        edit = (EditText) findViewById (R.id.edit);
+        vue = (ListView) findViewById(R.id.list);
+        pub=  findViewById(R.id.publier);
+        pub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                stat=edit.getText().toString();
+                statut.add(stat);
+                ArrayAdapter<String> liststatut = new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,statut);
+                vue.setAdapter(liststatut);
+
+
+            }
+        });
 
         //bottomNavigation
         BottomNavigationView BottomNavigationView = (BottomNavigationView) findViewById(R.id.BottomNav);
@@ -94,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         */
+
+
     }
 /*
     @Override
