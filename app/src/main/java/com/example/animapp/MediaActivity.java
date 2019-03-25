@@ -18,9 +18,7 @@ import android.widget.Toast;
 
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -60,7 +58,7 @@ public class PhotoActivity extends AppCompatActivity {
 
                     case R.id.action_menu:
                         Toast.makeText(PhotoActivity.this,"Action Menu Clicked ",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(PhotoActivity.this, MainActivity.class));
+                        startActivity(new Intent(PhotoActivity.this, PostActivity.class));
                         break;
                 }
                 //return true;

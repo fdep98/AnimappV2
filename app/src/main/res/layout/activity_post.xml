@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E7F4F0"
+    android:orientation="vertical"
+    tools:context="com.example.animapp.MainActivity">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:paddingLeft="4dip"
+            android:paddingRight="4dip">
+
+            <LinearLayout
+                android:id="@+id/top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/imgprof"
+                    android:layout_width="49dp"
+                    android:layout_height="44dp"
+                    android:src="@drawable/ic_profil" />
+
+                <EditText
+                    android:id="@+id/edit"
+                    android:layout_width="180dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@id/imgprof"
+                    android:paddingLeft="2dp"
+                    android:layout_marginRight="15dp"
+                    android:scrollHorizontally="true" />
+
+                <android.support.design.button.MaterialButton
+                    android:id="@+id/publier"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/add"
+                    android:elevation="4dp"
+                    android:text="Publier"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                    android:textColor="@color/blanc"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/vert" />
+
+            </LinearLayout>
+
+
+
+            <!--android:text=""-->
+
+
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_below="@id/top"/>
+
+
+        </RelativeLayout>
+</RelativeLayout>
