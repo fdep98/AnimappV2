@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.animapp.AccountCreation">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="6dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="62dp"
+            android:layout_height="53dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/logo"
+            android:tint="?android:attr/textColorPrimary" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="20dp"
+            android:fontFamily="casual"
+            android:text="Ajouter un animé"
+            android:textColor="@color/bleu2"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="399dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="6dp">
+
+
+            <!--Nom-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/nomTI"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@color/blanc"
+                android:hint="nom"
+                android:textColorHint="@color/brunRouge"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/nomET"
+                    android:layout_width="344dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:drawableTint="@color/bleu2"
+                    android:inputType="text"
+                    android:textAlignment="viewStart"
+                    tools:ignore="RtlCompat" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!--Pseudo-->
+
+            <!--Mot de passe-->
+
+            <!--Totem-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/totemTI"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@color/blanc"
+                android:hint="totem"
+                android:textColorHint="@color/brunRouge"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/totemET"
+                    android:layout_width="344dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:drawableTint="@color/bleu2"
+                    android:inputType="text"
+                    android:textAlignment="viewStart"
+                    tools:ignore="RtlCompat" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <!--Email-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/emailTI"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@color/blanc"
+                android:hint="email"
+                android:textColorHint="@color/brunRouge"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/emailET"
+                    android:layout_width="344dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:drawableTint="@color/bleu2"
+                    android:inputType="textEmailAddress"
+                    android:textAlignment="viewStart"
+                    tools:ignore="RtlCompat" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!--Ngsm-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ngsmTI"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@color/blanc"
+                android:hint="n° de gsm"
+                android:textColorHint="@color/brunRouge"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/ngsmET"
+                    android:layout_width="344dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:drawableTint="@color/bleu2"
+                    android:inputType="number|phone"
+                    android:textAlignment="viewStart"
+                    tools:ignore="RtlCompat" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!--Date de naissance-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/dobTI"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@color/blanc"
+                android:hint="date d'anniversaire"
+                android:textColorHint="@color/brunRouge"
+                android:layout_marginBottom="20dp"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/dobET"
+                    android:layout_width="344dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:drawableTint="@color/bleu2"
+                    android:inputType="date"
+                    android:textAlignment="viewStart"
+                    tools:ignore="RtlCompat" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:gravity="center"
+                android:orientation="horizontal"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"/>
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/ajouter"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:onClick="addData"
+                android:elevation="6dp"
+                android:text="Ajouter"
+                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                android:textStyle="bold"
+                app:backgroundTint="@color/bleu" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</ScrollView>

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">AnimApp</string>
+    <string-array name="array_categorie">
+        <item>Baladins</item>
+        <item>Louveteaux</item>
+        <item>Eclaireurs</item>
+        <item>Pionniers</item>
+    </string-array>
+
+    <!-- BOTTOM NAVIGATION VIEW -->
+    <string name="signout">Signout</string>
+    <string name="menu">Menu</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
+</resources>
