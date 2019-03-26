@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.animapp.Database.PostHelper;
+import com.example.animapp.Model.Post;
 import com.example.animapp.PostActivity;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,7 +32,10 @@ import com.google.firebase.firestore.model.value.StringValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PostFragment extends Fragment {
 
@@ -45,6 +50,9 @@ public class PostFragment extends Fragment {
     private ImageView imageView;
     private FirebaseStorage storage;
     private StorageReference storageRef;
+
+    //date et heure
+    private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy"+" à "+ "HH:mm:ss");
 
     @Nullable
     @Override
@@ -65,14 +73,22 @@ public class PostFragment extends Fragment {
         currentUser = mAuth.getCurrentUser();
         storage = FirebaseStorage.getInstance();
 
+        Date date = new Date();
+        final String currentDate = df.format(date);
+
         pub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 stat = edit.getText().toString();
-                statut.add(stat);
-                ArrayAdapter<String> liststatut = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, statut);
-                vue.setAdapter(liststatut);
+
+                if(currentUser != null){
+                    PostHelper.createPost(currentUser.getEmail(),currentDate, stat);
+                    statut.add(stat);
+                    ArrayAdapter<String> liststatut = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, statut);
+                    vue.setAdapter(liststatut);
+                }
+
 
 
             }

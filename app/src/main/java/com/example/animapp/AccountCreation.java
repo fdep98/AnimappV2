@@ -189,7 +189,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                              mAuth.getCurrentUser();
-                            Toast.makeText(AccountCreation.this, "ajouté dans Auth", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(AccountCreation.this, "ajouté dans Auth", Toast.LENGTH_SHORT).show();
                             //Log.d(TAG, "User email address updated.");
                         }
                     }

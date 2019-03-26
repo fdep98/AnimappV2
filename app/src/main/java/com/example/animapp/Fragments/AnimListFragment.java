@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -77,6 +78,8 @@ public class AnimListFragment extends Fragment {
         //Récupération automatique de la liste (l'id de cette liste est nommé obligatoirement @android:id/list afin d'être détecté)
         list = view.findViewById(R.id.list);
 
+        bindAnimeList();
+
 
         // Création de la ArrayList qui nous permettra de remplir la listView
         ArrayList<HashMap<String, String>> listItem = new ArrayList<>();
@@ -85,8 +88,8 @@ public class AnimListFragment extends Fragment {
         HashMap<String, String> map;
         User anime= new User("Colin","cvaneycken","Suricate","khluu@kgci.com","0467565656","16.02.1996",false,"Paravitam","Pio");
         map = new HashMap<String, String>();
-        map.put("nom",anime.getNom() );
-        map.put("totem", anime.getTotem());
+        map.put("nom",animListe.get(0).getEmail());
+        map.put("totem", animListe.get(0).getTotem());
         listItem.add(map);
 
         //Utilisation de notre adaptateur qui se chargera de placer les valeurs de notre liste automatiquement et d'affecter un tag à nos checkbox
@@ -97,13 +100,11 @@ public class AnimListFragment extends Fragment {
 
         // On attribue à notre listView l'adaptateur que l'on vient de créer
         list.setAdapter(mSchedule);
-//        nbrAbsence.setText(0);
-            bindAnimeList();
-        Toast.makeText(getActivity(), animListe.size(), Toast.LENGTH_SHORT).show();
+
     }
 
 
-    private void bindAnimeList(){
+    public void bindAnimeList(){
         userRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -116,10 +117,9 @@ public class AnimListFragment extends Fragment {
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if(task.isSuccessful()){
-                                            List<DocumentSnapshot> unitDocList = task.getResult().getDocuments();
+                                        if(task != null){
                                             int i = 0;
-                                            for(DocumentSnapshot doc : unitDocList){
+                                            for(DocumentSnapshot doc : task.getResult()){
                                                 String animUnite = doc.getString("unite");
                                                 String animSection = doc.getString("section");
                                                 String animEmail = doc.getString("email");
@@ -129,7 +129,6 @@ public class AnimListFragment extends Fragment {
                                                         && !animEmail.equals(currentUser.getEmail()) && isMonitor == null){
                                                     User anime = new User(animUnite, animSection, animEmail);
                                                     animListe.add(anime);
-                                                    Toast.makeText(getActivity(), animListe.get(i).getEmail(), Toast.LENGTH_SHORT).show();
                                                     i++;
                                                 }
                                             }

@@ -61,7 +61,6 @@ public class profil extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        setup();
         if(mAuth.getCurrentUser() != null){
             currentUser = mAuth.getCurrentUser();
             update();
@@ -169,19 +168,6 @@ public class profil extends AppCompatActivity {
         };
     }
 
-
-    public void setup() {
-        // [START get_firestore_instance]
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // [END get_firestore_instance]
-
-        // [START set_firestore_settings]
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
-                .build();
-        db.setFirestoreSettings(settings);
-        // [END set_firestore_settings]
-    }
 
     //lance une activité qui permet à l'utilisateur de choisir une photo de la gallerie et de l'affiché
     public void goToMain(View v){
