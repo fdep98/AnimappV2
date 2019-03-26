@@ -3,6 +3,7 @@ package com.example.animapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.button.MaterialButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -46,7 +47,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
 
     EditText nom,pseudo,mdp,totem,email,ngsm, dob;
     Spinner unite,section;
-    Button profil;
+    MaterialButton profil;
     CheckBox isAnimateur;
     private FirebaseUser user;
     private ArrayList<String> unitList = new ArrayList<>();
@@ -61,13 +62,13 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
         mAuth = FirebaseAuth.getInstance();
 
         profil =  findViewById(R.id.profil);
-        nom =  findViewById(R.id.nom);
-        pseudo =  findViewById(R.id.pseudo);
-        mdp =  findViewById(R.id.mdp);
-        totem = findViewById(R.id.totem);
-        email =  findViewById(R.id.email);
-        ngsm =  findViewById(R.id.ngsm);
-        dob = findViewById(R.id.dob);
+        nom =  findViewById(R.id.nomET);
+        pseudo =  findViewById(R.id.pseudoET);
+        mdp =  findViewById(R.id.mdpET);
+        totem = findViewById(R.id.totemET);
+        email =  findViewById(R.id.emailET);
+        ngsm =  findViewById(R.id.ngsmET);
+        dob = findViewById(R.id.dobET);
         unite =  findViewById(R.id.uniteSpinner);
         section =  findViewById(R.id.sectionSpinner);
         isAnimateur = findViewById(R.id.animateur);
@@ -128,6 +129,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
             startActivity(main);
         }
     }
+
 
     //lance une intent pour acceder au menu principale
     public void goToMain(View view){

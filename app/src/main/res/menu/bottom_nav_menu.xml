@@ -6,12 +6,12 @@
         android:enabled="true"
         android:icon="@drawable/ic_menu"
         android:title="Menu"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_photo"
         android:enabled="true"
         android:icon="@drawable/ic_photo"
-        android:title="Add Photo"
+        android:title="Media"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_list"

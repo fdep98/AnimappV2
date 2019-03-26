@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.animapp.AccountCreation">
+    tools:context="com.example.animapp.SectionCreation">
 
 
     <LinearLayout
@@ -19,20 +19,26 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="6dp">
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="62dp"
+            android:layout_height="53dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/logo"
+            android:tint="?android:attr/textColorPrimary" />
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:layout_marginBottom="60dp"
-            android:text="Création Section"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="24sp"
-            android:textStyle="bold|italic" />
 
-        <ScrollView
-            android:layout_width="370dp"
-            android:layout_height="match_parent">
+            android:layout_marginBottom="20dp"
+            android:fontFamily="casual"
+            android:text="Créer une section"
+            android:textColor="@color/bleu2"
+            android:textSize="24sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,63 +52,136 @@
                 tools:layout_editor_absoluteX="6dp">
 
 
-                <EditText
-                    android:id="@+id/nom"
+                <!--Nom-->
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/nomTI"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
+                    android:layout_height="54dp"
+                    android:background="@color/blanc"
                     android:hint="Nom"
-                    android:inputType="textPersonName"
-                    android:textColorLink="@color/colorPrimaryDark" />
+                    android:layout_marginBottom="5dp"
+                    android:textColorHint="@color/brunRouge"
+                    app:errorEnabled="true">
 
-                <EditText
-                    android:id="@+id/categorie"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/nomET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawableTint="@color/bleu2"
+                        android:inputType="text"
+                        android:textAlignment="viewStart"
+                        tools:ignore="RtlCompat" />
+                </android.support.design.widget.TextInputLayout>
+
+                <!--Catégorie-->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Catégorie"
-                    android:inputType="textPersonName"
-                    android:textColorLink="@color/colorPrimaryDark" />
+                    android:layout_marginBottom="7dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/unite"
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:paddingLeft="5dp"
+                        android:text="Catégorie"
+                        android:textColor="@color/brunRouge"
+                        android:textSize="17sp" />
+
+                    <Spinner
+                        android:id="@+id/categorieSpinner"
+                        android:layout_width="171dp"
+                        android:layout_height="match_parent"
+                        android:dropDownWidth="wrap_content"
+                        android:spinnerMode="dropdown"
+                        android:visibility="visible" />
+
+
+                </LinearLayout>
+
+
+                <!--Unité-->
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/uniteTI"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
+                    android:layout_height="54dp"
+                    android:background="@color/blanc"
                     android:hint="Unité"
-                    android:inputType="textPersonName"
-                    android:textColorLink="@color/colorPrimaryDark" />
+                    android:textColorHint="@color/brunRouge"
+                    app:errorEnabled="true">
 
-                <EditText
-                    android:id="@+id/description"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/uniteET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawableTint="@color/bleu2"
+                        android:inputType="text"
+                        android:textAlignment="viewStart"
+                        tools:ignore="RtlCompat" />
+                </android.support.design.widget.TextInputLayout>
+
+                <!--Description-->
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/descriptionTI"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
+                    android:layout_height="54dp"
+                    android:background="@color/blanc"
                     android:hint="Description"
-                    android:inputType="textPersonName"
-                    android:textColorLink="@color/colorPrimaryDark" />
+                    android:textColorHint="@color/brunRouge"
+                    app:errorEnabled="true">
 
-                <EditText
-                    android:id="@+id/nombre"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/descriptionET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawableTint="@color/bleu2"
+                        android:inputType="text"
+                        android:textAlignment="viewStart"
+                        tools:ignore="RtlCompat" />
+                </android.support.design.widget.TextInputLayout>
+
+                <!--Nombre-->
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/nombreTI"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
+                    android:layout_height="54dp"
+                    android:background="@color/blanc"
                     android:hint="Nombre"
-                    android:inputType="textEmailAddress"
-                    android:textColorLink="@color/colorPrimaryDark" />
+                    android:textColorHint="@color/brunRouge"
+                    android:layout_marginBottom="20dp"
+                    app:errorEnabled="true">
 
-                <Button
-                    android:id="@+id/creerUnite"
-                    android:layout_width="137dp"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/nombreET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawableTint="@color/bleu2"
+                        android:inputType="number"
+                        android:textAlignment="viewStart"
+                        tools:ignore="RtlCompat" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.button.MaterialButton
+                    android:id="@+id/creerSection"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:background="@color/colorPrimaryDark"
+                    android:layout_alignParentRight="true"
                     android:onClick="sendData"
+                    android:elevation="6dp"
                     android:text="Créer la section"
-                    android:textColor="#fff"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/bleu"
                     tools:ignore="OnClick" />
             </LinearLayout>
-        </ScrollView>
-
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</ScrollView>

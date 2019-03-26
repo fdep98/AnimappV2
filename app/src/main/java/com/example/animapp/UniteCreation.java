@@ -3,6 +3,7 @@ package com.example.animapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -28,10 +29,10 @@ public class UniteCreation extends AppCompatActivity {
 
         db = FirebaseDatabase.getInstance().getReference(); //instance de la BDD
 
-        nom = findViewById(R.id.nom);
-        localite = findViewById(R.id.localite);
-        description = findViewById(R.id.description);
-        nombre = findViewById(R.id.nombre);
+        nom = findViewById(R.id.nomET);
+        localite = findViewById(R.id.localiteET);
+        description = findViewById(R.id.descriptionET);
+        nombre = findViewById(R.id.nombreET);
 
     }
 
@@ -39,15 +40,22 @@ public class UniteCreation extends AppCompatActivity {
         String inputNom = nom.getText().toString();
         String inputLocalite = localite.getText().toString();
         String inputDescription = description.getText().toString();
-        int inputNombre = Integer.parseInt(nombre.getText().toString());
+        String inNombre = nombre.getText().toString();
+        int inputNombre;
 
-        //ajoute les données dans la BDD et renvoi à créationProfil de nom de la section
-        if(!(inputNom.isEmpty() && inputLocalite.isEmpty() && inputDescription.isEmpty())){
-            UniteHelper.createUnite(inputNom, inputLocalite, inputDescription, inputNombre);
-            Intent goBack = new Intent();
-            goBack.putExtra("result",inputNom);
-            setResult(RESULT_OK, goBack);
-            finish();
+        if(inNombre.isEmpty()){
+            TextInputLayout nbrTI = findViewById(R.id.nombreTI);
+            nbrTI.setError("veuillez entrer un nombre");
+        }else{
+           inputNombre = Integer.parseInt(inNombre);
+            //ajoute les données dans la BDD et renvoi à créationProfil de nom de la section
+            if(!(inputNom.isEmpty() && inputLocalite.isEmpty() && inputDescription.isEmpty())){
+                UniteHelper.createUnite(inputNom, inputLocalite, inputDescription, inputNombre);
+                Intent goBack = new Intent();
+                goBack.putExtra("result",inputNom);
+                setResult(RESULT_OK, goBack);
+                finish();
+            }
         }
 
     }

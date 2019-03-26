@@ -22,7 +22,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class profil extends AppCompatActivity {
 
@@ -185,8 +184,8 @@ public class profil extends AppCompatActivity {
     }
 
     //lance une activité qui permet à l'utilisateur de choisir une photo de la gallerie et de l'affiché
-    public  void takePic(View v){
-        Intent intent = new Intent(profil.this, MainActivity.class);
+    public void goToMain(View v){
+        Intent intent = new Intent(profil.this, MainFragmentActivity.class);
         startActivity(intent);
     }
 

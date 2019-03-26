@@ -1,77 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blanc"
     tools:context="com.example.animapp.emailPswdConnexion">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="0dp"
+        android:background="@color/blanc"
         android:orientation="vertical"
+        android:padding="24dp"
+        android:paddingTop="16dp"
         tools:ignore="MissingConstraints">
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/logo"
+            android:tint="?android:attr/textColorPrimary" />
+
         <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginBottom="30dp"
-            android:text="Se connecter"
-            android:textSize="24sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="80dp"
+            android:fontFamily="casual"
+            android:text="Connexion"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+            android:textColor="@color/bleu2"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
-        <ScrollView
+        <!--Email-->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/emailTI"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/blanc"
+            android:hint="email"
+            android:textColorHint="@color/brunRouge"
+            app:errorEnabled="true">
 
-            <LinearLayout
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/emailET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="6dp">
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/user"
+                android:drawableTint="@color/bleu2"
+                android:inputType="textEmailAddress"
+                android:textAlignment="viewStart"
+                tools:ignore="RtlCompat" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!--password-->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/mdpTI"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@color/blanc"
+            android:hint="mot de passe"
+            android:textColorHint="@color/brunRouge"
+            app:boxBackgroundMode="filled"
+            app:errorEnabled="true">
 
 
-                <EditText
-                    android:id="@+id/email"
-                    android:layout_width="350dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Email"
-                    android:inputType="textEmailAddress"
-                    android:textColorLink="@color/colorPrimaryDark" />
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/mdpET"
+                style="textInp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/lock"
+                android:drawableTint="@color/bleu2"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/mdp"
-                    android:layout_width="350dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:gravity="left"
-                    android:hint="Mot de passe"
-                    android:inputType="textPassword"
-                    android:textColorLink="@color/colorPrimaryDark" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-                <Button
-                    android:id="@+id/suivant"
-                    style="@style/FirebaseUI.Button.AccountChooser"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onClick"
-                    android:text="Suivant" />
+            <android.support.design.button.MaterialButton
+                android:id="@+id/suivant"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:elevation="4dp"
+                android:text="Suivant"
+                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                android:textStyle="bold"
+                app:backgroundTint="@color/bleu" />
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/annuler"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="100dp"
+                android:layout_toStartOf="@id/suivant"
+                android:layout_toLeftOf="@id/suivant"
+                android:elevation="4dp"
+                android:text="Annuler"
+                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                android:textColor="@color/bleu"
+                android:textStyle="bold"
+                app:backgroundTint="@color/blanc" />
+
+        </RelativeLayout>
 
 
-            </LinearLayout>
-        </ScrollView>
     </LinearLayout>
-</RelativeLayout>
+</ScrollView>
+

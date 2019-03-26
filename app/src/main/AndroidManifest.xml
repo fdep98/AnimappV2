@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.animapp.animapp">
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,8 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.animapp.MainActivity">
-        </activity>
+        <activity android:name="com.example.animapp.MainFragmentActivity"></activity>
+        <activity android:name="com.example.animapp.AddAnime" />
+        <activity android:name="com.example.animapp.PostActivity" />
         <activity android:name="com.example.animapp.googleConnexion" />
         <activity android:name="com.example.animapp.emailPswdConnexion" />
         <activity android:name="com.example.animapp.Connexion">
@@ -26,7 +31,12 @@
         <activity android:name="com.example.animapp.UniteCreation" />
         <activity android:name="com.example.animapp.AccountCreation" />
         <activity android:name="com.example.animapp.profil" />
-        <activity android:name="com.example.animapp.PhotoActivity" />
+        <activity android:name="com.example.animapp.MediaActivity" />
+        <activity android:name="com.example.animapp.Presence_activity"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

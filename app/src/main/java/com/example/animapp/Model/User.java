@@ -21,7 +21,7 @@ public class User {
     @Nullable
     private String urlPhoto;
     private String ngsm;
-    private int presence;
+    private int absences;
 
     public User(){
         //constructeur par défault, required for calls to DataSnapshot.getValue(User.class)
@@ -55,8 +55,9 @@ public class User {
         this.unite = unite;
     }
 
-    public User(String nom, String email){
-        this.nom = nom;
+    public User(String unite, String section, String email){
+        this.unite = unite;
+        this.section = section;
         this.email = email;
     }
 
@@ -133,12 +134,12 @@ public class User {
         this.ngsm = ngsm;
     }
 
-    public int getPresence() {
-        return this.presence;
+    public int getAbsences() {
+        return this.absences;
     }
 
-    public void setPresence(int presence) {
-        this.presence = presence;
+    public void setAbsences(int absences) {
+        this.absences = absences;
     }
     @Nullable
     public String getUrlPhoto() {

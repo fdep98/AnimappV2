@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.animapp.animapp.R;
@@ -32,6 +33,7 @@ public class Connexion extends AppCompatActivity {
     private static final String TAG = "connexion";
     private FirebaseAuth mAuth;
     Button creerCompte, emailSignIn, googleSignIn;
+    private ImageView imageView;
 
 
     @Override
@@ -42,6 +44,8 @@ public class Connexion extends AppCompatActivity {
         creerCompte = findViewById(R.id.creerCompte);
         emailSignIn = findViewById(R.id.emailSignin);
         googleSignIn = findViewById(R.id.googleSignin);
+        imageView = findViewById(R.id.imageView);
+        imageView.setImageResource(R.drawable.logo);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))

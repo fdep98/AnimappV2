@@ -15,19 +15,27 @@
 
         <Button
             android:id="@+id/addImage1"
-            android:layout_width="278dp"
+            style="@android:style/Widget.Material.Light.Button"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:text="Add via gallerie"
+            android:background="@color/bleu"
+            android:drawableLeft="@drawable/ic_photo"
+            android:drawableTint="@color/blanc"
+            android:text="Ajouter une photo"
+            android:textColor="@color/blanc"
+            android:padding="6dp"
             tools:ignore="MissingConstraints" />
 
         <Button
             android:id="@+id/addImage2"
-            android:layout_width="278dp"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
-            android:background="@color/colorPrimary"
-            android:text="Add via camera"
+            android:background="@color/mauve"
+            android:drawableLeft="@android:drawable/ic_menu_camera"
+            android:text="Prendre une photo"
+            android:padding="6dp"
+            android:textColor="@color/blanc"
             tools:ignore="MissingConstraints" />
 
     </LinearLayout>

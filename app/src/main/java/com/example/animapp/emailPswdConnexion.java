@@ -3,6 +3,9 @@ package com.example.animapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.button.MaterialButton;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
@@ -21,19 +24,21 @@ public class emailPswdConnexion extends AppCompatActivity implements View.OnClic
 
     private static final String TAG = "EmailPassword";
     private FirebaseAuth mAuth;
-    private EditText email, mdp;
-
+    private TextInputEditText email, mdp;
+    private TextInputLayout emailTI, mdpTI;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_pswd_connexion);
 
         mAuth = FirebaseAuth.getInstance();
-
-        email = findViewById(R.id.email);
-        mdp = findViewById(R.id.mdp);
+        email = findViewById(R.id.emailET);
+        mdp = findViewById(R.id.mdpET);
+        emailTI = findViewById(R.id.emailTI);
+        mdpTI = findViewById(R.id.mdpTI);
 
         findViewById(R.id.suivant).setOnClickListener(this);
+        findViewById(R.id.annuler).setOnClickListener(this);
         setup();
     }
 
@@ -58,7 +63,7 @@ public class emailPswdConnexion extends AppCompatActivity implements View.OnClic
                             FirebaseUser user = mAuth.getCurrentUser();
                             startActivity(new Intent(emailPswdConnexion.this,profil.class));
                         }else{
-                            Toast.makeText(emailPswdConnexion.this, "données incorrect", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(emailPswdConnexion.this, "utilisateur inconnu", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -67,21 +72,32 @@ public class emailPswdConnexion extends AppCompatActivity implements View.OnClic
     public void goToProfil(){
         String inputEmail = email.getText().toString();
         String inputMdp = mdp.getText().toString();
-        if(inputEmail.isEmpty() && inputMdp.isEmpty()){
-            Toast.makeText(this, "les champs ne peuvent être vide", Toast.LENGTH_SHORT).show();
-        }else if(inputMdp.length()<4){
-            Toast.makeText(this, "mot de passe trop court", Toast.LENGTH_SHORT).show();
+        if(inputEmail.isEmpty()){
+            emailTI.setError("veuillez entrer un email");
+        }else if(inputMdp.isEmpty()){
+            mdpTI.setError("Veuillez entrer le mot de passe");
+        }else if(inputMdp.length()<4 ){
+            mdpTI.setError("minimum 5 caractères");
         }else{
             signIn(inputEmail,inputMdp);
         }
 
     }
 
+    public void goToConnexion(){
+        startActivity(new Intent(emailPswdConnexion.this,Connexion.class));
+    }
+
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if(i == R.id.suivant){
-            goToProfil();
+        switch(i){
+            case R.id.annuler:
+                goToConnexion();
+                break;
+            case R.id.suivant:
+                goToProfil();
+                break;
         }
     }
 

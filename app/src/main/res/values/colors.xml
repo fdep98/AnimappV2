@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">@color/roseFushia</color>
+    <color name="colorPrimaryDark">@color/bleu2</color>
+    <color name="vertClaire">#009688</color>
+    <color name="vertFoncé">#00574B</color>
     <color name="colorAccent">#2E3439</color>
+    <color name="bleu">#1260E8</color>
+    <color name="bleu1">#34429D</color>
+    <color name="rouge">#CC0001</color>
+    <color name="bleu2">#223467</color>
+    <color name="bleuBlanc">#F3F6FE</color>
+    <color name="rougeRose">#7A2948</color>
+    <color name="rose">#913079</color>
+    <color name="BleuVert">#1C4654</color>
+    <color name="roseClair">#B83D66</color>
+    <color name="bleurFonce">#0D0B22</color>
+    <color name="brun">#361412</color>
+    <color name="blanc">#FFFFFF</color>
+    <color name="vertDélavé">#2B8275</color>
+    <color name="mauve">#7E00C9</color>
+    <color name="brunRouge">#41162C</color>
+    <color name="roseFushia">#E81A74</color>
+    <color name="rogeOrange">#E82C0C</color>
+    <color name="jaune">#FFFC1F</color>
+    <color name="vert">#16CC19</color>
+    <color name="grisClair">#DADBE0</color>
 </resources>

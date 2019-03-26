@@ -8,4 +8,23 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <style name="error_text" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/rouge</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="add" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/blanc</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">0sp</item>
+    </style>
+
+    <!--gère la taille du texte de la bottomNav-->
+
+    <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">13dp</item>
+    </style>
+
 </resources>

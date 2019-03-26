@@ -24,7 +24,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 
-public class PhotoActivity extends AppCompatActivity {
+public class MediaActivity extends AppCompatActivity {
     private Button addImage1;
     private Button addImage2;
     FirebaseStorage storage;
@@ -35,36 +35,7 @@ public class PhotoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo);
-
-        //bottomNavigation
-        BottomNavigationView BottomNavigationView = (BottomNavigationView) findViewById(R.id.BottomNav);
-        BottomNavigationView.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
-            @Override
-            public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.action_profil:
-                        Toast.makeText(PhotoActivity.this,"Action Profil Clicked",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(PhotoActivity.this, profil.class));
-                        break;
-
-                    case R.id.action_photo:
-                        Toast.makeText(PhotoActivity.this,"Action Photo Clicked",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(PhotoActivity.this, PhotoActivity.class));
-                        break;
-                    case R.id.action_list:
-                        Toast.makeText(PhotoActivity.this,"Action List Clicked(En cours de dévellopement)",Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.action_menu:
-                        Toast.makeText(PhotoActivity.this,"Action Menu Clicked ",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(PhotoActivity.this, PostActivity.class));
-                        break;
-                }
-                //return true;
-            }
-        });
-
+        setContentView(R.layout.activity_media);
 
         addImage1 = findViewById(R.id.addImage1);
         addImage2 = findViewById(R.id.addImage2);
@@ -83,7 +54,7 @@ public class PhotoActivity extends AppCompatActivity {
         addImage2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(PhotoActivity.this,"En cours de dévellopement",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MediaActivity.this,"En cours de dévellopement",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (intent.resolveActivity(getPackageManager()) != null) {
 //                    startActivityForResult(intent, CAMERA_INTENT);
@@ -105,7 +76,7 @@ public class PhotoActivity extends AppCompatActivity {
             st.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(PhotoActivity.this, "photo added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MediaActivity.this, "photo added", Toast.LENGTH_SHORT).show();
                     prog.dismiss();
                 }
             });
@@ -121,7 +92,7 @@ public class PhotoActivity extends AppCompatActivity {
             st.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(PhotoActivity.this, "photo added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MediaActivity.this, "photo added", Toast.LENGTH_SHORT).show();
                     prog.dismiss();
                 }
             });
