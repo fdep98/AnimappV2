@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Tableau permettant d'afficher tout le contenu d'un bloc -->
+
+
+    <android.support.v7.widget.GridLayout
+        android:layout_width="395dp"
+        android:layout_height="87dp"
+        tools:layout_editor_absoluteX="0dp"
+        android:padding="10dp"
+        tools:layout_editor_absoluteY="3dp"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/nom"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Nom"
+            android:textSize="19sp" />
+
+        <TextView
+            android:id="@+id/pseudo"
+            android:layout_width="wrap_content"
+            android:layout_height="31dp"
+            android:text="Totem"
+            android:textSize="19sp"
+            app:layout_column="0"
+
+            app:layout_row="1" />
+
+        <CheckBox
+            android:id="@+id/check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            app:layout_column="22"
+            app:layout_row="1" />
+
+        <TextView
+            android:id="@+id/editText"
+            android:layout_width="77dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Absence"
+            android:textSize="19sp"
+            app:layout_column="21"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/nbrAbsence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:text="TextView"
+            app:layout_column="22"
+            app:layout_row="0"
+            tools:text="absenceNbr" />
+    </android.support.v7.widget.GridLayout>
+</android.support.constraint.ConstraintLayout>
