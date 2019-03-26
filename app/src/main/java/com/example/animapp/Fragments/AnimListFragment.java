@@ -99,7 +99,7 @@ public class AnimListFragment extends Fragment {
         list.setAdapter(mSchedule);
 //        nbrAbsence.setText(0);
             bindAnimeList();
-//        Toast.makeText(getActivity(), arr.size(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), animListe.size(), Toast.LENGTH_SHORT).show();
     }
 
 

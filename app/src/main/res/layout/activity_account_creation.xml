@@ -276,12 +276,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-
+                android:onClick="goToMain"
                 android:elevation="6dp"
                 android:text="Profil"
                 android:textAppearance="@style/TextAppearance.AppCompat.Menu"
                 android:textStyle="bold"
-                app:backgroundTint="@color/bleu" />
+                app:backgroundTint="@color/bleu"
+                tools:ignore="OnClick" />
         </LinearLayout>
 
     </LinearLayout>

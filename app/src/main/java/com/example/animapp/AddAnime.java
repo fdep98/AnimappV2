@@ -2,6 +2,7 @@ package com.example.animapp;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.button.MaterialButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -44,7 +45,7 @@ public class AddAnime extends AppCompatActivity {
 
         private ArrayList<User> liste=new ArrayList<User>();
         EditText nom,totem, email, ngsm, dob;
-        Button profil;
+        MaterialButton ajouter;
         String currentUserUnite, currentUserSection;
 
         @Override
@@ -54,7 +55,7 @@ public class AddAnime extends AppCompatActivity {
 
             db = FirebaseDatabase.getInstance().getReference(); //instance de la BDD
             mAuth = FirebaseAuth.getInstance();
-            profil = findViewById(R.id.profil);
+            ajouter = findViewById(R.id.ajouter);
             nom = findViewById(R.id.nomET);
             totem = findViewById(R.id.totemET);
             email = findViewById(R.id.emailET);

@@ -23,52 +23,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f187a94-7857-4797-8c4a-590004f9d0dc" name="Default Changelist" comment="ajout de fragment pour la navigation du menu&#10;correction du double click du bottom nav&#10;array liste anime">
-      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/AccountCreation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/AccountCreation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/AddAnime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/AddAnime.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/Connexion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/Connexion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/AnimListFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/AnimListFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/MediaFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/MediaFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/PostFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/PostFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/ProfilFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/ProfilFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/MainFragmentActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/MainFragmentActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/MediaActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/MediaActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/Model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/Model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/PostActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/PostActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/Presence_activity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/Presence_activity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/SectionCreation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/SectionCreation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/UniteCreation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/UniteCreation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/emailPswdConnexion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/emailPswdConnexion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/animapp/profil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/animapp/profil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-anydpi/ic_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-anydpi/ic_menu.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/drawable/add.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable/add.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/drawable/bottom_nav.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable/bottom_nav.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/drawable/ic_add_black_24dp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable/ic_add_black_24dp.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/drawable/rounded_corner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable/rounded_corner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/drawable/user.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable/user.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_account_creation.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_account_creation.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_add_anime.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_add_anime.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_connexion.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_connexion.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_email_pswd_connexion.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_email_pswd_connexion.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_liste.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_liste.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_media.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_media.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_post.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_post.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_profil.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_profil.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_section_creation.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_section_creation.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_unite_creation.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_unite_creation.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/list_details.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/list_details.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/main_fragment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/main_fragment.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/menu/bottom_nav_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/menu/bottom_nav_menu.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/colors.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/styles.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -143,12 +101,12 @@
         <counts>
           <entry key="class" value="2" />
           <entry key="gradle" value="3" />
-          <entry key="java" value="97" />
+          <entry key="java" value="100" />
           <entry key="li" value="1" />
           <entry key="png" value="11" />
           <entry key="pro" value="1" />
           <entry key="properties" value="2" />
-          <entry key="xml" value="151" />
+          <entry key="xml" value="153" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -156,28 +114,28 @@
           <entry key="CLASS" value="2" />
           <entry key="Groovy" value="3" />
           <entry key="Image" value="11" />
-          <entry key="JAVA" value="97" />
+          <entry key="JAVA" value="100" />
           <entry key="Layout Inspector" value="1" />
           <entry key="ProGuard File" value="1" />
           <entry key="Properties" value="2" />
-          <entry key="XML" value="151" />
+          <entry key="XML" value="153" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="14" />
           <entry key="gradle" value="1" />
-          <entry key="java" value="7616" />
+          <entry key="java" value="7645" />
           <entry key="txt" value="816" />
-          <entry key="xml" value="2834" />
+          <entry key="xml" value="2844" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="1" />
-          <entry key="JAVA" value="7616" />
+          <entry key="JAVA" value="7645" />
           <entry key="PLAIN_TEXT" value="830" />
-          <entry key="XML" value="2834" />
+          <entry key="XML" value="2844" />
         </counts>
       </usages-collector>
     </session>
@@ -187,7 +145,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/MainFragmentActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
+            <state relative-caret-position="-312">
               <caret line="15" selection-start-line="15" selection-end-line="15" selection-end-column="37" />
               <folding>
                 <element signature="e#1424#2706#0" expanded="true" />
@@ -198,10 +156,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/AccountCreation.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1944">
+              <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/AnimListFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
-              <caret line="130" column="73" selection-start-line="130" selection-start-column="73" selection-end-line="130" selection-end-column="73" />
+            <state relative-caret-position="-955">
+              <caret line="51" column="74" lean-forward="true" selection-start-line="51" selection-start-column="74" selection-end-line="51" selection-end-column="74" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3308#5540#0" expanded="true" />
@@ -213,42 +183,12 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/SectionCreation.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="62" column="29" selection-start-line="62" selection-start-column="29" selection-end-line="62" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_connexion.xml">
-          <provider selected="true" editor-type-id="android-designer2" />
-          <provider editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="18" selection-start-line="18" selection-end-line="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/emailPswdConnexion.java">
+        <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_account_creation.xml">
+          <provider editor-type-id="android-designer2" />
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
-              <caret line="94" column="30" lean-forward="true" selection-start-line="94" selection-start-column="30" selection-end-line="94" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/Presence_activity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="61" column="18" selection-start-line="61" selection-start-column="18" selection-end-line="61" selection-end-column="18" />
-              <folding>
-                <element signature="e#2498#2523#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="475">
+              <caret line="271" lean-forward="true" selection-start-line="271" selection-end-line="271" />
             </state>
           </provider>
         </entry>
@@ -303,7 +243,6 @@
         <option value="$PROJECT_DIR$/src/main/res/values/colors.xml" />
         <option value="$PROJECT_DIR$/src/main/res/drawable/rounded_corner.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/Model/User.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/AddAnime.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/MainFragment.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/MainFragment.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/ProfilFragment.java" />
@@ -313,7 +252,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/profil.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/Connexion.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/activity_connexion.xml" />
-        <option value="$PROJECT_DIR$/src/main/res/layout/activity_account_creation.xml" />
         <option value="$PROJECT_DIR$/src/main/res/layout/activity_add_anime.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/MediaActivity.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/emailPswdConnexion.java" />
@@ -338,10 +276,12 @@
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/Presence_activity.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/PostActivity.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/MainFragmentActivity.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/AnimListFragment.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/AccountCreation.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/UniteCreation.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/SectionCreation.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/AddAnime.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/AnimListFragment.java" />
+        <option value="$PROJECT_DIR$/src/main/res/layout/activity_account_creation.xml" />
       </list>
     </option>
   </component>
@@ -391,12 +331,6 @@
               <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="res" type="d4f16f75:AndroidResFolderNode" />
               <item name="layout" type="ddeffd01:AndroidResFolderTypeNode" />
-            </path>
-            <path>
-              <item name="AnimappV2" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="values" type="ddeffd01:AndroidResFolderTypeNode" />
             </path>
             <path>
               <item name="AnimappV2" type="1abcf292:AndroidViewProjectNode" />
@@ -539,7 +473,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.18590604" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.18590604" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Build Variants" order="4" side_tool="true" weight="0.3295302" />
@@ -574,13 +508,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="ajout de fragment pour la navigation du menu&#10;correction du double click du bottom nav&#10;array liste anime" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/MyListAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="21" column="32" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/drawable/rounded_corner.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -600,29 +527,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/drawable-anydpi/animAppLogo1.png" />
     <entry file="file://$PROJECT_DIR$/src/main/res/drawable-xhdpi/logo.png" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/AddAnime.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="37" column="3" selection-start-line="37" selection-start-column="3" selection-end-line="37" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_account_creation.xml">
-      <provider selected="true" editor-type-id="android-designer2" />
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="2431">
-          <caret line="143" column="12" lean-forward="true" selection-start-line="143" selection-start-column="12" selection-end-line="161" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_add_anime.xml">
-      <provider selected="true" editor-type-id="android-designer2" />
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="3179">
-          <caret line="187" column="40" selection-start-line="187" selection-start-column="40" selection-end-line="187" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="16">
@@ -845,17 +749,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/MainFragmentActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" selection-start-line="15" selection-end-line="15" selection-end-column="37" />
-          <folding>
-            <element signature="e#1424#2706#0" expanded="true" />
-            <element signature="e#2705#2706#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_unite_creation.xml">
       <provider selected="true" editor-type-id="android-designer2" />
       <provider editor-type-id="text-editor">
@@ -868,32 +761,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="249">
           <caret line="49" column="52" selection-start-line="49" selection-start-column="52" selection-end-line="49" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/AccountCreation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1533">
-          <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#9595#10308#0" expanded="true" />
-            <element signature="e#10307#10308#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/AnimListFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="130" column="73" selection-start-line="130" selection-start-column="73" selection-end-line="130" selection-end-column="73" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3308#5540#0" expanded="true" />
-            <element signature="e#3790#5498#0" expanded="true" />
-            <element signature="e#5497#5498#0" expanded="true" />
-            <element signature="e#5539#5540#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -931,8 +798,73 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/emailPswdConnexion.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="94" column="30" lean-forward="true" selection-start-line="94" selection-start-column="30" selection-end-line="94" selection-end-column="30" />
+        <state relative-caret-position="296">
+          <caret line="114" column="5" selection-start-line="114" selection-start-column="5" selection-end-line="114" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_add_anime.xml">
+      <provider selected="true" editor-type-id="android-designer2" />
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="3179">
+          <caret line="187" column="40" selection-start-line="187" selection-start-column="40" selection-end-line="187" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/Database/UserHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="28" column="64" selection-start-line="28" selection-start-column="64" selection-end-line="28" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/AddAnime.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="94" selection-start-line="94" selection-end-line="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/MainFragmentActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-312">
+          <caret line="15" selection-start-line="15" selection-end-line="15" selection-end-column="37" />
+          <folding>
+            <element signature="e#1424#2706#0" expanded="true" />
+            <element signature="e#2705#2706#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/Fragments/AnimListFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-955">
+          <caret line="51" column="74" lean-forward="true" selection-start-line="51" selection-start-column="74" selection-end-line="51" selection-end-column="74" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3308#5540#0" expanded="true" />
+            <element signature="e#3790#5498#0" expanded="true" />
+            <element signature="e#5497#5498#0" expanded="true" />
+            <element signature="e#5539#5540#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/animapp/AccountCreation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1944">
+          <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_account_creation.xml">
+      <provider editor-type-id="android-designer2" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="271" lean-forward="true" selection-start-line="271" selection-end-line="271" />
         </state>
       </provider>
     </entry>
