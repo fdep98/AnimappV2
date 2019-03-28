@@ -1,49 +1,74 @@
 package com.example.animapp;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
+import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 
 
-public class MyListAdapter extends SimpleAdapter{
+public class MyListAdapter extends ArrayAdapter<User>{
     private LayoutInflater	mInflater;
+    private Context mContext;
+    private int mResource;
 
-    public MyListAdapter (Context context, List<? extends Map<String, ?>> data,
-                          int resource, String[] from, int[] to)
-    {
-        super (context, data, resource, from, to);
-        mInflater = LayoutInflater.from (context);
-
+    private static class ViewHolder{
+        TextView nom;
+        TextView pseudo;
+        TextView nbrAbsences;
     }
 
-    @Override
-    public Object getItem (int position)
-    {
-        return super.getItem (position);
+    public MyListAdapter(Context context, int resource, ArrayList<User> userList){
+        super(context,resource, userList);
+        mContext = context;
+        mResource = resource;
     }
+
 
     @Override
     public View getView (int position, View convertView, ViewGroup parent)
     {
-        //Ce test permet de ne pas reconstruire la vue si elle est déjà créée
-        if (convertView == null)
-        {
-            // On récupère les éléments de notre vue
-            convertView = mInflater.inflate (R.layout.list_details, null);
-            // On récupère notre checkBox
-            CheckBox cb = (CheckBox) convertView.findViewById (R.id.check);
-            // On lui affecte un tag comportant la position de l'item afin de
-            // pouvoir le récupérer au clic de la checkbox
-            cb.setTag (position);
-        }
-        return super.getView (position, convertView, parent);
+         String nom = getItem(position).getNom(); //recupère le nom de l'item courant
+         String pseudo = getItem(position).getPseudo();
+         String nbrAbsences = getItem(position).getAbsences();
+
+         User anime = new User(nom, pseudo, nbrAbsences);
+
+         final View result;
+         ViewHolder holder;
+
+         if(convertView == null){
+             mInflater = LayoutInflater.from(mContext);
+             convertView = mInflater.inflate(mResource, parent, false);
+             holder = new ViewHolder();
+             holder.nom = (TextView) convertView.findViewById(R.id.nom);
+             holder.pseudo = (TextView) convertView.findViewById(R.id.pseudo);
+             holder.nbrAbsences = (TextView) convertView.findViewById(R.id.nbrAbsences);
+
+             result = convertView;
+             convertView.setTag(holder);
+         }else{
+             holder = (ViewHolder) convertView.getTag();
+             result = convertView;
+         }
+
+        holder.nom.setText(anime.getNom());
+        holder.pseudo.setText(anime.getPseudo());
+        holder.nbrAbsences.setText(anime.getAbsences());
+
+        return convertView;
+
     }
 
 }

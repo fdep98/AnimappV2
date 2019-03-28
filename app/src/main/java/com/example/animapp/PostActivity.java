@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.animapp.animapp.R;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 //test
@@ -28,6 +30,8 @@ public class PostActivity extends AppCompatActivity{
     private ListView list;
     ListView vue;
     private ArrayList<String>  statut = new ArrayList<>();
+    private FirebaseFirestore firestoreDb; //instance de la BDD firestore
+    private DocumentReference docRef;
 
 
     @SuppressLint("WrongViewCast")
@@ -40,6 +44,9 @@ public class PostActivity extends AppCompatActivity{
         edit = (EditText) findViewById(R.id.edit);
         vue = (ListView) findViewById(R.id.list);
         pub = findViewById(R.id.publier);
+
+        firestoreDb = FirebaseFirestore.getInstance();
+
         pub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

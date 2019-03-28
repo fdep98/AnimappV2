@@ -75,14 +75,15 @@ public class Presence_activity extends ListActivity{
 
         //Utilisation de notre adaptateur qui se chargera de placer les valeurs de notre liste automatiquement et d'affecter un tag à nos checkbox
 
-        MyListAdapter mSchedule = new MyListAdapter(this.getBaseContext(), listItem,
+       /* MyListAdapter mSchedule = new MyListAdapter(this.getBaseContext(), listItem,
                 R.layout.list_details, new String[] { "nom", "totem" }, new int[] {
-                R.id.nom, R.id.pseudo });
+                R.id.nom, R.id.pseudo });*/
 
         // On attribue à notre listView l'adaptateur que l'on vient de créer
-        list.setAdapter(mSchedule);
+        //list.setAdapter(mSchedule);
 
-        ArrayList<User> arr = bindAnimeList();
+        bindAnimeList();
+
 
     }
 
@@ -92,7 +93,7 @@ public class Presence_activity extends ListActivity{
 
         if(currentUser != null){
             //référence vers le document de l'utilisateur courant
-
+            showList();
 
         }
     }
@@ -118,7 +119,7 @@ public class Presence_activity extends ListActivity{
         startActivity(new Intent(Presence_activity.this, AddAnime.class));
     }
 
-    public ArrayList<User> bindAnimeList(){
+    public void bindAnimeList(){
         animListe = new ArrayList<>();
         userRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -152,6 +153,9 @@ public class Presence_activity extends ListActivity{
                                 });
                     }
                 });
-        return animListe;
+    }
+
+    public void showList(){
+        Toast.makeText(this, animListe.size(), Toast.LENGTH_SHORT).show();
     }
 }

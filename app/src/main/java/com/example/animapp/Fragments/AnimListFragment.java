@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.example.animapp.AddAnime;
 import com.example.animapp.Model.User;
 import com.example.animapp.MyListAdapter;
+import com.example.animapp.PostActivity;
 import com.example.animapp.Presence_activity;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,12 +41,11 @@ import java.util.List;
 public class AnimListFragment extends Fragment {
 
     private ListView list;
-    private EditText nbrAbsence;
     private FirebaseUser currentUser;
     private DocumentReference userRef;
     private MaterialButton addAnim;
     private FirebaseAuth mAuth;
-    private ArrayList<User> animListe = new ArrayList<>();
+    ArrayList<User> animListe;
     private FirebaseFirestore firestoreDb; //instance de la BDD firestore
 
     @Nullable
@@ -64,8 +65,7 @@ public class AnimListFragment extends Fragment {
         userRef = firestoreDb.collection("users").document(currentUser.getEmail()); //réference vers le doc du moniteur connecté
 
         addAnim = getView().findViewById(R.id.ajouter);
-        nbrAbsence = getView().findViewById(R.id.nbrAbsence);
-
+        list = view.findViewById(R.id.list);
         addAnim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,36 +75,16 @@ public class AnimListFragment extends Fragment {
         });
 
 
-        //Récupération automatique de la liste (l'id de cette liste est nommé obligatoirement @android:id/list afin d'être détecté)
-        list = view.findViewById(R.id.list);
-
         bindAnimeList();
-
-
-        // Création de la ArrayList qui nous permettra de remplir la listView
-        ArrayList<HashMap<String, String>> listItem = new ArrayList<>();
-
-        // On déclare la HashMap qui contiendra les informations pour un item
-        HashMap<String, String> map;
-        User anime= new User("Colin","cvaneycken","Suricate","khluu@kgci.com","0467565656","16.02.1996",false,"Paravitam","Pio");
-        map = new HashMap<String, String>();
-        map.put("nom",animListe.get(0).getEmail());
-        map.put("totem", animListe.get(0).getTotem());
-        listItem.add(map);
-
-        //Utilisation de notre adaptateur qui se chargera de placer les valeurs de notre liste automatiquement et d'affecter un tag à nos checkbox
-
-        MyListAdapter mSchedule = new MyListAdapter(getActivity(), listItem,
-                R.layout.list_details, new String[] { "nom", "totem" }, new int[] {
-                R.id.nom, R.id.pseudo });
-
-        // On attribue à notre listView l'adaptateur que l'on vient de créer
-        list.setAdapter(mSchedule);
-
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
     public void bindAnimeList(){
+        animListe = new ArrayList<>();
         userRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -117,25 +97,32 @@ public class AnimListFragment extends Fragment {
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if(task != null){
-                                            int i = 0;
-                                            for(DocumentSnapshot doc : task.getResult()){
-                                                String animUnite = doc.getString("unite");
-                                                String animSection = doc.getString("section");
-                                                String animEmail = doc.getString("email");
-                                                String isMonitor = doc.getString("isAnimateur");
 
-                                                if(animUnite.equals(monitUnite) && animSection.equals(monitSection)
-                                                        && !animEmail.equals(currentUser.getEmail()) && isMonitor == null){
-                                                    User anime = new User(animUnite, animSection, animEmail);
+                                        if(task.isSuccessful()){
+                                            List<DocumentSnapshot> unitDocList = task.getResult().getDocuments();
+
+                                            for(DocumentSnapshot doc : unitDocList){
+                                                User anime = doc.toObject(User.class);
+
+                                                if(anime.getUnite().equals(monitUnite) && anime.getSection().equals(monitSection) && !anime.getEmail().equals(currentUser.getEmail())){
+
+                                                    //Toast.makeText(getActivity(),animEmail, Toast.LENGTH_SHORT).show();
+
                                                     animListe.add(anime);
-                                                    i++;
+
+                                                    //Utilisation de notre adaptateur qui se chargera de placer les valeurs de notre liste automatiquement et d'affecter un tag à nos checkbox
+                                                    MyListAdapter adapter = new MyListAdapter(getActivity(),R.layout.list_details,animListe);
+                                                    list.setAdapter(adapter);
                                                 }
                                             }
                                         }
                                     }
                                 });
+
                     }
                 });
+
     }
+
+
 }

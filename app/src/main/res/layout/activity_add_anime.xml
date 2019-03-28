@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.animapp.AccountCreation">
+    tools:context="com.example.animapp.AddAnime">
 
 
     <LinearLayout
@@ -26,7 +26,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="48dp"
             android:layout_marginBottom="10dp"
-            android:src="@drawable/logo"
+            android:background="@drawable/logo"
             android:tint="?android:attr/textColorPrimary" />
 
         <TextView
@@ -185,8 +185,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:onClick="addData"
                 android:elevation="6dp"
+                android:onClick="addData"
                 android:text="Ajouter"
                 android:textAppearance="@style/TextAppearance.AppCompat.Menu"
                 android:textStyle="bold"

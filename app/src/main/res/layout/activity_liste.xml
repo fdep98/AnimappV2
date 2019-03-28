@@ -52,14 +52,27 @@
                     android:textStyle="bold"
                     app:backgroundTint="@color/rogeOrange" />
             </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_marginTop="10dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Abscences"
+                android:layout_marginEnd="100dp"/>
+        </LinearLayout>
 
         <ListView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteY="99dp" />
+            tools:layout_editor_absoluteY="99dp"
+            android:divider="@color/grisClair"/>
 
 
 

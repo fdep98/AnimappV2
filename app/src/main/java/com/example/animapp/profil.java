@@ -12,16 +12,23 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Database.UserHelper;
+import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class profil extends AppCompatActivity {
 
@@ -34,6 +41,7 @@ public class profil extends AppCompatActivity {
     private DocumentReference userRef; //référence vers un document
     public FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    public static List<User> animeList = new ArrayList<>();
 
 
     @Override
@@ -53,6 +61,7 @@ public class profil extends AppCompatActivity {
         TVemail = findViewById(R.id.vpa_email);
 
         mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
         update();
 
     }
@@ -64,6 +73,8 @@ public class profil extends AppCompatActivity {
         if(mAuth.getCurrentUser() != null){
             currentUser = mAuth.getCurrentUser();
             update();
+        }else{
+            Toast.makeText(this, "current user null", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -84,23 +95,16 @@ public class profil extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if(documentSnapshot.exists()){
-                                String inNom = documentSnapshot.getString("nom");
-                                String inPseudo = documentSnapshot.getString("pseudo");
-                                String inTotem = documentSnapshot.getString("totem");
-                                String inEmail = documentSnapshot.getString("email");
-                                String inNgsm = documentSnapshot.getString("ngsm");
-                                String inDob = documentSnapshot.getString("dateOfBirth");
-                                String inSection = documentSnapshot.getString("section");
-                                String inUnite = documentSnapshot.getString("unite");
+                                User user = documentSnapshot.toObject(User.class);
 
-                                TVnom.setText(inNom);
-                                TVpseudo.setText(inPseudo);
-                                TVtotem.setText(inTotem);
-                                TVemail.setText(inEmail);
-                                TVngsm.setText(inNgsm);
-                                TVdob.setText(inDob);
-                                TVunite.setText(inUnite);
-                                TVsection.setText(inSection);
+                                TVnom.setText(user.getNom());
+                                TVpseudo.setText(user.getPseudo());
+                                TVtotem.setText(user.getTotem());
+                                TVemail.setText(user.getEmail());
+                                TVngsm.setText(user.getNgsm());
+                                TVdob.setText(user.getDateOfBirth());
+                                TVunite.setText(user.getUnite());
+                                TVsection.setText(user.getSection());
 
                             }else{
                                 TVnom.setText(currentUser.getDisplayName());
@@ -174,5 +178,6 @@ public class profil extends AppCompatActivity {
         Intent intent = new Intent(profil.this, MainFragmentActivity.class);
         startActivity(intent);
     }
+
 
 }
