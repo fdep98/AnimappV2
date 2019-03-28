@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/search"
+        android:enabled="true"
+        android:icon="@drawable/ic_search_black"
+        android:title="Search"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
+    <!--collapseActionView permet l'extension de l'icon et SearchView permettra
+        de transformer l'icon en une barre de recherche lorsque l'on cliquera dessus-->
+    <item
+        android:id="@+id/ajouter"
+        android:enabled="true"
+        android:icon="@drawable/ic_add_anime"
+        android:title="absences"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/updateAbs"
+        android:enabled="true"
+        android:icon="@drawable/ic_thumb_down"
+        android:title="absences"
+        app:showAsAction="ifRoom"/>
+
+
+</menu>
