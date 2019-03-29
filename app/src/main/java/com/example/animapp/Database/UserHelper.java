@@ -25,6 +25,11 @@ public class UserHelper {
         return UserHelper.getUserCollection().document(email).set(userToCreate);
     }
 
+    public static Task<Void> createAnime(String nom, String totem, String email, String ngsm, String dob, String unite, String section) {
+        User userToCreate = new User(nom,totem,email,ngsm,dob, unite, section);
+        return UserHelper.getUserCollection().document(email).set(userToCreate);
+    }
+
     public static Task<DocumentSnapshot> getUser(String uid){
         return UserHelper.getUserCollection().document(uid).get(); //permet de récupérer la référence du document contenu dans la collection
     }

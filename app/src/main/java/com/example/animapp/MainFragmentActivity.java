@@ -43,8 +43,6 @@ public class MainFragmentActivity extends AppCompatActivity {
                     Fragment fragment = null;
                     switch (menuItem.getItemId()) {
                         case R.id.action_profil:
-                            /*fragment = new ProfilFragment();
-                            break;*/
                             startActivity(new Intent(MainFragmentActivity.this, profil.class));
 
                         case R.id.action_photo:

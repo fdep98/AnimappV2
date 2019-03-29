@@ -87,6 +87,8 @@ public class profil extends AppCompatActivity {
                         .load(currentUser.getPhotoUrl())
                         .apply(RequestOptions.circleCropTransform())
                         .into(IVphoto);
+            }else{
+                IVphoto.setImageResource(R.mipmap.scout);
             }
             //le snapshot contient toute les données de l'utilisateur
 

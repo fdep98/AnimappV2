@@ -24,33 +24,22 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/imgprof"
+                android:id="@+id/monitImg"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginRight="2dp" />
 
             <EditText
                 android:id="@+id/edit"
-                android:layout_width="215dp"
+                android:layout_width="282dp"
                 android:layout_height="60dp"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="10dp"
-                android:layout_toRightOf="@id/imgprof"
+                android:layout_toRightOf="@id/monitImg"
                 android:hint="Exprimez-vous"
                 android:inputType="text"
                 android:paddingLeft="2dp"
                 android:scrollHorizontally="true" />
-
-            <Button
-                android:id="@+id/publier"
-                android:layout_width="72dp"
-                android:layout_height="40dp"
-                android:backgroundTint="@color/vert"
-                android:clickable="true"
-                android:text="Publier"
-                android:textSize="10dp"
-                android:textColor="@color/blanc"
-                app:srcCompat="@drawable/add" />
 
         </LinearLayout>
 

@@ -1,19 +1,14 @@
 package com.example.animapp;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.example.animapp.Model.User;
@@ -47,29 +42,29 @@ public class MyListAdapter extends ArrayAdapter<User> implements Filterable {
     @Override
     public View getView (int position, View convertView, ViewGroup parent)
     {
-         String nom = getItem(position).getNom(); //recupère le nom de l'item courant
-         String pseudo = getItem(position).getPseudo();
-         String nbrAbsences = getItem(position).getAbsences();
+        String nom = getItem(position).getNom(); //recupère le nom de l'item courant
+        String pseudo = getItem(position).getPseudo();
+        String nbrAbsences = getItem(position).getAbsences();
 
-         User anime = new User(nom, pseudo, nbrAbsences);
+        User anime = new User(nom, pseudo, nbrAbsences);
 
-         final View result;
-         ViewHolder holder;
+        final View result;
+        ViewHolder holder;
 
-         if(convertView == null){
-             mInflater = LayoutInflater.from(mContext);
-             convertView = mInflater.inflate(mResource, parent, false);
-             holder = new ViewHolder();
-             holder.nom = (TextView) convertView.findViewById(R.id.nom);
-             holder.pseudo = (TextView) convertView.findViewById(R.id.pseudo);
-             holder.nbrAbsences = (TextView) convertView.findViewById(R.id.nbrAbsences);
+        if(convertView == null){
+            mInflater = LayoutInflater.from(mContext);
+            convertView = mInflater.inflate(mResource, parent, false);
+            holder = new ViewHolder();
+            holder.nom = (TextView) convertView.findViewById(R.id.nom);
+            holder.pseudo = (TextView) convertView.findViewById(R.id.pseudo);
+            holder.nbrAbsences = (TextView) convertView.findViewById(R.id.nbrAbsences);
 
-             result = convertView;
-             convertView.setTag(holder);
-         }else{
-             holder = (ViewHolder) convertView.getTag();
-             result = convertView;
-         }
+            result = convertView;
+            convertView.setTag(holder);
+        }else{
+            holder = (ViewHolder) convertView.getTag();
+            result = convertView;
+        }
 
         holder.nom.setText(anime.getNom());
         holder.pseudo.setText(anime.getPseudo());

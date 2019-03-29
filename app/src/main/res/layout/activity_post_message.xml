@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.animapp.postMessage">
+
+    <Button
+        android:id="@+id/publier"
+        android:layout_width="90dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/vert"
+        android:clickable="true"
+        android:text="Publier"
+        android:textColor="@color/blanc"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.866"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postText"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/add" />
+
+    <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="404dp"
+        android:layout_height="103dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.102">
+
+        <ImageView
+            android:id="@+id/monitImg"
+            android:layout_width="67dp"
+            android:layout_height="67dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginBottom="25dp"
+            android:background="@mipmap/scout"
+            tools:srcCompat="@mipmap/ic_launcher_round" />
+
+        <TextView
+            android:id="@+id/monitName"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="57dp"
+            android:layout_toEndOf="@+id/monitImg"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Nom du moniteur" />
+
+        <TextView
+            android:id="@+id/monitTotem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="54dp"
+            android:layout_marginBottom="25dp"
+            android:layout_toEndOf="@+id/monitImg"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Totem du moniteur " />
+
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/messageToolbar"
+        layout="@layout/message_toolbar"/>
+
+    <EditText
+        android:id="@+id/postText"
+        android:layout_width="377dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/fui_transparent"
+        android:gravity="top|left"
+        android:hint="Exprimez-vous"
+        android:inputType="textMultiLine"
+        android:maxLines="15"
+        android:minLines="5"
+        android:scrollbars="vertical"
+        android:singleLine="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.216"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top"
+        tools:text="Contenu du message " />
+
+
+</android.support.constraint.ConstraintLayout>

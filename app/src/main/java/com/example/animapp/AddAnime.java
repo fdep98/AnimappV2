@@ -1,38 +1,32 @@
 package com.example.animapp;
 
+
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.design.button.MaterialButton;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.animapp.Database.UserHelper;
+import com.example.animapp.Fragments.AnimListFragment;
 import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /*
     Permet d'ajouter un animé dans la BDD en définissant son nom, email, etc..
@@ -44,7 +38,8 @@ public class AddAnime extends AppCompatActivity {
         private FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance(); //instance de la BDD firestore
 
         private ArrayList<User> liste=new ArrayList<User>();
-        EditText nom,totem, email, ngsm, dob;
+        private TextInputEditText nom,totem, email, ngsm, dob;
+        public TextInputLayout nomTI, totemTI, emailTI;
         MaterialButton ajouter;
         String currentUserUnite, currentUserSection;
 
@@ -61,6 +56,10 @@ public class AddAnime extends AppCompatActivity {
             email = findViewById(R.id.emailET);
             ngsm = findViewById(R.id.ngsmET);
             dob = findViewById(R.id.dobET);
+
+            nomTI = findViewById(R.id.nomTI);
+            totemTI = findViewById(R.id.totemTI);
+            emailTI = findViewById(R.id.emailTI);
 
             setup();
 
@@ -91,11 +90,29 @@ public class AddAnime extends AppCompatActivity {
             String inputEmail = email.getText().toString();
             String inputTel = ngsm.getText().toString();
             String inputDob = dob.getText().toString();
-            User anime=new User(inputName,null,inputTotem,inputEmail,inputTel,inputDob,currentUserUnite,currentUserSection);
-            UserHelper.createUser(inputName, null, inputTotem, inputEmail, inputTel, inputDob, false, currentUserUnite, currentUserSection);
-            liste.add(anime);
-            Intent main = new Intent(this, Presence_activity.class);
-            startActivity(main);
+
+            if(inputEmail.isEmpty()){
+                emailTI.setError("veuillez entrer un email");
+            }else if(inputName.isEmpty()){
+                nomTI.setError("Veuillez entrer le nom");
+            }else if(inputTotem.isEmpty()){
+                totemTI.setError("veuillez entrer un totem");
+            }else{
+                User anime=new User(inputName,inputTotem,inputEmail,inputTel,inputDob,currentUserUnite,currentUserSection);
+                UserHelper.createAnime(inputName,inputTotem, inputEmail, inputTel, inputDob, currentUserUnite, currentUserSection);
+                liste.add(anime);
+
+
+                /*Fragment fragment = new AnimListFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.add(R.id.action_list,fragment,"ANIM_LIST_FRAGMENT");
+                transaction.addToBackStack(null);
+                transaction.commit();*/
+                startActivity(new Intent(this,MainFragmentActivity.class));
+
+            }
+
         }
 
         //active le mode offline permettant d'utiliser qd même l'app

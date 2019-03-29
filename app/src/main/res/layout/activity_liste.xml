@@ -12,11 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/BottomNav"
         android:background="#FFFFFF"
-        android:orientation="vertical"
-        tools:ignore="NotSibling">
+        android:orientation="vertical">
         <include
             android:id="@+id/toolbar"
-            layout="@layout/toolbar"/>
+            layout="@layout/list_toolbar"/>
 
         <ListView
             android:id="@+id/list"

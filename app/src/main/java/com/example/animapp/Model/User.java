@@ -17,21 +17,21 @@ public class User {
     private String email;
     private String dateOfBirth;
     private boolean isAnimateur;
+    private String absences;
 
     @Nullable
     private String urlPhoto;
     private String ngsm;
-    private String absences;
+
 
     public User(){
         //constructeur par défault, required for calls to DataSnapshot.getValue(User.class)
     }
 
     //constructeur animé
-    public User(String nom, String pseudo, String totem, String email, String ngsm, String dob, String unite, String section){
+    public User(String nom, String totem, String email, String ngsm, String dob, String unite, String section){
         //this.id = id;
         this.nom = nom;
-        this.pseudo = pseudo;
         this.totem = totem;
         this.section = section;
         this.email = email;
@@ -39,6 +39,7 @@ public class User {
         this.dateOfBirth = dob;
         this.section = section;
         this.unite = unite;
+        this.absences = "0";
     }
 
     //constructeur moniteur
@@ -53,12 +54,14 @@ public class User {
         this.isAnimateur = isAnimateur;
         this.section = section;
         this.unite = unite;
+        this.absences = "0";
     }
 
     public User(String nom, String pseudo, String nbrAbsences){
         this.nom = nom;
         this.pseudo = pseudo;
         this.absences = nbrAbsences;
+        this.absences = "0";
     }
 
     /*--------------------------------GET&SETTER-------------------------------------------*/
@@ -138,9 +141,7 @@ public class User {
         return this.absences;
     }
 
-    public void setAbsences(String absences) {
-        this.absences = absences;
-    }
+
     @Nullable
     public String getUrlPhoto() {
         return urlPhoto;
@@ -151,6 +152,10 @@ public class User {
     }
     public String getUnite() {
         return unite;
+    }
+
+    public void setAbsences(String absences) {
+        this.absences = absences;
     }
 
     public void setUnite(String unite) {

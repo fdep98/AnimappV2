@@ -1,11 +1,9 @@
 package com.example.animapp.Fragments;
 
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.button.MaterialButton;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,22 +11,21 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.animapp.Database.PostHelper;
-import com.example.animapp.Model.Post;
-import com.example.animapp.PostActivity;
 import com.example.animapp.animapp.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.animapp.postMessage;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.model.value.StringValue;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -36,23 +33,20 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PostFragment extends Fragment {
 
     private EditText edit;
-    private String stat;
-    private Button pub;
-    private ListView list;
     ListView vue;
-    private ArrayList<String> statut = new ArrayList<>();
     public FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private ImageView imageView;
-    private FirebaseStorage storage;
-    private StorageReference storageRef;
 
-    //date et heure
-    private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy"+" à "+ "HH:mm:ss");
+    private ArrayList<String>  statut = new ArrayList<>();
+    private FirebaseFirestore firestoreDb; //instance de la BDD firestore
+
+
 
     @Nullable
     @Override
@@ -67,32 +61,12 @@ public class PostFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         edit = getView().findViewById(R.id.edit);
         vue = getView().findViewById(R.id.list);
-        pub = getView().findViewById(R.id.publier);
-        imageView = getView().findViewById(R.id.imgprof);
+        imageView = getView().findViewById(R.id.monitImg);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        storage = FirebaseStorage.getInstance();
-
-        Date date = new Date();
-        final String currentDate = df.format(date);
-
-        pub.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                stat = edit.getText().toString();
-
-                if(currentUser != null){
-                    PostHelper.createPost(currentUser.getEmail(),currentDate, stat);
-                    statut.add(stat);
-                    ArrayAdapter<String> liststatut = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, statut);
-                    vue.setAdapter(liststatut);
-                }
+        firestoreDb = FirebaseFirestore.getInstance();
 
 
-
-            }
-        });
 
         if (currentUser != null) {
             //récupère et met à jour la photo de profil
@@ -102,13 +76,40 @@ public class PostFragment extends Fragment {
                         .apply(RequestOptions.circleCropTransform())
                         .into(imageView);
             }else{
-                //chaeger la photo de profil du currentUser stocké dans la BDD
-               // Toast.makeText(getActivity(), storage.getReferenceFromUrl("gs://animapp-c5f42.appspot.com").child("photos").toString(), Toast.LENGTH_SHORT).show();
-                Glide.with(this)
-                        .load("")
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(imageView);
+                imageView.setImageResource(R.mipmap.scout);
             }
+
+            edit.setFocusable(false); //fait en sorte qu'on ne puisse pas écrire dans l'édite texte
+            edit.setClickable(true); //permet de cliquer sur l'edit text
+
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getActivity(), postMessage.class));
+                }
+            });
+
+
+
+            firestoreDb.collection("userPosts")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful()) {
+                                List<DocumentSnapshot> doc = task.getResult().getDocuments();
+                                for (DocumentSnapshot document : doc) {
+                                    String message = document.getString("message");
+                                    statut.add(message);
+                                    ArrayAdapter<String> liststatut = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, statut);
+                                    vue.setAdapter(liststatut);
+                                }
+                            }
+                        }
+                    });
+
+
+
         }
 
     }

@@ -10,13 +10,13 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name="com.example.animapp.MainFragmentActivity"></activity>
+        <activity android:name="com.example.animapp.postMessage"></activity>
+        <activity android:name="com.example.animapp.MainFragmentActivity" />
         <activity android:name="com.example.animapp.AddAnime" />
         <activity android:name="com.example.animapp.PostActivity" />
         <activity android:name="com.example.animapp.googleConnexion" />
@@ -33,7 +33,7 @@
         <activity android:name="com.example.animapp.AccountCreation" />
         <activity android:name="com.example.animapp.profil" />
         <activity android:name="com.example.animapp.MediaActivity" />
-        <activity android:name="com.example.animapp.Presence_activity"></activity>
+        <activity android:name="com.example.animapp.Presence_activity" />
 
         <meta-data
             android:name="preloaded_fonts"

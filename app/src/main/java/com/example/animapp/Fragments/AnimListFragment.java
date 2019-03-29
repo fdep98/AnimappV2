@@ -1,19 +1,15 @@
+
 package com.example.animapp.Fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.button.MaterialButton;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,16 +17,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.animapp.AddAnime;
 import com.example.animapp.Model.User;
 import com.example.animapp.MyListAdapter;
-import com.example.animapp.PostActivity;
-import com.example.animapp.Presence_activity;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,11 +31,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -53,9 +42,8 @@ public class AnimListFragment extends Fragment {
     private ListView list;
     private FirebaseUser currentUser;
     private DocumentReference userRef;
-    private FloatingActionButton addAnim;
     private FirebaseAuth mAuth;
-    ArrayList<User> animListe;
+    private ArrayList<User> animListe;
     private FirebaseFirestore firestoreDb; //instance de la BDD firestore
     private MyListAdapter adapter;
 
@@ -92,7 +80,7 @@ public class AnimListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.toolbar_menu, menu);
+        inflater.inflate(R.menu.list_toolbar_menu, menu);
 
         MenuItem addAnime = menu.findItem(R.id.ajouter);
         addAnime.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -139,8 +127,8 @@ public class AnimListFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        final String monitUnite = documentSnapshot.getString("unite");
-                        final String monitSection = documentSnapshot.getString("section");
+                         final String monitUnite = documentSnapshot.getString("unite");
+                         final String monitSection = documentSnapshot.getString("section");
 
                         firestoreDb.collection("users")
                                 .get()
@@ -153,18 +141,19 @@ public class AnimListFragment extends Fragment {
 
                                             for(DocumentSnapshot doc : unitDocList){
                                                 User anime = doc.toObject(User.class);
+                                                if(anime.getUnite() != null && anime.getSection() != null){
+                                                    if(anime.getUnite().equals(monitUnite) && anime.getSection().equals(monitSection) && !anime.getEmail().equals(currentUser.getEmail())){
+                                                        //Toast.makeText(getActivity(),animEmail, Toast.LENGTH_SHORT).show();
 
-                                                if(anime.getUnite().equals(monitUnite) && anime.getSection().equals(monitSection) && !anime.getEmail().equals(currentUser.getEmail())){
-
-                                                    //Toast.makeText(getActivity(),animEmail, Toast.LENGTH_SHORT).show();
-
-                                                    animListe.add(anime);
-
-                                                    //Utilisation de notre adaptateur qui se chargera de placer les valeurs de notre liste automatiquement et d'affecter un tag à nos checkbox
-                                                    adapter = new MyListAdapter(getActivity(),R.layout.list_details,animListe);
-                                                    list.setAdapter(adapter);
+                                                        animListe.add(anime);
+                                                    }
                                                 }
+
                                             }
+                                            //Utilisation de notre adaptateur qui se chargera de placer les valeurs de notre liste automatiquement et d'affecter un tag à nos checkbox
+                                            adapter = new MyListAdapter(getActivity(),R.layout.list_details,animListe);
+                                            list.setAdapter(adapter);
+
                                         }
                                     }
                                 });
