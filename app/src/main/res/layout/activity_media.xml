@@ -1,16 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.animapp.MediaActivity">
+    android:orientation="vertical"
+    tools:context="com.example.animapp.Activities.MediaActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <include
+        android:id="@+id/media_toolbar"
+        layout="@layout/media_toolbar" />
+
+    <ImageView
+        android:id="@+id/picToShare"
+        android:layout_width="395dp"
+        android:layout_height="254dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="85dp"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:contentDescription="TODO" />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/partagerImg"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="right"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="45dp"
+        android:elevation="6dp"
+        android:text="Partager"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textStyle="bold"
+        app:backgroundTint="@color/bleu" />
+
+    <!--<LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="482dp"
+        android:layout_marginEnd="86dp"
+        android:layout_marginBottom="57dp"
         android:gravity="center"
-        android:layout_above="@id/BottomNav"
         android:orientation="vertical">
 
         <Button
@@ -21,22 +57,24 @@
             android:background="@color/bleu"
             android:drawableLeft="@drawable/ic_photo"
             android:drawableTint="@color/blanc"
+            android:padding="6dp"
             android:text="Ajouter une photo"
             android:textColor="@color/blanc"
-            android:padding="6dp"
             tools:ignore="MissingConstraints" />
 
         <Button
             android:id="@+id/addImage2"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="40dp"
             android:background="@color/mauve"
             android:drawableLeft="@android:drawable/ic_menu_camera"
-            android:text="Prendre une photo"
             android:padding="6dp"
+            android:text="Prendre une photo"
             android:textColor="@color/blanc"
             tools:ignore="MissingConstraints" />
 
-    </LinearLayout>
-</RelativeLayout>
+    </LinearLayout>-->
+
+
+</LinearLayout>

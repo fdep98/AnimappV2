@@ -1,4 +1,4 @@
-package com.example.animapp;
+package com.example.animapp.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Database.PostsHelper;
+import com.example.animapp.MainFragmentActivity;
 import com.example.animapp.Model.Post;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,6 +38,7 @@ public class postMessage extends AppCompatActivity {
     ImageView monitImg;
     ListView vue;
     Toolbar messageToolbar;
+    ImageView toolbarImg;
 
     public FirebaseAuth mAuth;
     private FirebaseUser currentUser;
@@ -61,11 +63,13 @@ public class postMessage extends AppCompatActivity {
 
         //permet de retourner en arrire lorsqu'on appui sur la flèche (navigationIcon)
         messageToolbar = findViewById(R.id.messageToolbar);
+        //messageToolbar.setLogo(R.mipmap.ic_launcher_round);
+
         setSupportActionBar(messageToolbar);
         messageToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(postMessage.this,MainFragmentActivity.class));
+                startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
             }
         });
 
@@ -96,6 +100,7 @@ public class postMessage extends AppCompatActivity {
                         .into(monitImg);
             } else {
                 monitImg.setImageResource(R.mipmap.scout);
+
             }
         }
 
@@ -107,7 +112,7 @@ public class postMessage extends AppCompatActivity {
                 String post = postMessage.getText().toString();
                 if(post != null){
                     Post newPost = new Post(currentUser.getEmail(),currentDate, post);
-                    PostsHelper.createUserPost(currentUser.getEmail(),currentDate, post);
+                    PostsHelper.createUserPost(newPost);
                     startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
                 }else{
                     Toast.makeText(postMessage.this, "veuillez entrer un message avant la publication", Toast.LENGTH_SHORT).show();

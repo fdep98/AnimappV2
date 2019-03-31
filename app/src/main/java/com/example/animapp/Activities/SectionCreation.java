@@ -1,4 +1,4 @@
-package com.example.animapp;
+package com.example.animapp.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,20 +6,17 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.animapp.Database.SectionHelper;
+import com.example.animapp.Model.Section;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
 
 public class SectionCreation extends AppCompatActivity {
 
@@ -68,7 +65,9 @@ public class SectionCreation extends AppCompatActivity {
 
             //ajoute les données dans la BDD et renvoi à créationProfil de nom de la section
             if(!(inputNom.isEmpty() && inputCategorie.isEmpty() && inputDescription.isEmpty() && inputUnite.isEmpty())){
-                SectionHelper.createSection(inputNom, inputCategorie, inputDescription);
+
+                Section section = new Section(inputNom,inputCategorie,inputDescription);
+                SectionHelper.createSection(section);
                 Intent goBack = new Intent();
                 goBack.putExtra("result",inputNom);
                 setResult(RESULT_OK, goBack);

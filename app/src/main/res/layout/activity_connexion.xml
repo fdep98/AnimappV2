@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="vertical"
-    tools:context="com.example.animapp.Connexion"
+    tools:context="com.example.animapp.Activities.Connexion"
     android:background="@color/bleuBlanc">
 
 

@@ -20,10 +20,14 @@ public class UserHelper {
     //set est utilisé pour créer un document, on doit lui spécifié un id en paramètre
 
     //insertion d'un moniteur dans la bdd
-    public static Task<Void> createUser(String nom, String pseudo, String totem, String email, String ngsm, String dob, boolean isAnim, String unite, String section) {
+   /* public static Task<Void> createUser(String nom, String pseudo, String totem, String email, String ngsm, String dob, boolean isAnim, String unite, String section) {
         User userToCreate = new User(nom,pseudo,totem,email,ngsm,dob, isAnim, unite, section);
         return UserHelper.getUserCollection().document(email).set(userToCreate);
-    }
+    }*/
+
+   public static void createUser(User user){
+       UserHelper.getUserCollection().add(user);
+   }
 
     public static Task<Void> createAnime(String nom, String totem, String email, String ngsm, String dob, String unite, String section) {
         User userToCreate = new User(nom,totem,email,ngsm,dob, unite, section);

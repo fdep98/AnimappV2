@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ListView;
 
-import com.example.animapp.AddAnime;
+import com.example.animapp.Activities.AddAnime;
 import com.example.animapp.Model.User;
 import com.example.animapp.MyListAdapter;
 import com.example.animapp.animapp.R;
@@ -64,12 +64,12 @@ public class AnimListFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getInstance().getCurrentUser();
-        firestoreDb = FirebaseFirestore.getInstance();
-        userRef = firestoreDb.collection("users").document(currentUser.getEmail()); //réference vers le doc du moniteur connecté
+        if(currentUser != null){
+            firestoreDb = FirebaseFirestore.getInstance();
+            userRef = firestoreDb.collection("users").document(currentUser.getEmail()); //réference vers le doc du moniteur connecté
+        }
 
         list = view.findViewById(R.id.list);
-
-
 
         Toolbar myToolbar = (Toolbar) getView().findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(myToolbar);
@@ -91,14 +91,14 @@ public class AnimListFragment extends Fragment {
             }
         });
 
-        MenuItem updateAbsc = menu.findItem(R.id.updateAbs);
+/*        MenuItem updateAbsc = menu.findItem(R.id.updateAbs);
         updateAbsc.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 //pour chaque item cliqué, mettre à jour le nbr d'abscences
                 return true;
             }
-        });
+        });*/
 
 
         MenuItem searchItem = menu.findItem(R.id.search); //reférence vers l'iconne de recherche

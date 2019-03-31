@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blanc"
-    tools:context="com.example.animapp.emailPswdConnexion">
+    tools:context="com.example.animapp.Activities.emailPswdConnexion">
 
     <LinearLayout
         android:layout_width="match_parent"

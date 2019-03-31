@@ -17,6 +17,14 @@
             android:id="@+id/toolbar"
             layout="@layout/list_toolbar"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="210dp"
+            android:text="Abscences"
+            android:textColor="@color/bleu"
+            android:textStyle="bold" />
+
         <ListView
             android:id="@+id/list"
             android:layout_width="match_parent"

@@ -19,9 +19,13 @@ public class PostsHelper {
         return PostsHelper.getPostCollection().document(id).set(postToCreate);
     }
 
-    public static Task<Void> createUserPost(String moniteur, String date, String message) {
+    /*public static Task<Void> createUserPost(String moniteur, String date, String message) {
         Post postToCreate = new Post(moniteur, date, message);
         return PostsHelper.getPostCollection().document(message).set(postToCreate);
+    }*/
+
+    public static void createUserPost(Post post) {
+        PostsHelper.getPostCollection().add(post);
     }
 
     public static Task<DocumentSnapshot> getPost(String uid) {

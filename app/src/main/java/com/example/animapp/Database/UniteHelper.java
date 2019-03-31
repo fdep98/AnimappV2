@@ -14,9 +14,13 @@ public class UniteHelper {
     }
 
     //Task permet de réaliser des appels asynchrones
-    public static Task<Void> createUnite(String name, String localite,String description, int nombre) {
+    /*public static Task<Void> createUnite(String name, String localite,String description, int nombre) {
         Unite section = new Unite(name, localite, description, nombre);
         return UniteHelper.getUniteCollection().document(name).set(section);
+    }*/
+
+    public static void createUnite(Unite unite) {
+        UniteHelper.getUniteCollection().add(unite);
     }
 
     public static Task<DocumentSnapshot> getUnite(String uid){

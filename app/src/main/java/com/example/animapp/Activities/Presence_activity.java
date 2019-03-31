@@ -1,4 +1,4 @@
-package com.example.animapp;
+package com.example.animapp.Activities;
 //Source: https://dsilvera.developpez.com/tutoriels/android/creer-listview-avec-checkbox-et-gerer-evenements/
 
 
@@ -7,30 +7,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.example.animapp.Model.Section;
 import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.api.LogDescriptor;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;

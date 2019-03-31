@@ -1,4 +1,4 @@
-package com.example.animapp;
+package com.example.animapp.Activities;
 
 
 import android.content.Intent;
@@ -6,15 +6,12 @@ import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import com.example.animapp.Database.UserHelper;
-import com.example.animapp.Fragments.AnimListFragment;
+import com.example.animapp.MainFragmentActivity;
 import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -99,17 +96,10 @@ public class AddAnime extends AppCompatActivity {
                 totemTI.setError("veuillez entrer un totem");
             }else{
                 User anime=new User(inputName,inputTotem,inputEmail,inputTel,inputDob,currentUserUnite,currentUserSection);
-                UserHelper.createAnime(inputName,inputTotem, inputEmail, inputTel, inputDob, currentUserUnite, currentUserSection);
+                UserHelper.createUser(anime);
                 liste.add(anime);
 
-
-                /*Fragment fragment = new AnimListFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.add(R.id.action_list,fragment,"ANIM_LIST_FRAGMENT");
-                transaction.addToBackStack(null);
-                transaction.commit();*/
-                startActivity(new Intent(this,MainFragmentActivity.class));
+                startActivity(new Intent(this, MainFragmentActivity.class));
 
             }
 

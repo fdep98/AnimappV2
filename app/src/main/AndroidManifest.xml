@@ -7,6 +7,11 @@
         android:required="true" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
     <application
         android:allowBackup="true"
@@ -15,25 +20,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.animapp.postMessage"></activity>
+        <activity android:name="com.example.animapp.Activities.postMessage"></activity>
         <activity android:name="com.example.animapp.MainFragmentActivity" />
-        <activity android:name="com.example.animapp.AddAnime" />
-        <activity android:name="com.example.animapp.PostActivity" />
-        <activity android:name="com.example.animapp.googleConnexion" />
-        <activity android:name="com.example.animapp.emailPswdConnexion" />
-        <activity android:name="com.example.animapp.Connexion">
+        <activity android:name="com.example.animapp.Activities.AddAnime" />
+        <activity android:name="com.example.animapp.Activities.PostActivity" />
+        <activity android:name="com.example.animapp.Activities.googleConnexion" />
+        <activity android:name="com.example.animapp.Activities.emailPswdConnexion" />
+        <activity android:name="com.example.animapp.Activities.Connexion">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.animapp.SectionCreation" />
-        <activity android:name="com.example.animapp.UniteCreation" />
-        <activity android:name="com.example.animapp.AccountCreation" />
-        <activity android:name="com.example.animapp.profil" />
-        <activity android:name="com.example.animapp.MediaActivity" />
-        <activity android:name="com.example.animapp.Presence_activity" />
+        <activity android:name="com.example.animapp.Activities.SectionCreation" />
+        <activity android:name="com.example.animapp.Activities.UniteCreation" />
+        <activity android:name="com.example.animapp.Activities.AccountCreation" />
+        <activity android:name="com.example.animapp.Activities.profil" />
+        <activity android:name="com.example.animapp.Activities.MediaActivity" />
+        <activity android:name="com.example.animapp.Activities.Presence_activity" />
 
         <meta-data
             android:name="preloaded_fonts"

@@ -1,4 +1,4 @@
-package com.example.animapp;
+package com.example.animapp.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;

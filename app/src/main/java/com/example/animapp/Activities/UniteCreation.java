@@ -1,4 +1,4 @@
-package com.example.animapp;
+package com.example.animapp.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.animapp.Database.UniteHelper;
+import com.example.animapp.Model.Unite;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DatabaseReference;
@@ -50,7 +51,8 @@ public class UniteCreation extends AppCompatActivity {
            inputNombre = Integer.parseInt(inNombre);
             //ajoute les données dans la BDD et renvoi à créationProfil de nom de la section
             if(!(inputNom.isEmpty() && inputLocalite.isEmpty() && inputDescription.isEmpty())){
-                UniteHelper.createUnite(inputNom, inputLocalite, inputDescription, inputNombre);
+                Unite unite = new Unite(inputNom,inputLocalite,inputDescription,inputNombre);
+                UniteHelper.createUnite(unite);
                 Intent goBack = new Intent();
                 goBack.putExtra("result",inputNom);
                 setResult(RESULT_OK, goBack);

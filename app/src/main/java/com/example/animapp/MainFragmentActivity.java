@@ -4,15 +4,14 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.animapp.Activities.profil;
 import com.example.animapp.Fragments.AnimListFragment;
 import com.example.animapp.Fragments.PostFragment;
 import com.example.animapp.Fragments.MediaFragment;
-import com.example.animapp.Fragments.ProfilFragment;
 import com.example.animapp.animapp.R;
 
 public class MainFragmentActivity extends AppCompatActivity {
