@@ -60,7 +60,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
 
         profil =  findViewById(R.id.profil);
         nom =  findViewById(R.id.nomET);
-        pseudo =  findViewById(R.id.pseudoET);
+        pseudo =  findViewById(R.id.prenomET);
         mdp =  findViewById(R.id.mdpET);
         totem = findViewById(R.id.totemET);
         email =  findViewById(R.id.emailET);
@@ -68,7 +68,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
         dob = findViewById(R.id.dobET);
         unite =  findViewById(R.id.uniteSpinner);
         section =  findViewById(R.id.sectionSpinner);
-        isAnimateur = findViewById(R.id.animateur);
+        isAnimateur = findViewById(R.id.animateur); //UNUSED
         unitList.add("");
         sectionList.add("");
         unitList.add("Créer une unité");
@@ -103,30 +103,55 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
 
 
     public void addData(){
-        String inputName = nom.getText().toString();
-        String inputPseudo = pseudo.getText().toString();
-        String inputMdp =  mdp.getText().toString();
-        String inputTotem =  totem.getText().toString();
         String inputEmail =  email.getText().toString();
-        String inputTel = ngsm.getText().toString();
-        String inputDob =  dob.getText().toString();
-        boolean inputIsAnim = isAnimateur.isChecked();
-        String inputUnite = unite.getSelectedItem().toString();
-        String inputSection = section.getSelectedItem().toString();
-
-        User user = new User(inputName,inputTotem,inputEmail,inputTel,inputDob,inputUnite,inputSection);
-
-
-        if(inputMdp.isEmpty() && inputEmail.isEmpty()){
-            Toast.makeText(this, "veuillez entrer votre email et votre mot de passe", Toast.LENGTH_SHORT).show();
-        }else if(inputMdp.length() < 4){
-            Toast.makeText(this, "mot de passe trop court", Toast.LENGTH_SHORT).show();
-        }else{
-            putUserInAuth(inputEmail,inputMdp);
-            UserHelper.createUser(user);
-            Intent main = new Intent(this, profil.class);
-            startActivity(main);
+        if(false){ //TODO vérifie si on peut ajouter à la BDD
+            Toast.makeText(this, "Cette adresse Email possède déjà un compte", Toast.LENGTH_SHORT).show();
         }
+        if(!inputEmail.contains("@")){
+            Toast.makeText(this, "Votre adresse email est invalide", Toast.LENGTH_SHORT).show();
+            email.setText("");
+        }
+        else{
+            String inputMdp =  mdp.getText().toString();
+            if(inputMdp.length() <= 6){
+                Toast.makeText(this, "Votre mot de passe est peu robuste, il doit contenir plus de 6 caractères", Toast.LENGTH_SHORT).show();
+            }
+            else if(inputMdp.equals(inputMdp.toUpperCase())||inputMdp.equals(inputMdp.toLowerCase())){
+                Toast.makeText(this, "Votre mot de passe est peu robuste, il doit au moins contenir une majuscule et minuscule", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                String inputName = nom.getText().toString();
+                String inputPrenom = pseudo.getText().toString();
+                String inputTotem =  totem.getText().toString();
+                String inputTel = ngsm.getText().toString();
+                String inputDob =  dob.getText().toString();
+                boolean inputIsAnim = isAnimateur.isChecked(); // UNUSED
+                String inputUnite = unite.getSelectedItem().toString();
+                String inputSection = section.getSelectedItem().toString();
+
+                if(inputName.equals("")||inputPrenom.equals("")){ // Filtre les champs Obligatoires
+                    Toast.makeText(this, "Il manque certaine informations afin de créer votre profil", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                User user = new User(inputName,inputTotem,inputEmail,inputTel,inputDob,inputUnite,inputSection);
+
+                //putUserInAuth(inputEmail,inputMdp);
+                //UserHelper.createUser(user);
+
+                if(false){ //TODO vérifie si on ajoute bien à la BDD
+                    Toast.makeText(this, "Une erreur inattendue s'est produite", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else{
+                    Toast.makeText(this, "Votre profil a été créer avec succès", Toast.LENGTH_SHORT).show();
+                    Intent main = new Intent(this, profil.class);
+                    startActivity(main);
+                }
+            }
+        }
+
+        mdp.setText("");
     }
 
 

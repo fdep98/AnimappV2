@@ -56,6 +56,46 @@
 
             <!--Nom-->
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/emailTI"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@color/blanc"
+                android:hint="email"
+                android:textColorHint="@color/brunRouge"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/emailET"
+                    android:layout_width="344dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:drawableTint="@color/bleu2"
+                    android:inputType="textEmailAddress"
+                    android:textAlignment="viewStart"
+                    tools:ignore="RtlCompat" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/mdpTI"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@color/blanc"
+                android:hint="mot de passe"
+                android:textColorHint="@color/brunRouge"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/mdpET"
+                    android:layout_width="344dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:drawableTint="@color/bleu2"
+                    android:inputType="textPassword"
+                    android:textAlignment="viewStart"
+                    tools:ignore="RtlCompat" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
                 android:id="@+id/nomTI"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
@@ -77,16 +117,16 @@
 
             <!--Pseudo-->
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/pseudoTI"
+                android:id="@+id/prenomTI"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:background="@color/blanc"
-                android:hint="pseudo"
+                android:hint="prenom"
                 android:textColorHint="@color/brunRouge"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/pseudoET"
+                    android:id="@+id/prenomET"
                     android:layout_width="344dp"
                     android:layout_height="44dp"
                     android:layout_gravity="center"
@@ -98,27 +138,9 @@
             </android.support.design.widget.TextInputLayout>
 
             <!--Mot de passe-->
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/mdpTI"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:background="@color/blanc"
-                android:hint="mot de passe"
-                android:textColorHint="@color/brunRouge"
-                app:errorEnabled="true">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/mdpET"
-                    android:layout_width="344dp"
-                    android:layout_height="44dp"
-                    android:layout_gravity="center"
-                    android:drawableTint="@color/bleu2"
-                    android:inputType="textPassword"
-                    android:textAlignment="viewStart"
-                    tools:ignore="RtlCompat" />
-            </android.support.design.widget.TextInputLayout>
 
             <!--Totem-->
+
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/totemTI"
                 android:layout_width="match_parent"
@@ -141,25 +163,6 @@
 
 
             <!--Email-->
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/emailTI"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:background="@color/blanc"
-                android:hint="email"
-                android:textColorHint="@color/brunRouge"
-                app:errorEnabled="true">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/emailET"
-                    android:layout_width="344dp"
-                    android:layout_height="44dp"
-                    android:layout_gravity="center"
-                    android:drawableTint="@color/bleu2"
-                    android:inputType="textEmailAddress"
-                    android:textAlignment="viewStart"
-                    tools:ignore="RtlCompat" />
-            </android.support.design.widget.TextInputLayout>
 
             <!--Ngsm-->
             <android.support.design.widget.TextInputLayout
