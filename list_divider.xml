@@ -1,0 +1,10 @@
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="85dp"
+    android:insetRight="0dp">
+
+    <shape android:shape="rectangle" >
+        <solid android:color="@color/common_google_signin_btn_text_dark_disabled"/>
+        <size android:height="0.1dp"/>
+    </shape>
+
+</inset>
