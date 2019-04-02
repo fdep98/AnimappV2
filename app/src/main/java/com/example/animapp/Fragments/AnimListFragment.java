@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.animapp.Activities.AddAnime;
 import com.example.animapp.Model.User;
@@ -143,8 +144,6 @@ public class AnimListFragment extends Fragment {
                                                 User anime = doc.toObject(User.class);
                                                 if(anime.getUnite() != null && anime.getSection() != null){
                                                     if(anime.getUnite().equals(monitUnite) && anime.getSection().equals(monitSection) && !anime.getEmail().equals(currentUser.getEmail())){
-                                                        //Toast.makeText(getActivity(),animEmail, Toast.LENGTH_SHORT).show();
-
                                                         animListe.add(anime);
                                                     }
                                                 }

@@ -67,6 +67,10 @@ public class Connexion extends AppCompatActivity {
         }
     }
 
+    public void onBackPressed(){
+        moveTaskToBack(true);
+    }
+
     public void emailSignin(View v){
         startActivity(new Intent(Connexion.this, emailPswdConnexion.class));
     }

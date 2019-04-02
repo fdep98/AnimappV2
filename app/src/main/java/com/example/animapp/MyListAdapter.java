@@ -34,7 +34,7 @@ public class MyListAdapter extends ArrayAdapter<User> implements Filterable {
         super(context,resource, userList);
         mContext = context;
         mResource = resource;
-        exampleList = new ArrayList<>(userList); //créer une copie de userList
+        exampleList = userList;//créer une copie de userList
         this.userList = userList;
     }
 

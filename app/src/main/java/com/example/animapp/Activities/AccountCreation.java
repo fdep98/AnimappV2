@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,15 +39,13 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
     private static final int SECTION_CODE_CREATION = 22;
     public DatabaseReference db;
     private FirebaseAuth mAuth;
-    private FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance(); //instance de la BDD firestore
-    private DocumentReference unitRef; //reference vers un document de l'unite
-    private DocumentReference secRef; //reference vers un document de la section
+    private FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
 
-    EditText nom,pseudo,mdp,totem,email,ngsm, dob;
+    User new_user;
+
+    EditText email,mdp,nom,prenom,totem,ngsm, dob;
     Spinner unite,section;
     MaterialButton profil;
-    CheckBox isAnimateur;
-    private FirebaseUser user;
     private ArrayList<String> unitList = new ArrayList<>();
     private ArrayList<String> sectionList = new ArrayList<>();
 
@@ -60,7 +59,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
 
         profil =  findViewById(R.id.profil);
         nom =  findViewById(R.id.nomET);
-        pseudo =  findViewById(R.id.pseudoET);
+        prenom =  findViewById(R.id.prenomET);
         mdp =  findViewById(R.id.mdpET);
         totem = findViewById(R.id.totemET);
         email =  findViewById(R.id.emailET);
@@ -68,7 +67,6 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
         dob = findViewById(R.id.dobET);
         unite =  findViewById(R.id.uniteSpinner);
         section =  findViewById(R.id.sectionSpinner);
-        isAnimateur = findViewById(R.id.animateur);
         unitList.add("");
         sectionList.add("");
         unitList.add("Créer une unité");
@@ -98,35 +96,82 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
         sSpinner.setOnItemSelectedListener(this);
 
         setup();
-
     }
 
+    public void onResume(){
+        super.onResume();
+        mdp.setText("");
+    }
 
     public void addData(){
-        String inputName = nom.getText().toString();
-        String inputPseudo = pseudo.getText().toString();
-        String inputMdp =  mdp.getText().toString();
-        String inputTotem =  totem.getText().toString();
         String inputEmail =  email.getText().toString();
+        String inputMdp = mdp.getText().toString();
+        //TODO ajouter un confirm password
+        String inputName = nom.getText().toString();
+        String inputPrenom = prenom.getText().toString();
+        String inputTotem =  totem.getText().toString();
         String inputTel = ngsm.getText().toString();
         String inputDob =  dob.getText().toString();
-        boolean inputIsAnim = isAnimateur.isChecked();
         String inputUnite = unite.getSelectedItem().toString();
         String inputSection = section.getSelectedItem().toString();
 
-        User user = new User(inputName,inputTotem,inputEmail,inputTel,inputDob,inputUnite,inputSection);
-
-
-        if(inputMdp.isEmpty() && inputEmail.isEmpty()){
-            Toast.makeText(this, "veuillez entrer votre email et votre mot de passe", Toast.LENGTH_SHORT).show();
-        }else if(inputMdp.length() < 4){
-            Toast.makeText(this, "mot de passe trop court", Toast.LENGTH_SHORT).show();
-        }else{
-            putUserInAuth(inputEmail,inputMdp);
-            UserHelper.createUser(user);
-            Intent main = new Intent(this, profil.class);
-            startActivity(main);
+        if(inputName.equals("")){
+            Toast.makeText(this, "Il manque certaine informations afin de créer votre profil", Toast.LENGTH_SHORT).show();
+            nom.requestFocus();
+            return;
         }
+        else if(inputPrenom.equals("")){
+            Toast.makeText(this, "Il manque certaine informations afin de créer votre profil", Toast.LENGTH_SHORT).show();
+            prenom.requestFocus();
+            return;
+        }
+        else if(!inputTel.equals("")&&inputTel.length()!=10){
+            Toast.makeText(this, "Ce numéro de gsm est invalide", Toast.LENGTH_SHORT).show();
+            ngsm.requestFocus();
+            ngsm.setText("");
+            return;
+        }
+        else if(!inputDob.equals("")&&false) {
+            //TODO vérifie le champ date de naissance
+        }
+
+        new_user = new User(inputName,inputTotem,inputEmail,inputTel,inputDob,inputUnite,inputSection);
+
+        mAuth.createUserWithEmailAndPassword(inputEmail, inputMdp)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            mAuth.getCurrentUser();
+                            //UserHelper.createUser(new_user); //TODO vérifie si on ajoute bien à la BDD
+                            Toast.makeText(AccountCreation.this, "Votre profil a été créer avec succès", Toast.LENGTH_SHORT).show();
+                            Intent main = new Intent(AccountCreation.this, profil.class);
+                            startActivity(main);
+                        }
+                        else{
+                            String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                            switch (errorCode){
+                                case "ERROR_EMAIL_ALREADY_IN_USE":
+                                    Toast.makeText(AccountCreation.this, "Cette adresse email est déjà utilisée", Toast.LENGTH_SHORT).show();
+                                    email.requestFocus();
+                                    email.setText("");
+                                    break;
+                                case "ERROR_INVALID_EMAIL":
+                                    Toast.makeText(AccountCreation.this, "Cette adresse email est invalide", Toast.LENGTH_SHORT).show();
+                                    email.requestFocus();
+                                    break;
+                                case "ERROR_WEAK_PASSWORD":
+                                    Toast.makeText(AccountCreation.this, "Votre mot de passe n'est pas assez robuste", Toast.LENGTH_SHORT).show();
+                                    mdp.requestFocus();
+                                    mdp.setText("");
+                                    break;
+                                default :
+                                    Toast.makeText(AccountCreation.this, "Une erreur inattendue s'est produite", Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
+                        }
+                    }
+                });
     }
 
 
@@ -178,22 +223,6 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         Toast.makeText(this, "veuillez selectionner une unite et une section", Toast.LENGTH_SHORT).show();
-    }
-
-    //ajoute l'email et le mot de passe de l'utilisateur dans Firebase Auth(utile pour la connexion via email et mdp)
-    public void putUserInAuth(String email, String mdp){
-        mAuth.createUserWithEmailAndPassword(email, mdp)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                             mAuth.getCurrentUser();
-                            //Toast.makeText(AccountCreation.this, "ajouté dans Auth", Toast.LENGTH_SHORT).show();
-                            //Log.d(TAG, "User email address updated.");
-                        }
-                    }
-                });
-
     }
 
     //active le mode offline permettant d'utiliser qd même l'app
