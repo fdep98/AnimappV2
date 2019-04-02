@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="200dp"
+    android:layout_gravity="center"
+    android:background="@android:color/transparent">
+
+    <TextView
+        android:id="@+id/frame_delete_text1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Attention cette action est irréversible"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/frame_delete_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="75dp"
+        android:text="Etes-vous certain de vouloir supprimer votre compte ?"
+        android:textAlignment="center"
+        android:textStyle="italic" />
+
+    <Button
+        android:id="@+id/frame_delete_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="130dp"
+        android:onClick="confirm"
+        android:text="Confirmer" />
+
+    <Button
+        android:id="@+id/frame_delete_cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="180dp"
+        android:layout_marginTop="130dp"
+        android:onClick="cancel"
+        android:text="Annuler" />
+</FrameLayout>

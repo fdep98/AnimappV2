@@ -75,6 +75,10 @@ public class profil extends AppCompatActivity {
         }
     }
 
+    public void onBackPressed(){
+        moveTaskToBack(true);
+    }
+
     public void update(){
         if(currentUser!= null){
             userRef = db.collection("users").document(currentUser.getEmail());
@@ -130,8 +134,9 @@ public class profil extends AppCompatActivity {
 
     public void update(View view){
         update();
-    }
+    } //UNUSED ?
 
+    // executer lorsque le bouton sign out est pressé
     public void signout(View view) {
         // [START auth_fui_signout]
         AuthUI.getInstance()
@@ -140,14 +145,26 @@ public class profil extends AppCompatActivity {
         this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK);
     }
 
+    // executer lorsque le bouton delete est pressé
     public void delete(View view) {
+        setContentView(R.layout.frame_delete_user);
+    }
+
+    // executer lorsque le bouton confirmer est pressé (FrameLayout)
+    public void confirm(View view){
+        Toast.makeText(this, "confirmer", Toast.LENGTH_SHORT).show();
         UserHelper.deleteUser(mAuth.getCurrentUser().getEmail());
         // [START auth_fui_delete]
         AuthUI.getInstance()
                 .delete(this)
                 .addOnSuccessListener(this, updateUIAfterRESTRequestsCompleted(DELETE_USER_TASK));
         this.updateUIAfterRESTRequestsCompleted(DELETE_USER_TASK);
+    }
 
+    // executer lorsque le bouton annuler est pressé (FrameLayout)
+    public void cancel(View view){
+        Toast.makeText(this, "annuler", Toast.LENGTH_SHORT).show();
+        setContentView(R.layout.activity_profil);
     }
 
     // 3 - Create OnCompleteListener called after tasks ended
@@ -172,7 +189,7 @@ public class profil extends AppCompatActivity {
     }
 
 
-    //lance une activité qui permet à l'utilisateur de choisir une photo de la gallerie et de l'affiché
+    // executer lorsque le bouton main est pressé
     public void goToMain(View v){
         Intent intent = new Intent(profil.this, MainFragmentActivity.class);
         startActivity(intent);
