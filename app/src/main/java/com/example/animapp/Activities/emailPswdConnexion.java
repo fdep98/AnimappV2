@@ -52,6 +52,11 @@ public class emailPswdConnexion extends AppCompatActivity implements View.OnClic
         //updateUI(currentUser);
     }
 
+    public void onResume(){
+        super.onResume();
+        mdp.setText("");
+    }
+
     public void signIn(String email, String mdp){
         mAuth.signInWithEmailAndPassword(email,mdp)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

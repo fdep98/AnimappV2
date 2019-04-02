@@ -138,7 +138,6 @@ public class profil extends AppCompatActivity {
 
     // executer lorsque le bouton sign out est pressé
     public void signout(View view) {
-        // [START auth_fui_signout]
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnSuccessListener(this, updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
@@ -154,7 +153,6 @@ public class profil extends AppCompatActivity {
     public void confirm(View view){
         Toast.makeText(this, "confirmer", Toast.LENGTH_SHORT).show();
         UserHelper.deleteUser(mAuth.getCurrentUser().getEmail());
-        // [START auth_fui_delete]
         AuthUI.getInstance()
                 .delete(this)
                 .addOnSuccessListener(this, updateUIAfterRESTRequestsCompleted(DELETE_USER_TASK));

@@ -207,14 +207,6 @@
             </android.support.design.widget.TextInputLayout>
 
 
-
-            <CheckBox
-                android:id="@+id/animateur"
-                android:layout_width="344dp"
-                android:layout_height="wrap_content"
-                android:text="Animateur"
-                android:textColorLink="@color/bleu" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
