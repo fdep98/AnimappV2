@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -61,7 +62,30 @@ public class emailPswdConnexion extends AppCompatActivity implements View.OnClic
                             FirebaseUser user = mAuth.getCurrentUser();
                             startActivity(new Intent(emailPswdConnexion.this,profil.class));
                         }else{
-                            Toast.makeText(emailPswdConnexion.this, "utilisateur inconnu", Toast.LENGTH_SHORT).show();
+                            String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                            switch (errorCode){
+                                case "ERROR_INVALID_EMAIL":
+                                    Toast.makeText(emailPswdConnexion.this, "The email address is badly formatted.", Toast.LENGTH_LONG).show();
+                                    emailTI.setError("Adresse email incohérente");
+                                    emailTI.requestFocus();
+                                    break;
+                                case "ERROR_WRONG_PASSWORD":
+                                    Toast.makeText(emailPswdConnexion.this, "The password is invalid or the user does not have a password.", Toast.LENGTH_LONG).show();
+                                    mdpTI.setError("Mot de passe incorrect ");
+                                    mdpTI.requestFocus();
+                                    TextInputEditText tmp = findViewById(R.id.mdpET); // j'arrive pas a faire mieux
+                                    tmp.setText("");
+                                    break;
+                                case "ERROR_USER_NOT_FOUND":
+                                    Toast.makeText(emailPswdConnexion.this, "The supplied credentials do not correspond to the previously signed in user.", Toast.LENGTH_LONG).show();
+                                    emailTI.setError("Cette adresse email ne possède aucune compte");
+                                    emailTI.requestFocus();
+                                    break;
+                                default :
+                                    Toast.makeText(emailPswdConnexion.this, "Une erreur inattendue s'est produite", Toast.LENGTH_SHORT).show();
+                                    break;
+
+                            }
                         }
                     }
                 });
