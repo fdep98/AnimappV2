@@ -15,6 +15,8 @@ import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.animapp.Model.Post;
+import com.example.animapp.PostListAdapter;
 import com.example.animapp.animapp.R;
 import com.example.animapp.Activities.postMessage;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,7 +38,7 @@ public class PostFragment extends Fragment {
     private FirebaseUser currentUser;
     private ImageView imageView;
 
-    private ArrayList<String>  statut = new ArrayList<>();
+    private ArrayList<Post>  statut = new ArrayList<>();
     private FirebaseFirestore firestoreDb; //instance de la BDD firestore
 
 
@@ -91,12 +93,16 @@ public class PostFragment extends Fragment {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if(task.isSuccessful()) {
                                 List<DocumentSnapshot> doc = task.getResult().getDocuments();
+                                
                                 for (DocumentSnapshot document : doc) {
-                                    String message = document.getString("message");
-                                    statut.add(message);
-                                    ArrayAdapter<String> liststatut = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, statut);
-                                    vue.setAdapter(liststatut);
+                                   // Post post = new Post(document.getString("moniteur"),document.getString("date"),document.getString("message"));
+                                    Post post = document.toObject(Post.class);
+                                    statut.add(post);
+
                                 }
+                                //ArrayAdapter<Post> liststatut = new ArrayAdapter<Post>(getContext(), android.R.layout.simple_list_item_1, statut);
+                                PostListAdapter liststatut = new PostListAdapter(getContext(), R.layout.list_adaptater, statut);
+                                vue.setAdapter(liststatut);
                             }
                         }
                     });

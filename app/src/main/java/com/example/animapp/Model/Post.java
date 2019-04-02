@@ -10,7 +10,9 @@ public class Post {
 
     private String id;
 
-
+    public Post(){
+        //constructeur par défault, required for calls to DataSnapshot.getValue(Post.class)
+    }
 
     public Post(String moniteur, String date, String message) {
         this.moniteur = moniteur;
