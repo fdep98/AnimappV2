@@ -18,7 +18,6 @@ public class User {
     private String dateOfBirth;
     private boolean isAnimateur;
     private String absences;
-
     @Nullable
     private String urlPhoto;
     private String ngsm;
@@ -140,6 +139,7 @@ public class User {
     public String getAbsences() {
         return this.absences;
     }
+
 
 
     @Nullable
