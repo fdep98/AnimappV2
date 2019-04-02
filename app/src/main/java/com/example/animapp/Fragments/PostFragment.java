@@ -38,6 +38,7 @@ public class PostFragment extends Fragment {
     private FirebaseUser currentUser;
     private ImageView imageView;
 
+
     private ArrayList<Post>  statut = new ArrayList<>();
     private FirebaseFirestore firestoreDb; //instance de la BDD firestore
 

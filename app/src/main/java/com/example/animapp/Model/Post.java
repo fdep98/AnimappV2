@@ -4,9 +4,9 @@ import java.text.DateFormat;
 
 public class Post {
     private String moniteur;
-
     private String date;
     private String message;
+    private String imgurl;
 
     private String id;
 
@@ -20,12 +20,20 @@ public class Post {
         this.message = message;
     }
 
-    public Post(String id, String moniteur, String date, String message) {
+    //constructeur avec image
+    public Post(String moniteur, String date, String message,String imgurl) {
         this.moniteur = moniteur;
         this.date = date;
         this.message = message;
-        this.id = id;
+        this.imgurl=imgurl;
     }
+
+    //public Post(String id, String moniteur, String date, String message) {
+       // this.moniteur = moniteur;
+        //this.date = date;
+        //this.message = message;
+      //  this.id = id;
+    //}
 
     public String getMoniteur() {
         return moniteur;
@@ -57,5 +65,13 @@ public class Post {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
     }
 }
