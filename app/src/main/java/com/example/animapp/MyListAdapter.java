@@ -25,7 +25,7 @@ public class MyListAdapter extends BaseAdapter implements Filterable {
 
     private Context mContext;
     private ArrayList<User> userList;
-    private ArrayList<User> exampleList;
+    private List<User> exampleList;
     private static LayoutInflater inflater = null;
     private View view;
     private ViewHolder holder;
@@ -35,7 +35,7 @@ public class MyListAdapter extends BaseAdapter implements Filterable {
         mContext = context;
         this.userList = userList;
         exampleList = userList;
-        inflater = ((Activity) mContext).getLayoutInflater();
+        inflater = LayoutInflater.from(mContext);
     }
 
 
@@ -58,41 +58,45 @@ public class MyListAdapter extends BaseAdapter implements Filterable {
     @Override
     public View getView (int position, View convertView, ViewGroup parent)
     {
-        view = convertView;
+
         final int pos = position;
-        User anim = userList.get(pos);
-        if(view == null){
-            view = inflater.inflate(R.layout.list_details,parent,false);
+        final User anim = userList.get(pos);
+        if(convertView == null){
+            convertView = inflater.inflate(R.layout.list_details,parent,false);
             holder = new ViewHolder();
-            holder.nom = (TextView) view.findViewById(R.id.nom);
-            holder.totem = (TextView) view.findViewById(R.id.totem);
-            holder.nbrAbsences = (TextView) view.findViewById(R.id.nbrAbsences);
-            holder.checkBox = (CheckBox) view.findViewById(R.id.check);
-            view.setTag(holder);
+            holder.nom = (TextView) convertView.findViewById(R.id.nom);
+            holder.totem = (TextView) convertView.findViewById(R.id.totem);
+            holder.nbrAbsences = (TextView) convertView.findViewById(R.id.nbrAbsences);
+            holder.checkBox = (CheckBox) convertView.findViewById(R.id.check);
+            convertView.setTag(holder);
 
         }else{
-            holder = (ViewHolder) view.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
         if(anim.isChecked()){
             holder.checkBox.setChecked(true);
         }else{
             holder.checkBox.setChecked(false);
         }
-
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    User anim = userList.get(pos);
+                    anim.setChecked(true);
+                }else{
+                    anim.setChecked(false);
+                }
+            }
+        });
         holder.nom.setText(anim.getNom());
         holder.totem.setText(anim.getPrenom());
         holder.nbrAbsences.setText(anim.getAbsences());
 
-        return view;
+        return convertView;
 
     }
 
-    public void setCheckBox(int position){
-        //mise à jour du status de la checkbox
-        User anim = userList.get(position);
-        anim.setChecked(!anim.isChecked());
-        notifyDataSetChanged();
-    }
 
     public class ViewHolder{
         TextView nom;
@@ -116,8 +120,8 @@ public class MyListAdapter extends BaseAdapter implements Filterable {
             //si le filtre est vide, on montre tt les résultats
             if(constraint == null || constraint.length() == 0){
                 filteredList.addAll(exampleList);
-            }else if(constraint!=null){
-                String filterPattern = constraint.toString().toLowerCase().trim();
+            }else{
+                String filterPattern = constraint.toString().toLowerCase();
                 for(User user:exampleList){
                     //check si le mot a filtrer match avec le nom ou le pseudo d'un animé dans la liste
                     if(user.getNom().toLowerCase().contains(filterPattern) || (user.getTotem().toLowerCase().contains(filterPattern))){

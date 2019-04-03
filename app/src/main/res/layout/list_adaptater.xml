@@ -7,6 +7,7 @@
     android:weightSum="100"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_adaptater"
+    android:layout_marginBottom="15dp"
     >
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,13 +40,13 @@
             android:layout_weight="45"
             android:id="@+id/Image"/>
 
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:id="@+id/Message"
-            android:text="Zone 3"
-            android:layout_weight="45"
-            android:layout_below="@id/Date"/>
+    <TextView
+        android:id="@+id/Message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Date"
+        android:layout_weight="45"
+        android:text="Zone 3" />
 
 
     </LinearLayout>
