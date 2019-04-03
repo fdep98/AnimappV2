@@ -17,13 +17,12 @@
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="com.example.animapp.Activities.postMessage"></activity>
         <activity android:name="com.example.animapp.MainFragmentActivity" />
         <activity android:name="com.example.animapp.Activities.AddAnime" />
-        <activity android:name="com.example.animapp.Activities.PostActivity" />
         <activity android:name="com.example.animapp.Activities.googleConnexion" />
         <activity android:name="com.example.animapp.Activities.emailPswdConnexion" />
         <activity android:name="com.example.animapp.Activities.Connexion">
@@ -37,8 +36,6 @@
         <activity android:name="com.example.animapp.Activities.UniteCreation" />
         <activity android:name="com.example.animapp.Activities.AccountCreation" />
         <activity android:name="com.example.animapp.Activities.profil" />
-        <activity android:name="com.example.animapp.Activities.MediaActivity" />
-        <activity android:name="com.example.animapp.Activities.Presence_activity" />
 
         <meta-data
             android:name="preloaded_fonts"

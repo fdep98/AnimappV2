@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/pseudo"
+        android:id="@+id/totem"
         android:layout_width="wrap_content"
         android:layout_height="31dp"
         android:layout_marginStart="8dp"

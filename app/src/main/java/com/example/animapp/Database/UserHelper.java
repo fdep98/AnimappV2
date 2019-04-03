@@ -2,6 +2,7 @@ package com.example.animapp.Database;
 
 import com.example.animapp.Model.User;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,13 +26,14 @@ public class UserHelper {
         return UserHelper.getUserCollection().document(email).set(userToCreate);
     }*/
 
-   public static void createUser(User user){
-       UserHelper.getUserCollection().add(user);
-   }
-
+    public static Task<Void> createUser(String nom, String pseudo, String totem, String email, String ngsm, String dob, String unite, String section) {
+        User userToCreate = new User(nom,pseudo,totem,email,ngsm,dob, unite, section);
+        return UserHelper.getUserCollection().document(email).set(userToCreate);
+    }
     public static Task<Void> createAnime(String nom, String totem, String email, String ngsm, String dob, String unite, String section) {
         User userToCreate = new User(nom,totem,email,ngsm,dob, unite, section);
-        return UserHelper.getUserCollection().document(email).set(userToCreate);
+
+        return UserHelper.getUserCollection().document().set(userToCreate);
     }
 
     public static Task<DocumentSnapshot> getUser(String uid){

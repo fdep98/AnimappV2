@@ -44,9 +44,11 @@ public class AnimListFragment extends Fragment {
     private FirebaseUser currentUser;
     private DocumentReference userRef;
     private FirebaseAuth mAuth;
-    private ArrayList<User> animListe;
+    private ArrayList<User> animListe = new ArrayList<>();
     private FirebaseFirestore firestoreDb; //instance de la BDD firestore
     private MyListAdapter adapter;
+    MenuItem searchItem;
+    SearchView searchView;
 
     @Nullable
     @Override
@@ -62,6 +64,10 @@ public class AnimListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        list = view.findViewById(R.id.list);
+
+        Toolbar myToolbar = (Toolbar) getView().findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(myToolbar);
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getInstance().getCurrentUser();
@@ -70,13 +76,8 @@ public class AnimListFragment extends Fragment {
             userRef = firestoreDb.collection("users").document(currentUser.getEmail()); //réference vers le doc du moniteur connecté
         }
 
-        list = view.findViewById(R.id.list);
-
-        Toolbar myToolbar = (Toolbar) getView().findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(myToolbar);
-        //myToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_search_black));
-
         bindAnimeList();
+
     }
 
     @Override
@@ -92,18 +93,23 @@ public class AnimListFragment extends Fragment {
             }
         });
 
-/*        MenuItem updateAbsc = menu.findItem(R.id.updateAbs);
+        MenuItem updateAbsc = menu.findItem(R.id.updateAbs);
         updateAbsc.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 //pour chaque item cliqué, mettre à jour le nbr d'abscences
+                for(User anim : animListe){
+                    if(anim.isChecked()){
+                        anim.setAbsences(anim.getAbsences()+1);
+                    }
+                }
                 return true;
             }
-        });*/
+        });
 
 
-        MenuItem searchItem = menu.findItem(R.id.search); //reférence vers l'iconne de recherche
-        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchItem = menu.findItem(R.id.search); //reférence vers l'iconne de recherche
+        searchView = (SearchView) searchItem.getActionView();
         //searchView.setBackgroundColor(Color.WHITE);
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE); //remplace l'action bouton recherche dans le clavier par le v
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -114,16 +120,18 @@ public class AnimListFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                MyListAdapter adapter = new MyListAdapter(getActivity(),R.layout.list_details,animListe);
                 adapter.getFilter().filter(newText);
                 return false;
             }
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
 
     public void bindAnimeList(){
-        animListe = new ArrayList<>();
         userRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -147,19 +155,16 @@ public class AnimListFragment extends Fragment {
                                                         animListe.add(anime);
                                                     }
                                                 }
-
+                                                adapter = new MyListAdapter(getActivity(),animListe);
+                                                list.setAdapter(adapter);
                                             }
-                                            //Utilisation de notre adaptateur qui se chargera de placer les valeurs de notre liste automatiquement et d'affecter un tag à nos checkbox
-                                            adapter = new MyListAdapter(getActivity(),R.layout.list_details,animListe);
-                                            list.setAdapter(adapter);
-
                                         }
+
                                     }
                                 });
 
                     }
                 });
-
     }
 
 

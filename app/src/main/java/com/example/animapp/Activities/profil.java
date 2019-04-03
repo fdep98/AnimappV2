@@ -59,8 +59,9 @@ public class profil extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        update();
-
+        if(currentUser != null){
+            update();
+        }
     }
 
     //verifie si le user est déja connecté
@@ -82,6 +83,7 @@ public class profil extends AppCompatActivity {
     public void update(){
         if(currentUser!= null){
             userRef = db.collection("users").document(currentUser.getEmail());
+
             //récupère et met à jour la photo de profil
             if(currentUser.getPhotoUrl() != null){
                 Glide.with(this)
@@ -91,8 +93,8 @@ public class profil extends AppCompatActivity {
             }else{
                 IVphoto.setImageResource(R.mipmap.scout);
             }
-            //le snapshot contient toute les données de l'utilisateur
 
+            //le snapshot contient toute les données de l'utilisateur
             userRef.get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -101,7 +103,7 @@ public class profil extends AppCompatActivity {
                                 User user = documentSnapshot.toObject(User.class);
 
                                 TVnom.setText(user.getNom());
-                                TVpseudo.setText(user.getPseudo());
+                                TVpseudo.setText(user.getPrenom());
                                 TVtotem.setText(user.getTotem());
                                 TVemail.setText(user.getEmail());
                                 TVngsm.setText(user.getNgsm());
@@ -178,8 +180,6 @@ public class profil extends AppCompatActivity {
                     case DELETE_USER_TASK:
                         finish();
                         startActivity(new Intent(profil.this, Connexion.class));
-                        break;
-                    default:
                         break;
                 }
             }

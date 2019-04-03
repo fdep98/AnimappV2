@@ -67,6 +67,7 @@ public class AddAnime extends AppCompatActivity {
         super.onStart();
         final FirebaseUser currentUser = mAuth.getInstance().getCurrentUser();
         String email = currentUser.getEmail();
+        String uiId = currentUser.getUid();
 
         if(currentUser != null){
             firestoreDb.collection("users").document(email)
@@ -96,11 +97,9 @@ public class AddAnime extends AppCompatActivity {
                 totemTI.setError("veuillez entrer un totem");
             }else{
                 User anime=new User(inputName,inputTotem,inputEmail,inputTel,inputDob,currentUserUnite,currentUserSection);
-                UserHelper.createUser(anime);
+                UserHelper.createUser(inputName,null,inputTotem,inputEmail,inputTel,inputDob,currentUserUnite,currentUserSection);
                 liste.add(anime);
-
                 startActivity(new Intent(this, MainFragmentActivity.class));
-
             }
 
         }
@@ -117,10 +116,6 @@ public class AddAnime extends AppCompatActivity {
                     .build();
             db.setFirestoreSettings(settings);
             // [END set_firestore_settings]
-        }
-
-        public void addToArrayList(User user){
-            liste.add(user);
         }
 
 }

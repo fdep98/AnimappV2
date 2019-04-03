@@ -1,12 +1,18 @@
 package com.example.animapp;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -15,63 +21,84 @@ import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 
 
-public class MyListAdapter extends ArrayAdapter<User> implements Filterable {
+public class MyListAdapter extends BaseAdapter implements Filterable {
 
-    private LayoutInflater	mInflater;
     private Context mContext;
-    private int mResource;
-    private ArrayList<User> userList = null;
-
+    private ArrayList<User> userList;
     private ArrayList<User> exampleList;
+    private static LayoutInflater inflater = null;
+    private View view;
+    private ViewHolder holder;
 
-    private static class ViewHolder{
-        TextView nom;
-        TextView pseudo;
-        TextView nbrAbsences;
+
+    public MyListAdapter(Context context, ArrayList<User> userList){
+        mContext = context;
+        this.userList = userList;
+        exampleList = userList;
+        inflater = ((Activity) mContext).getLayoutInflater();
     }
 
-    public MyListAdapter(Context context, int resource, ArrayList<User> userList){
-        super(context,resource, userList);
-        mContext = context;
-        mResource = resource;
-        exampleList = userList;//créer une copie de userList
-        this.userList = userList;
+
+    @Override
+    public int getCount() {
+        return userList.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
 
     @Override
     public View getView (int position, View convertView, ViewGroup parent)
     {
-        String nom = getItem(position).getNom(); //recupère le nom de l'item courant
-        String pseudo = getItem(position).getPseudo();
-        String nbrAbsences = getItem(position).getAbsences();
-
-        User anime = new User(nom, pseudo, nbrAbsences);
-
-        final View result;
-        ViewHolder holder;
-
-        if(convertView == null){
-            mInflater = LayoutInflater.from(mContext);
-            convertView = mInflater.inflate(mResource, parent, false);
+        view = convertView;
+        final int pos = position;
+        User anim = userList.get(pos);
+        if(view == null){
+            view = inflater.inflate(R.layout.list_details,parent,false);
             holder = new ViewHolder();
-            holder.nom = (TextView) convertView.findViewById(R.id.nom);
-            holder.pseudo = (TextView) convertView.findViewById(R.id.pseudo);
-            holder.nbrAbsences = (TextView) convertView.findViewById(R.id.nbrAbsences);
+            holder.nom = (TextView) view.findViewById(R.id.nom);
+            holder.totem = (TextView) view.findViewById(R.id.totem);
+            holder.nbrAbsences = (TextView) view.findViewById(R.id.nbrAbsences);
+            holder.checkBox = (CheckBox) view.findViewById(R.id.check);
+            view.setTag(holder);
 
-            result = convertView;
-            convertView.setTag(holder);
         }else{
-            holder = (ViewHolder) convertView.getTag();
-            result = convertView;
+            holder = (ViewHolder) view.getTag();
+        }
+        if(anim.isChecked()){
+            holder.checkBox.setChecked(true);
+        }else{
+            holder.checkBox.setChecked(false);
         }
 
-        holder.nom.setText(anime.getNom());
-        holder.pseudo.setText(anime.getPseudo());
-        holder.nbrAbsences.setText(anime.getAbsences());
+        holder.nom.setText(anim.getNom());
+        holder.totem.setText(anim.getPrenom());
+        holder.nbrAbsences.setText(anim.getAbsences());
 
-        return result;
+        return view;
 
+    }
+
+    public void setCheckBox(int position){
+        //mise à jour du status de la checkbox
+        User anim = userList.get(position);
+        anim.setChecked(!anim.isChecked());
+        notifyDataSetChanged();
+    }
+
+    public class ViewHolder{
+        TextView nom;
+        TextView totem;
+        TextView nbrAbsences;
+        CheckBox checkBox;
     }
 
     @Override
@@ -89,14 +116,15 @@ public class MyListAdapter extends ArrayAdapter<User> implements Filterable {
             //si le filtre est vide, on montre tt les résultats
             if(constraint == null || constraint.length() == 0){
                 filteredList.addAll(exampleList);
-            }else{
+            }else if(constraint!=null){
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for(User user:exampleList){
                     //check si le mot a filtrer match avec le nom ou le pseudo d'un animé dans la liste
-                    if(user.getNom().toLowerCase().contains(filterPattern) || (user.getPseudo().toLowerCase().contains(filterPattern))){
+                    if(user.getNom().toLowerCase().contains(filterPattern) || (user.getTotem().toLowerCase().contains(filterPattern))){
                         filteredList.add(user);
                     }
                 }
+
             }
             FilterResults results = new FilterResults();
             results.values = filteredList;
@@ -106,7 +134,7 @@ public class MyListAdapter extends ArrayAdapter<User> implements Filterable {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             exampleList.clear();
-            exampleList.addAll((ArrayList) results.values);
+            exampleList.addAll((ArrayList<User>) results.values);
             notifyDataSetChanged();
         }
     };

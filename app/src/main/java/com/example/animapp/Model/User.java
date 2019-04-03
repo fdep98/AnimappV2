@@ -9,22 +9,23 @@ public class User {
 
     private String id;
     private String nom;
-    private String pseudo;
+    private String prenom;
     private String totem;
     private String mdp;
     private String section;
     private String unite;
     private String email;
     private String dateOfBirth;
-    private boolean isAnimateur;
+    private boolean isChecked;
+
+
+
     private String absences;
     @Nullable
     private String urlPhoto;
     private String ngsm;
 
-
-    public User(){
-        //constructeur par défault, required for calls to DataSnapshot.getValue(User.class)
+    public User() {
     }
 
     //constructeur animé
@@ -39,18 +40,18 @@ public class User {
         this.section = section;
         this.unite = unite;
         this.absences = "0";
+
     }
 
     //constructeur moniteur
-    public User(String nom, String pseudo, String totem, String email, String ngsm, String dob, boolean isAnimateur, String unite, String section){
+    public User(String nom, String prenom, String totem, String email, String ngsm, String dob, String unite, String section){
         this.nom = nom;
-        this.pseudo = pseudo;
+        this.prenom = prenom;
         this.totem = totem;
         this.section = section;
         this.email = email;
         this.ngsm = ngsm;
         this.dateOfBirth = dob;
-        this.isAnimateur = isAnimateur;
         this.section = section;
         this.unite = unite;
         this.absences = "0";
@@ -58,9 +59,10 @@ public class User {
 
     public User(String nom, String pseudo, String nbrAbsences){
         this.nom = nom;
-        this.pseudo = pseudo;
+        this.prenom = pseudo;
         this.absences = nbrAbsences;
         this.absences = "0";
+
     }
 
     /*--------------------------------GET&SETTER-------------------------------------------*/
@@ -81,12 +83,12 @@ public class User {
         this.nom = nom;
     }
 
-    public String getPseudo() {
-        return this.pseudo;
+    public String getPrenom() {
+        return this.prenom;
     }
 
-    public void setPseudo(String pseudo) {
-        this.pseudo = pseudo;
+    public void setPrenom(String pseudo) {
+        this.prenom = pseudo;
     }
 
     public String getTotem() {
@@ -161,12 +163,13 @@ public class User {
     public void setUnite(String unite) {
         this.unite = unite;
     }
-    public boolean isAnimateur() {
-        return isAnimateur;
+
+    public boolean isChecked() {
+        return isChecked;
     }
 
-    public void setAnimateur(boolean animateur) {
-        isAnimateur = animateur;
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 
 }
