@@ -102,7 +102,7 @@ public class PostFragment extends Fragment {
 
                                 }
                                 //ArrayAdapter<Post> liststatut = new ArrayAdapter<Post>(getContext(), android.R.layout.simple_list_item_1, statut);
-                                PostListAdapter liststatut = new PostListAdapter(getContext(), R.layout.list_adaptater, statut);
+                                PostListAdapter liststatut = new PostListAdapter(getContext(), R.layout.post_card, statut);
                                 vue.setAdapter(liststatut);
                             }
                         }

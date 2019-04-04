@@ -102,14 +102,14 @@ public class profil extends AppCompatActivity {
                             if(documentSnapshot.exists()){
                                 User user = documentSnapshot.toObject(User.class);
 
-                                TVnom.setText(user.getNom());
-                                TVpseudo.setText(user.getPrenom());
-                                TVtotem.setText(user.getTotem());
-                                TVemail.setText(user.getEmail());
-                                TVngsm.setText(user.getNgsm());
-                                TVdob.setText(user.getDateOfBirth());
-                                TVunite.setText(user.getUnite());
-                                TVsection.setText(user.getSection());
+                                TVnom.setText("Nom: "+user.getNom());
+                                TVpseudo.setText("Prénom: "+user.getPrenom());
+                                TVtotem.setText("Totem: "+user.getTotem());
+                                TVemail.setText("Email: "+user.getEmail());
+                                TVngsm.setText("GSM: "+user.getNgsm());
+                                TVdob.setText("Date Naissance: "+user.getDateOfBirth());
+                                TVunite.setText("Unité: "+user.getUnite());
+                                TVsection.setText("Section: "+user.getSection());
 
                             }else{
                                 TVnom.setText(currentUser.getDisplayName());

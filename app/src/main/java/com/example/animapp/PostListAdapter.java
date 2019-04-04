@@ -71,10 +71,10 @@ public class PostListAdapter extends ArrayAdapter<Post> {
             holder= new ViewHolder();
             LayoutInflater inflater=LayoutInflater.from(mContext);
             convertView=inflater.inflate(mRessource,parent,false); //pas top ! voir tuto:"https://www.youtube.com/watch?v=SApBLHIpH8A&index=9&list=PLgCYzUzKIBE8TUoCyjomGFqzTFcJ05OaC"
-            holder.moniteur = (TextView) convertView.findViewById(R.id.Moniteur);
-            holder.date = (TextView) convertView.findViewById(R.id.Date);
-            holder.message = (TextView) convertView.findViewById(R.id.Message);
-            holder.image=(ImageView) convertView.findViewById(R.id.Image);
+            holder.moniteur = (TextView) convertView.findViewById(R.id.cardMoniteur);
+            holder.date = (TextView) convertView.findViewById(R.id.cardDate);
+            holder.message = (TextView) convertView.findViewById(R.id.cardMessage);
+            holder.image=(ImageView) convertView.findViewById(R.id.cardImage);
 
             result=convertView;
 
@@ -109,6 +109,7 @@ public class PostListAdapter extends ArrayAdapter<Post> {
         holder.moniteur.setText(post.getMoniteur());
         holder.date.setText(post.getDate());
         holder.message.setText(post.getMessage());
+
 
 
         return convertView;
