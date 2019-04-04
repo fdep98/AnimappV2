@@ -48,6 +48,7 @@ public class AnimListFragment extends Fragment {
     private FirebaseFirestore firestoreDb; //instance de la BDD firestore
     private MyListAdapter adapter;
     MenuItem searchItem;
+    MenuItem updateAbsc;
     SearchView searchView;
 
     @Nullable
@@ -93,7 +94,8 @@ public class AnimListFragment extends Fragment {
             }
         });
 
-        MenuItem updateAbsc = menu.findItem(R.id.updateAbs);
+        updateAbsc = menu.findItem(R.id.updateAbs);
+
         updateAbsc.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -103,27 +105,46 @@ public class AnimListFragment extends Fragment {
                         anim.setAbsences(anim.getAbsences()+1);
                     }
                 }
-                return true;
+                return false;
             }
         });
-
 
         searchItem = menu.findItem(R.id.search); //reférence vers l'iconne de recherche
         searchView = (SearchView) searchItem.getActionView();
         //searchView.setBackgroundColor(Color.WHITE);
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE); //remplace l'action bouton recherche dans le clavier par le v
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                adapter = new MyListAdapter(getActivity(),animListe);
+                list.setAdapter(adapter);
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        adapter.getFilter().filter(newText);
+                        return true;
+                    }
+                });
+                return true;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                return false;
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                AnimListFragment backToAnimList= new AnimListFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment, backToAnimList)
+                        .addToBackStack(null)
+                        .commit();
+                return true; //false si on ne veut pas que ca se referme
             }
         });
+
     }
 
     @Override
@@ -155,9 +176,10 @@ public class AnimListFragment extends Fragment {
                                                         animListe.add(anime);
                                                     }
                                                 }
-                                                adapter = new MyListAdapter(getActivity(),animListe);
-                                                list.setAdapter(adapter);
+
                                             }
+                                            adapter = new MyListAdapter(getActivity(),animListe);
+                                            list.setAdapter(adapter);
                                         }
 
                                     }

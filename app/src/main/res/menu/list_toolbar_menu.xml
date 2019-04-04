@@ -6,8 +6,10 @@
         android:enabled="true"
         android:icon="@drawable/ic_search_black"
         android:title="Search"
+        android:iconifiedByDefault="true"
         app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        />
     <!--collapseActionView permet l'extension de l'icon et SearchView permettra
         de transformer l'icon en une barre de recherche lorsque l'on cliquera dessus-->
     <item
