@@ -242,7 +242,7 @@ public class postMessage extends AppCompatActivity {
                 public void onClick(View v) {
                     prog.setMessage("Téléchargement...");
                     prog.show();
-                    if(post != null){
+                    if(!post.isEmpty()){
                         //stockage dans la BDD
                         final StorageReference st = storageRef.child(currentUser.getEmail()+" photos").child("post du "+currentDate); //créer un dossier photos et met le chemin vers la photo comme child
                         st.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -294,7 +294,7 @@ public class postMessage extends AppCompatActivity {
             publier.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(post != null) {
+                    if(!post.isEmpty()) {
                         prog.setMessage("Téléchargement...");
                         prog.show();
                         //stockage dans la BDD
