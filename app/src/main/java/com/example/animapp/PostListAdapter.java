@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.animapp.Model.Post;
 import com.example.animapp.animapp.R;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
@@ -19,6 +20,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,10 +89,12 @@ public class PostListAdapter extends ArrayAdapter<Post> {
 
 
 
-        Animation animation = AnimationUtils.loadAnimation(mContext,(position>lastPosition) ? R.anim.loading_down_animation :R.anim.loading_up_animation);
+       /* Animation animation = AnimationUtils.loadAnimation(mContext,(position>lastPosition) ? R.anim.loading_down_animation :R.anim.loading_up_animation);
         result.startAnimation(animation);
-        lastPosition=position;
+        lastPosition=position;*/
 
+        /*Animation animation = AnimationUtils.loadAnimation(mContext,R.anim.fui_slide_in_right);
+        result.startAnimation(animation);*/
 
 
         //création image defaultImage est l'image si y'en a pas
@@ -109,6 +113,8 @@ public class PostListAdapter extends ArrayAdapter<Post> {
         holder.moniteur.setText(post.getMoniteur());
         holder.date.setText(post.getDate());
         holder.message.setText(post.getMessage());
+        /*Picasso.get().load(post.getImgurl())
+                .into(holder.image);*/
 
 
 

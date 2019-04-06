@@ -23,9 +23,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="@color/blanc"
+        android:visibility="visible"
         app:elevation="4dp"
         app:itemBackground="@color/blanc"
-
         app:itemIconTint="@drawable/bottom_nav"
         app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
         app:itemTextColor="@drawable/bottom_nav"

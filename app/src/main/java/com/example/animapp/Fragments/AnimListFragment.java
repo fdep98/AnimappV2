@@ -8,6 +8,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -23,15 +26,21 @@ import android.widget.Toast;
 import com.example.animapp.Activities.AddAnime;
 import com.example.animapp.Model.User;
 import com.example.animapp.MyListAdapter;
+import com.example.animapp.UserAdapter;
 import com.example.animapp.animapp.R;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -40,13 +49,16 @@ import java.util.List;
 
 public class AnimListFragment extends Fragment {
 
-    private ListView list;
+    private RecyclerView list;
     private FirebaseUser currentUser;
-    private DocumentReference userRef;
+    private CollectionReference userRef;
+    private DocumentReference monitRef;
     private FirebaseAuth mAuth;
     private ArrayList<User> animListe = new ArrayList<>();
     private FirebaseFirestore firestoreDb; //instance de la BDD firestore
     private MyListAdapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+
     MenuItem searchItem;
     MenuItem updateAbsc;
     SearchView searchView;
@@ -54,7 +66,7 @@ public class AnimListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_liste, container,false);
+        View v = inflater.inflate(R.layout.activity_anim_liste, container,false);
         setHasOptionsMenu(true);
         return v;
 
@@ -65,19 +77,27 @@ public class AnimListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        list = view.findViewById(R.id.list);
+        list = view.findViewById(R.id.listRecyclerView);
+        list.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getContext());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
+        list.addItemDecoration(dividerItemDecoration);
+        list.setLayoutManager(layoutManager);
 
         Toolbar myToolbar = (Toolbar) getView().findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(myToolbar);
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getInstance().getCurrentUser();
+
         if(currentUser != null){
             firestoreDb = FirebaseFirestore.getInstance();
-            userRef = firestoreDb.collection("users").document(currentUser.getEmail()); //réference vers le doc du moniteur connecté
+            userRef = firestoreDb.collection("users");
+            monitRef = firestoreDb.collection("users").document(currentUser.getEmail()); //réference vers le doc du moniteur connecté
         }
 
         bindAnimeList();
+
 
     }
 
@@ -85,7 +105,7 @@ public class AnimListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.list_toolbar_menu, menu);
 
-        MenuItem addAnime = menu.findItem(R.id.ajouter);
+        final MenuItem addAnime = menu.findItem(R.id.ajouter);
         addAnime.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -117,8 +137,8 @@ public class AnimListFragment extends Fragment {
         searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                adapter = new MyListAdapter(getActivity(),animListe);
-                list.setAdapter(adapter);
+                //adapter = new MyListAdapter(animListe);
+               //
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
@@ -128,6 +148,7 @@ public class AnimListFragment extends Fragment {
                     @Override
                     public boolean onQueryTextChange(String newText) {
                         adapter.getFilter().filter(newText);
+                        list.setAdapter(adapter);
                         return true;
                     }
                 });
@@ -152,42 +173,60 @@ public class AnimListFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void bindAnimeList(){
-        userRef.get()
+    public void onItemClicked(final ArrayList<User> alist){
+       adapter.setOnItemClickListener(new MyListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Toast.makeText(getActivity(), alist.get(position).getNom()+" clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void bindAnimeList() {
+        monitRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                         final String monitUnite = documentSnapshot.getString("unite");
-                         final String monitSection = documentSnapshot.getString("section");
+                        final String monitUnite = documentSnapshot.getString("unite");
+                        final String monitSection = documentSnapshot.getString("section");
+                        final String monitEmail = documentSnapshot.getString("email");
 
-                        firestoreDb.collection("users")
-                                .get()
+                        Query query1 = userRef
+                                .whereEqualTo("unite", monitUnite)
+                                .whereEqualTo("section", monitSection);
+
+                        query1.get()
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                                        if(task.isSuccessful()){
-                                            List<DocumentSnapshot> unitDocList = task.getResult().getDocuments();
-
-                                            for(DocumentSnapshot doc : unitDocList){
-                                                User anime = doc.toObject(User.class);
-                                                if(anime.getUnite() != null && anime.getSection() != null){
-                                                    if(anime.getUnite().equals(monitUnite) && anime.getSection().equals(monitSection) && !anime.getEmail().equals(currentUser.getEmail())){
-                                                        animListe.add(anime);
-                                                    }
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                if(!document.getString("email").equals(monitEmail)){
+                                                    animListe.add(document.toObject(User.class));
                                                 }
 
                                             }
-                                            adapter = new MyListAdapter(getActivity(),animListe);
+                                            adapter = new MyListAdapter(animListe);
                                             list.setAdapter(adapter);
+                                        } else {
+                                            Toast.makeText(getActivity(), "Une erreur s'est produite", Toast.LENGTH_SHORT).show();
                                         }
 
                                     }
                                 });
-
                     }
                 });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        //adapter.startListening(); //"écoute" un éventuelle changement dans la BDD
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        //adapter.stopListening();
+    }
 }

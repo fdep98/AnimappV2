@@ -15,7 +15,7 @@
         android:orientation="vertical">
         <include
             android:id="@+id/toolbar"
-            layout="@layout/list_toolbar"/>
+            layout="@layout/anim_list_toolbar"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -25,12 +25,11 @@
             android:textColor="@color/bleu"
             android:textStyle="bold" />
 
-        <ListView
-            android:id="@+id/list"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:divider="@drawable/list_divider"
-            tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteY="99dp" />
 
 

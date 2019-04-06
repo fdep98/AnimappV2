@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/bleu</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorAccent">@color/bleu</item>
     </style>
 
     <style name="error_text" parent="@android:style/TextAppearance">
@@ -26,5 +26,7 @@
     <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">13dp</item>
     </style>
+    <dimen name="grid_spacing_large">30dp</dimen>
+    <dimen name="grid_spacing_small">26dp</dimen>
 
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,26 +9,51 @@
     <include
         android:id="@+id/messageToolbar"
         layout="@layout/message_toolbar" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
 
-
             <RelativeLayout
-                android:layout_width="380dp"
+                android:layout_width="385dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="45dp"
+                android:layout_marginTop="42dp"
+                android:layout_marginBottom="10dp"
                 android:paddingLeft="15dp"
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="15dp"
                 tools:layout_editor_absoluteY="116dp">
 
+
+                <android.support.design.button.MaterialButton
+                    android:id="@+id/publier"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginEnd="21dp"
+                    android:layout_marginBottom="27dp"
+
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    android:text="Publier"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                    android:textColor="@color/bleu"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/browser_actions_bg_grey" />
 
                 <ImageView
                     android:id="@+id/monitImg"
@@ -36,10 +62,9 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginStart="13dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="17dp"
-                    android:background="@mipmap/scout"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginBottom="15dp"
                     android:contentDescription="TODO"
                     tools:srcCompat="@mipmap/ic_launcher_round" />
 
@@ -48,46 +73,57 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/monitName"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="15dp"
                     android:layout_toRightOf="@+id/monitImg"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
+                    android:textColor="@color/common_google_signin_btn_text_light"
+                    android:textSize="12sp"
                     tools:text="Totem du moniteur " />
 
                 <TextView
                     android:id="@+id/monitName"
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="6dp"
                     android:layout_marginTop="20dp"
                     android:layout_toRightOf="@+id/monitImg"
-                    android:textSize="18sp"
+                    android:textColor="@color/bleu"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    tools:text="Nom du moniteur" />
+                    tools:text="Nom " />
+
+                <TextView
+                    android:id="@+id/monitPrenom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_toRightOf="@+id/monitName"
+                    android:textColor="@color/bleu"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:text="Prenom" />
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="379dp"
+                android:layout_width="match_parent"
                 android:layout_height="422dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="254dp">
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                tools:ignore="MissingConstraints">
 
                 <EditText
                     android:id="@+id/postText"
-                    android:layout_width="356dp"
-                    android:layout_height="130dp"
+                    android:layout_width="336dp"
+                    android:layout_height="129dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
                     android:layout_marginStart="11dp"
                     android:layout_marginTop="22dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginBottom="270dp"
+                    android:layout_marginEnd="32dp"
                     android:autofillHints=""
                     android:background="@color/fui_transparent"
                     android:gravity="top|left"
@@ -99,33 +135,77 @@
                     android:singleLine="true"
                     tools:text="Contenu du message " />
 
-                <Button
-                    android:id="@+id/publier"
-                    android:layout_width="90dp"
-                    android:layout_height="50dp"
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/picOptionFAB"
+                    style="@style/Widget.MaterialComponents.FloatingActionButton"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/postText"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginEnd="20dp"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_close"
+                    android:visibility="visible"
+                    app:backgroundTint="@color/bleu"
+                    app:borderWidth="0dp"
+                    app:elevation="4dp"
+                    app:fabCustomSize="47dp"
+                    app:fabSize="normal" />
+
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/addPicViaCam"
+                    style="@style/Widget.MaterialComponents.FloatingActionButton"
+                    android:layout_width="47dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/postText"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_toStartOf="@+id/picOptionFAB"
+                    android:src="@drawable/app_photo"
+                    android:visibility="invisible"
+                    app:backgroundTint="@color/bleu"
+                    app:borderWidth="0dp"
+                    app:elevation="4dp"
+                    app:fabCustomSize="47dp"
+                    app:fabSize="normal" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/addPicViaGallery"
+                    style="@style/Widget.MaterialComponents.FloatingActionButton"
+                    android:layout_width="47dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/postText"
+                    android:layout_marginTop="62dp"
+                    android:layout_marginEnd="17dp"
+                    android:layout_toStartOf="@+id/picOptionFAB"
+                    android:src="@drawable/ic_gallery"
+                    android:visibility="invisible"
+                    app:backgroundTint="@color/bleu"
+                    app:borderWidth="0dp"
+                    app:fabCustomSize="47dp"
+                    app:fabSize="normal" />
+
+                <ImageView
+                    android:id="@+id/picToShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="176dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginStart="238dp"
-                    android:layout_marginEnd="50dp"
-                    android:layout_marginBottom="190dp"
-                    android:backgroundTint="@color/vert"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:text="@string/publier"
-                    android:textColor="@color/blanc"
-                    android:textSize="13sp" />
+                    android:layout_gravity="center"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginEnd="125dp"
+                    android:layout_marginBottom="82dp"
+                    android:contentDescription="TODO" />
+
+
             </RelativeLayout>
 
         </LinearLayout>
 
     </ScrollView>
-
-
-
-
-
-
-
 
 </LinearLayout>

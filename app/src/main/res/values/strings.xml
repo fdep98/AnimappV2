@@ -15,4 +15,7 @@
     <string name="post">post</string>
     <string name="publier">Publier</string>
     <string name="exprimez_vous">Exprimez-vous</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

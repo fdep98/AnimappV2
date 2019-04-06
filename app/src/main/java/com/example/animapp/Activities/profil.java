@@ -4,7 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,10 +33,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class profil extends AppCompatActivity {
+public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
 
     ImageView IVphoto;
-    TextView TVnom, TVemail, TVpseudo, TVtotem, TVsection, TVngsm, TVdob, TVunite;
+    TextView TVnom, TVemail, TVpseudo, TVtotem, TVsection, TVngsm, TVdob, TVunite, TVanime;
     private static final int SIGN_OUT_TASK = 10;
     private static final int DELETE_USER_TASK = 20;
     private static final int RC_SIGN_IN = 123;
@@ -39,12 +45,13 @@ public class profil extends AppCompatActivity {
     public FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     public static List<User> animeList = new ArrayList<>();
-
-
+    Animation rotateForward, rotateBackward;
+    boolean isOpen = false;
+    ImageButton parametre;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profil);
+        setContentView(R.layout.activity_custom_profil);
 
 
         IVphoto = findViewById(R.id.vpa_photo);
@@ -56,12 +63,21 @@ public class profil extends AppCompatActivity {
         TVdob = findViewById(R.id.vpa_birth);
         TVngsm = findViewById(R.id.vpa_ngsm);
         TVemail = findViewById(R.id.vpa_email);
+        TVanime = findViewById(R.id.vpa_anime);
+        parametre = findViewById(R.id.parametre);
+        TVanime.setText("15");
+
+        rotateForward =  AnimationUtils.loadAnimation(this,R.anim.rotate_forward);
+        rotateBackward =  AnimationUtils.loadAnimation(this,R.anim.rotate_backward);
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             update();
         }
+
+        animateParButton();
+
     }
 
     //verifie si le user est déja connecté
@@ -76,10 +92,6 @@ public class profil extends AppCompatActivity {
         }
     }
 
-    public void onBackPressed(){
-        moveTaskToBack(true);
-    }
-
     public void update(){
         if(currentUser!= null){
             userRef = db.collection("users").document(currentUser.getEmail());
@@ -91,7 +103,7 @@ public class profil extends AppCompatActivity {
                         .apply(RequestOptions.circleCropTransform())
                         .into(IVphoto);
             }else{
-                IVphoto.setImageResource(R.mipmap.scout);
+                IVphoto.setImageResource(R.mipmap.ic_launcher_round);
             }
 
             //le snapshot contient toute les données de l'utilisateur
@@ -102,14 +114,14 @@ public class profil extends AppCompatActivity {
                             if(documentSnapshot.exists()){
                                 User user = documentSnapshot.toObject(User.class);
 
-                                TVnom.setText("Nom: "+user.getNom());
-                                TVpseudo.setText("Prénom: "+user.getPrenom());
-                                TVtotem.setText("Totem: "+user.getTotem());
-                                TVemail.setText("Email: "+user.getEmail());
-                                TVngsm.setText("GSM: "+user.getNgsm());
-                                TVdob.setText("Date Naissance: "+user.getDateOfBirth());
-                                TVunite.setText("Unité: "+user.getUnite());
-                                TVsection.setText("Section: "+user.getSection());
+                                TVnom.setText(user.getNom());
+                                TVpseudo.setText(user.getPrenom());
+                                TVtotem.setText(user.getTotem());
+                                TVemail.setText(user.getEmail());
+                                TVngsm.setText(user.getNgsm());
+                                TVdob.setText(user.getDateOfBirth());
+                                TVunite.setText(user.getUnite());
+                                TVsection.setText(user.getSection());
 
                             }else{
                                 TVnom.setText(currentUser.getDisplayName());
@@ -134,22 +146,16 @@ public class profil extends AppCompatActivity {
         }
     }
 
+    /*@Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }*/
+
+    //lorsque l'utilisateur mettra ses données à jour
     public void update(View view){
         update();
     } //UNUSED ?
 
-    // executer lorsque le bouton sign out est pressé
-    public void signout(View view) {
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnSuccessListener(this, updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
-        this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK);
-    }
-
-    // executer lorsque le bouton delete est pressé
-    public void delete(View view) {
-        setContentView(R.layout.frame_delete_user);
-    }
 
     // executer lorsque le bouton confirmer est pressé (FrameLayout)
     public void confirm(View view){
@@ -164,7 +170,21 @@ public class profil extends AppCompatActivity {
     // executer lorsque le bouton annuler est pressé (FrameLayout)
     public void cancel(View view){
         Toast.makeText(this, "annuler", Toast.LENGTH_SHORT).show();
-        setContentView(R.layout.activity_profil);
+        setContentView(R.layout.activity_custom_profil);
+    }
+
+
+    // executer lorsque le bouton main est pressé
+    public void goToMain(View v){
+        Intent intent = new Intent(profil.this, MainFragmentActivity.class);
+        startActivity(intent);
+    }
+
+    public void signout() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnSuccessListener(this, updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
+        this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK);
     }
 
     // 3 - Create OnCompleteListener called after tasks ended
@@ -186,12 +206,44 @@ public class profil extends AppCompatActivity {
         };
     }
 
-
-    // executer lorsque le bouton main est pressé
-    public void goToMain(View v){
-        Intent intent = new Intent(profil.this, MainFragmentActivity.class);
-        startActivity(intent);
+    public void menuProfil(View view){
+        PopupMenu popup = new PopupMenu(this, view);
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.profil_menu);
+        popup.show();
     }
 
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.signout:
+                parametre.startAnimation(rotateBackward);
+                isOpen = false;
+                signout();
+                return true;
+            case R.id.delete:
+                parametre.startAnimation(rotateBackward);
+                isOpen = false;
+                setContentView(R.layout.frame_delete_user);
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    //tourne le bouton parametre quand on clique dessus
+    private void animateParButton(){
+        //si l'optionFAB (FAB add) est ouvert, on l'anim en l'ouvrant, et on ferme les autres FAB
+        parametre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.startAnimation(rotateForward);
+                menuProfil(v);
+                isOpen = true;
+            }
+        });
+
+    }
 
 }

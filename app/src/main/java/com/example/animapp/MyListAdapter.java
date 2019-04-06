@@ -1,15 +1,15 @@
 package com.example.animapp;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -21,88 +21,90 @@ import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 
 
-public class MyListAdapter extends BaseAdapter implements Filterable {
+public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder> implements Filterable {
 
-    private Context mContext;
     private ArrayList<User> userList;
     private List<User> exampleList;
-    private static LayoutInflater inflater = null;
-    private View view;
-    private ViewHolder holder;
+    public OnItemClickListener mlistener;
 
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
 
-    public MyListAdapter(Context context, ArrayList<User> userList){
-        mContext = context;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mlistener =  listener;
+    }
+
+    public MyListAdapter(ArrayList<User> userList){
         this.userList = userList;
         exampleList = userList;
-        inflater = LayoutInflater.from(mContext);
     }
 
 
+
+    @NonNull
     @Override
-    public int getCount() {
-        return userList.size();
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.anim_list_details, viewGroup, false);
+        ViewHolder holder = new ViewHolder(view,  mlistener);
+        return holder;
     }
 
     @Override
-    public Object getItem(int position) {
-        return position;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-
-    @Override
-    public View getView (int position, View convertView, ViewGroup parent)
-    {
-
-        final int pos = position;
-        final User anim = userList.get(pos);
-        if(convertView == null){
-            convertView = inflater.inflate(R.layout.list_details,parent,false);
-            holder = new ViewHolder();
-            holder.nom = (TextView) convertView.findViewById(R.id.nom);
-            holder.totem = (TextView) convertView.findViewById(R.id.totem);
-            holder.nbrAbsences = (TextView) convertView.findViewById(R.id.nbrAbsences);
-            holder.checkBox = (CheckBox) convertView.findViewById(R.id.check);
-            convertView.setTag(holder);
-
-        }else{
-            holder = (ViewHolder) convertView.getTag();
-        }
-        if(anim.isChecked()){
-            holder.checkBox.setChecked(true);
-        }else{
-            holder.checkBox.setChecked(false);
-        }
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    User anim = userList.get(pos);
-                    anim.setChecked(true);
-                }else{
-                    anim.setChecked(false);
-                }
-            }
-        });
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        User anim = userList.get(position);
         holder.nom.setText(anim.getNom());
         holder.totem.setText(anim.getPrenom());
         holder.nbrAbsences.setText(anim.getAbsences());
+    }
 
-        return convertView;
-
+    @Override
+    public int getItemCount() {
+        return userList.size();
     }
 
 
-    public class ViewHolder{
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
         TextView nom;
         TextView totem;
         TextView nbrAbsences;
         CheckBox checkBox;
+        public ViewHolder(View view, final OnItemClickListener listener){
+            super(view);
+            nom = view.findViewById(R.id.nom);
+            totem = view.findViewById(R.id.totem);
+            nbrAbsences = view.findViewById(R.id.nbrAbsences);
+            checkBox = view.findViewById(R.id.check);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
+
+
+
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            userList.get(getAdapterPosition()).setChecked(isChecked);
+
+                        }
+                    }
+
+                }
+            });
+        }
     }
 
     @Override
@@ -121,7 +123,7 @@ public class MyListAdapter extends BaseAdapter implements Filterable {
             if(constraint == null || constraint.length() == 0){
                 filteredList.addAll(exampleList);
             }else{
-                String filterPattern = constraint.toString().toLowerCase();
+                String filterPattern = constraint.toString().toLowerCase().trim();
                 for(User user:exampleList){
                     //check si le mot a filtrer match avec le nom ou le pseudo d'un animé dans la liste
                     if(user.getNom().toLowerCase().contains(filterPattern) || (user.getTotem().toLowerCase().contains(filterPattern))){

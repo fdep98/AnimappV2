@@ -7,7 +7,7 @@
     android:elevation="4dp"
     android:theme="@style/Base.Widget.AppCompat.Toolbar"
     app:titleTextColor="@color/blanc"
-    app:title="Partager une image"
+    app:title="Ajouter dans la galerie..."
     app:titleMarginTop="10dp"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 </android.support.v7.widget.Toolbar>
