@@ -171,7 +171,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
     // executer lorsque le bouton annuler est pressé (FrameLayout)
     public void cancel(View view){
         Toast.makeText(this, "annuler", Toast.LENGTH_SHORT).show();
-        setContentView(R.layout.activity_custom_profil);
+        startActivity(new Intent(this,profil.class));
     }
 
 

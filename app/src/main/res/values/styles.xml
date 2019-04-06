@@ -29,4 +29,8 @@
     <dimen name="grid_spacing_large">30dp</dimen>
     <dimen name="grid_spacing_small">26dp</dimen>
 
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">17sp</item>
+    </style>
+
 </resources>

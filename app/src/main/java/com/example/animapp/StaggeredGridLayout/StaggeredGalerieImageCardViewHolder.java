@@ -3,14 +3,14 @@ package com.example.animapp.StaggeredGridLayout;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.example.animapp.animapp.R;
 
 public class StaggeredGalerieImageCardViewHolder extends RecyclerView.ViewHolder {
 
-    public NetworkImageView image;
+    public ImageView image;
     public TextView description;
     public TextView date;
 

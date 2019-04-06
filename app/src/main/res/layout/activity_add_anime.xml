@@ -160,8 +160,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:drawableTint="@color/bleu2"
-                    android:clickable="true"
                     android:editable="false"
+                    android:onClick="insertDate"
                     android:textAlignment="viewStart"
                     tools:ignore="RtlCompat" />
             </android.support.design.widget.TextInputLayout>

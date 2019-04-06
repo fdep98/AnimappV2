@@ -65,32 +65,6 @@ public class AddAnime extends AppCompatActivity {
 
             setup();
 
-            final Calendar calendar = Calendar.getInstance();
-
-            final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-
-                @Override
-                public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                      int dayOfMonth) {
-                    calendar.set(Calendar.YEAR, year);
-                    calendar.set(Calendar.MONTH, monthOfYear);
-                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    setDatePicked(calendar);
-                }
-
-            };
-
-            dob.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    new DatePickerDialog(AddAnime.this, date, calendar
-                            .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                            calendar.get(Calendar.DAY_OF_MONTH)).show();
-                }
-            });
-
         }
 
     @Override
@@ -114,26 +88,47 @@ public class AddAnime extends AppCompatActivity {
     }
 
     public void addData(View view) {
-            String inputName = nom.getText().toString();
-            String inputTotem = totem.getText().toString();
-            String inputEmail = email.getText().toString();
-            String inputTel = ngsm.getText().toString();
-            String inputDob = dob.getText().toString();
+        String inputName = nom.getText().toString();
+        String inputTotem = totem.getText().toString();
+        String inputEmail = email.getText().toString();
+        String inputTel = ngsm.getText().toString();
+        String inputDob = dob.getText().toString();
 
-            if(inputEmail.isEmpty()){
-                emailTI.setError("veuillez entrer un email");
-            }else if(inputName.isEmpty()){
-                nomTI.setError("Veuillez entrer le nom");
-            }else if(inputTotem.isEmpty()){
-                totemTI.setError("veuillez entrer un totem");
-            }else{
-                User anime=new User(inputName,inputTotem,inputEmail,inputTel,inputDob,currentUserUnite,currentUserSection);
-                UserHelper.createUser(inputName,null,inputTotem,inputEmail,inputTel,inputDob,currentUserUnite,currentUserSection);
-                liste.add(anime);
-                startActivity(new Intent(this, MainFragmentActivity.class));
+        if (inputEmail.isEmpty()) {
+            emailTI.setError("veuillez entrer un email");
+        } else if (inputName.isEmpty()) {
+            nomTI.setError("Veuillez entrer le nom");
+        } else if (inputTotem.isEmpty()) {
+            totemTI.setError("veuillez entrer un totem");
+        } else {
+            User anime = new User(inputName, inputTotem, inputEmail, inputTel, inputDob, currentUserUnite, currentUserSection);
+            UserHelper.createUser(inputName, null, inputTotem, inputEmail, inputTel, inputDob, currentUserUnite, currentUserSection);
+            liste.add(anime);
+            startActivity(new Intent(this, MainFragmentActivity.class));
+        }
+    }
+
+
+    public void insertDate(View view){
+        final Calendar calendar = Calendar.getInstance();
+
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                setDatePicked(calendar);
             }
 
-        }
+        };
+
+        new DatePickerDialog(AddAnime.this, date, calendar
+                .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
 
     private void setDatePicked(Calendar calendar) {
         String myFormat = "MM/dd/yy"; //In which you need put here

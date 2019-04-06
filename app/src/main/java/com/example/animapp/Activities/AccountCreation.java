@@ -81,31 +81,6 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
         bindUniteSpinner();
         bindSectionSpinner();
 
-        final Calendar calendar = Calendar.getInstance();
-
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, monthOfYear);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                setDatePicked(calendar);
-            }
-
-        };
-
-        dob.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(AccountCreation.this, date, calendar
-                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
 
 
 //-------------------------------------------SPINNER---------------------------------------------//
@@ -212,7 +187,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
     }
 
     private void setDatePicked(Calendar calendar) {
-        String myFormat = "MM/dd/yy"; //In which you need put here
+        String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
 
         dob.setText(sdf.format(calendar.getTime()));
@@ -324,5 +299,26 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
                     }
                 });
 
+    }
+
+    public void insertDate(View view){
+        final Calendar calendar = Calendar.getInstance();
+
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                setDatePicked(calendar);
+            }
+
+        };
+
+        new DatePickerDialog(AccountCreation.this, date, calendar
+                .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 }

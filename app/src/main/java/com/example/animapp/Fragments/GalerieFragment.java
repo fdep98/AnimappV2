@@ -1,11 +1,9 @@
 package com.example.animapp.Fragments;
 
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,17 +15,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.animapp.GalerieCardRecyclerViewAdapter;
 import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.ImageGridItemDecoration;
 import com.example.animapp.StaggeredGridLayout.StaggeredGalerieImageCardRecyclerViewAdapter;
 import com.example.animapp.animapp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.animapp.Fragments.MediaFragment.IMAGE_INSERTED_CODE;
+import static com.example.animapp.Fragments.MediaFragment.listImages;
+
 
 public class GalerieFragment extends Fragment {
+    FirebaseStorage storage;
+    StorageReference storageRef;
+    private FirebaseAuth mAuth;
+    public FirebaseUser currentUser;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,19 +57,26 @@ public class GalerieFragment extends Fragment {
             activity.setSupportActionBar(toolbar);
         }
 
-        ImageGalerie img1, img2, img3, img4, img5, img6, img7, img8, img9, img10;
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        storage = FirebaseStorage.getInstance();
+        if(currentUser != null){
+            storageRef = storage.getReference("Galerie de"+currentUser.getEmail());
+        }
+
+
+        /*ImageGalerie img1, img2, img3, img4, img5, img6, img7, img8, img9, img10;
         img1 = new ImageGalerie("Vagabond sack",
-                "https://storage.googleapis.com/material-vignettes.appspot.com/image/0-0.jpg", "$120");
-        img2 = new ImageGalerie("Stella sunglasses","https://storage.googleapis.com/material-vignettes.appspot.com/image/1-0.jpg","$58");
-        img3 = new ImageGalerie("Whitney belt","https://storage.googleapis.com/material-vignettes.appspot.com/image/2-0.jpg", "$35");
-        img4 = new ImageGalerie("Garden strand","https://storage.googleapis.com/material-vignettes.appspot.com/image/3-0.jpg", "$98");
-        img5 = new ImageGalerie("Strut earrings","https://storage.googleapis.com/material-vignettes.appspot.com/image/4-0.jpg", "$34");
-        img6 = new ImageGalerie("Varsity socks","https://storage.googleapis.com/material-vignettes.appspot.com/image/5-0.jpg", "$12");
-        img7 = new ImageGalerie("Weave keyring","https://storage.googleapis.com/material-vignettes.appspot.com/image/6-0.jpg", "$16");
-        img8 = new ImageGalerie("Gatsby hat","https://storage.googleapis.com/material-vignettes.appspot.com/image/7-0.jpg", "$40");
-        img9 = new ImageGalerie("Shrug bag","https://storage.googleapis.com/material-vignettes.appspot.com/image/8-0.jpg", "$198");
-        img10 = new ImageGalerie("Gilt desk trio","https://storage.googleapis.com/material-vignettes.appspot.com/image/9-0.jpg", "$58");
-        List<ImageGalerie> listImages = new ArrayList<>();
+                "https://storage.googleapis.com/material-vignettes.appspot.com/image/0-0.jpg", "13/06/19");
+        img2 = new ImageGalerie("Stella sunglasses","https://storage.googleapis.com/material-vignettes.appspot.com/image/1-0.jpg","19/03/19");
+        img3 = new ImageGalerie("Whitney belt","https://storage.googleapis.com/material-vignettes.appspot.com/image/2-0.jpg", "1/03/19");
+        img4 = new ImageGalerie("Garden strand","https://storage.googleapis.com/material-vignettes.appspot.com/image/3-0.jpg", "12/03/18");
+        img5 = new ImageGalerie("Strut earrings","https://storage.googleapis.com/material-vignettes.appspot.com/image/4-0.jpg", "9/03/20");
+        img6 = new ImageGalerie("Varsity socks","https://storage.googleapis.com/material-vignettes.appspot.com/image/5-0.jpg", "11/11/22");
+        img7 = new ImageGalerie("Weave keyring","https://storage.googleapis.com/material-vignettes.appspot.com/image/6-0.jpg", "09/06/13");
+        img8 = new ImageGalerie("Gatsby hat","https://storage.googleapis.com/material-vignettes.appspot.com/image/7-0.jpg", "12/01/01");
+        img9 = new ImageGalerie("Shrug bag","https://storage.googleapis.com/material-vignettes.appspot.com/image/8-0.jpg", "06/04/19");
+        img10 = new ImageGalerie("Gilt desk trio","https://storage.googleapis.com/material-vignettes.appspot.com/image/9-0.jpg", "19/03/19");
         listImages.add(img1);
         listImages.add(img2);
         listImages.add(img3);
@@ -70,8 +86,7 @@ public class GalerieFragment extends Fragment {
         listImages.add(img7);
         listImages.add(img8);
         listImages.add(img9);
-        listImages.add(img10);
-
+        listImages.add(img10);*/
 
 
         //set up du recycler view
@@ -111,5 +126,9 @@ public class GalerieFragment extends Fragment {
                 return true;
             }
         });
+    }
+
+    public void picUserGalerie(){
+
     }
 }

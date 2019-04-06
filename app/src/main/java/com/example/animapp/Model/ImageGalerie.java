@@ -1,6 +1,7 @@
 package com.example.animapp.Model;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
@@ -25,15 +26,13 @@ public class ImageGalerie {
     private static final String TAG = ImageGalerie.class.getSimpleName();
 
     public  String description;
-    public  Uri dynamicUrl;
+    public  Uri imageUri;
     public  String url;
     public String date;
-    public  Date date1;
 
-    public ImageGalerie(String description, String dynamicUrl, String url,String date){
+    public ImageGalerie(Uri image, String description,String date){
         this.description = description;
-        this.dynamicUrl = Uri.parse(dynamicUrl);
-        this.url = url;
+        this.imageUri = image;
         this.date = date;
     }
     public ImageGalerie(String description,String url,String date){
@@ -72,5 +71,37 @@ public class ImageGalerie {
         Type imageListType = new TypeToken<ArrayList<ImageGalerie>>() {
         }.getType();
         return gson.fromJson(jsonProductsString, imageListType);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Uri getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(Uri dynamicUrl) {
+        this.imageUri = dynamicUrl;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

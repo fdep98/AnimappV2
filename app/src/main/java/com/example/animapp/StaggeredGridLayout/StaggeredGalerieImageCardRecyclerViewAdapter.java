@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.example.animapp.ImageRequester;
 import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.animapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -51,9 +52,9 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
     public void onBindViewHolder(@NonNull StaggeredGalerieImageCardViewHolder holder, int position) {
         if (imageGalerieList != null && position < imageGalerieList.size()) {
             ImageGalerie image = imageGalerieList.get(position);
-            holder.description.setText(image.description);
-            holder.date.setText(image.date);
-            Glide.with(mContext).load(image.url).into(holder.image);
+            holder.description.setText(image.getDescription());
+            holder.date.setText(image.getDate());
+            Picasso.get().load(image.getImageUri()).into(holder.image);
         }
     }
 

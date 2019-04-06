@@ -201,7 +201,7 @@
                     android:layout_height="44dp"
                     android:layout_gravity="center"
                     android:drawableTint="@color/bleu2"
-                    android:clickable="true"
+                    android:onClick="insertDate"
                     android:editable="false"
                     android:textAlignment="viewStart"
                     tools:ignore="RtlCompat" />

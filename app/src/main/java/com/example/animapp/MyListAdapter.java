@@ -3,6 +3,7 @@ package com.example.animapp;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.example.animapp.Database.UserHelper;
 import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 
@@ -25,37 +27,41 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
 
     private ArrayList<User> userList;
     private List<User> exampleList;
-    public OnItemClickListener mlistener;
-
-    public interface OnItemClickListener{
-        void onItemClick(int position);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        mlistener =  listener;
-    }
 
     public MyListAdapter(ArrayList<User> userList){
         this.userList = userList;
         exampleList = userList;
     }
 
-
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.anim_list_details, viewGroup, false);
-        ViewHolder holder = new ViewHolder(view,  mlistener);
+        ViewHolder holder = new ViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User anim = userList.get(position);
+        final User anim = userList.get(position);
         holder.nom.setText(anim.getNom());
         holder.totem.setText(anim.getPrenom());
-        holder.nbrAbsences.setText(anim.getAbsences());
+        holder.checkBox.setChecked(anim.isChecked());
+        holder.nbrAbsences.setText(""+anim.getAbsences());
+
+        holder.setItemClickListener(new ViewHolder.ItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                CheckBox checkBox = (CheckBox) v;
+                if(checkBox.isChecked()){
+                    anim.setChecked(true);
+                    UserHelper.updateIsChecked(anim.getEmail(),true);
+                }else if(!checkBox.isChecked()){
+                   anim.setChecked(false);
+                   UserHelper.updateIsChecked(anim.getEmail(),false);
+                }
+            }
+        });
     }
 
     @Override
@@ -64,46 +70,32 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
     }
 
 
-
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView nom;
         TextView totem;
         TextView nbrAbsences;
         CheckBox checkBox;
-        public ViewHolder(View view, final OnItemClickListener listener){
+        ItemClickListener itemClickListener;
+
+        public ViewHolder(View view){
             super(view);
             nom = view.findViewById(R.id.nom);
             totem = view.findViewById(R.id.totem);
             nbrAbsences = view.findViewById(R.id.nbrAbsences);
             checkBox = view.findViewById(R.id.check);
+            checkBox.setOnClickListener(this);
+        }
 
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(listener != null){
-                        int position = getAdapterPosition();
-                        if(position != RecyclerView.NO_POSITION){
-                            listener.onItemClick(position);
-                        }
-                    }
-                }
-            });
+        public void setItemClickListener(ItemClickListener itemClickListener){
+            this.itemClickListener = itemClickListener;
+        }
 
-
-
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked){
-                        int position = getAdapterPosition();
-                        if(position != RecyclerView.NO_POSITION){
-                            userList.get(getAdapterPosition()).setChecked(isChecked);
-
-                        }
-                    }
-
-                }
-            });
+        @Override
+        public void onClick(View v) {
+            this.itemClickListener.onItemClick(v,getLayoutPosition());
+        }
+        interface ItemClickListener{
+            void onItemClick(View v, int pos);
         }
     }
 

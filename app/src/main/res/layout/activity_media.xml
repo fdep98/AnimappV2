@@ -11,70 +11,66 @@
         android:id="@+id/media_toolbar"
         layout="@layout/media_toolbar" />
 
-    <ImageView
-        android:id="@+id/picToShare"
-        android:layout_width="395dp"
-        android:layout_height="254dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="85dp"
-        android:contentDescription="TODO"
-        app:srcCompat="@drawable/paysage" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <android.support.design.button.MaterialButton
-        android:id="@+id/partagerImg"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="right"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="45dp"
-        android:elevation="6dp"
-        android:text="Ajouter"
-        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-        android:textStyle="bold"
-        app:backgroundTint="@color/bleu" />
-
-    <!--<LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="85dp"
-        android:layout_marginTop="482dp"
-        android:layout_marginEnd="86dp"
-        android:layout_marginBottom="57dp"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/addImage1"
-            style="@android:style/Widget.Material.Light.Button"
-            android:layout_width="240dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/bleu"
-            android:drawableLeft="@drawable/ic_photo"
-            android:drawableTint="@color/blanc"
-            android:padding="6dp"
-            android:text="Ajouter une photo"
-            android:textColor="@color/blanc"
-            tools:ignore="MissingConstraints" />
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/picToShare"
+                android:layout_width="365dp"
+                android:layout_height="211dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="35dp"
+                android:contentDescription="TODO"
+                app:srcCompat="@drawable/paysage"
+                android:layout_marginBottom="25dp"/>
 
-        <Button
-            android:id="@+id/addImage2"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:background="@color/mauve"
-            android:drawableLeft="@android:drawable/ic_menu_camera"
-            android:padding="6dp"
-            android:text="Prendre une photo"
-            android:textColor="@color/blanc"
-            tools:ignore="MissingConstraints" />
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/description"
+                android:layout_width="365dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/ic_description"
+                android:hint="Description"
+                android:inputType="textShortMessage" />
 
-    </LinearLayout>-->
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/date"
+                android:layout_width="365dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:drawableLeft="@drawable/ic_date_range_black_24dp"
+                android:editable="false"
+                android:hint="Date" />
 
 
+            <android.support.design.button.MaterialButton
+                android:id="@+id/partagerImg"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="right"
+                android:layout_marginTop="35dp"
+                android:layout_marginEnd="45dp"
+                android:elevation="6dp"
+                android:text="Ajouter"
+                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                android:textStyle="bold"
+                app:backgroundTint="@color/bleu" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
 </LinearLayout>

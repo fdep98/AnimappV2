@@ -6,16 +6,13 @@
         android:id="@+id/camera"
         android:enabled="true"
         android:icon="@drawable/app_photo"
-        android:title="camera"
+        android:title="Camera"
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/gallerie"
+        android:id="@+id/galerie"
         android:enabled="true"
         android:icon="@drawable/ic_gallery"
-        android:title="gallerie "
+        android:title="Galerie "
         app:showAsAction="ifRoom" />
-
-
-
 </menu>

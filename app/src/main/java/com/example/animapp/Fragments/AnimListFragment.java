@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.animapp.Activities.AddAnime;
+import com.example.animapp.Database.UserHelper;
 import com.example.animapp.Model.User;
 import com.example.animapp.MyListAdapter;
 import com.example.animapp.UserAdapter;
@@ -122,7 +123,9 @@ public class AnimListFragment extends Fragment {
                 //pour chaque item cliqué, mettre à jour le nbr d'abscences
                 for(User anim : animListe){
                     if(anim.isChecked()){
-                        anim.setAbsences(anim.getAbsences()+1);
+                        int nbrAbsences = anim.getAbsences()+1;
+                        anim.setAbsences(nbrAbsences);
+                        UserHelper.updateAbsences(anim.getEmail(),nbrAbsences);
                     }
                 }
                 return false;
@@ -173,14 +176,6 @@ public class AnimListFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onItemClicked(final ArrayList<User> alist){
-       adapter.setOnItemClickListener(new MyListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Toast.makeText(getActivity(), alist.get(position).getNom()+" clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     public void bindAnimeList() {
         monitRef.get()

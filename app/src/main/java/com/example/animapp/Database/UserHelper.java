@@ -40,12 +40,12 @@ public class UserHelper {
         return UserHelper.getUserCollection().document(uid).get(); //permet de récupérer la référence du document contenu dans la collection
     }
 
-    public static Task<Void> updateUsername(String name, String uid) {
-        return UserHelper.getUserCollection().document(uid).update("nom", name);
+    public static Task<Void> updateAbsences(String email, int nbrAbsences) {
+        return UserHelper.getUserCollection().document(email).update("absences", nbrAbsences);
     }
 
-    public static Task<Void> updateIsMonitor(String uid, Boolean isMonitor) {
-        return UserHelper.getUserCollection().document(uid).update("isMonitor", isMonitor);
+    public static Task<Void> updateIsChecked(String email, Boolean isChecked) {
+        return UserHelper.getUserCollection().document(email).update("isChecked", isChecked);
     }
 
     public static Task<Void> deleteUser(String email) {

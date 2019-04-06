@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/bleu"
-    android:elevation="4dp"
-    android:theme="@style/Base.Widget.AppCompat.Toolbar"
-    app:titleTextColor="@color/blanc"
-    app:title="Ajouter dans la galerie..."
-    app:titleMarginTop="10dp"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:background="@color/bleu"
+android:elevation="4dp"
+android:theme="@style/Base.Widget.AppCompat.Toolbar"
+app:titleTextColor="@color/blanc"
+app:title="Ajouter image..."
+app:titleMarginTop="10dp"
+app:navigationIcon="@drawable/ic_arrow_back"
+app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 </android.support.v7.widget.Toolbar>

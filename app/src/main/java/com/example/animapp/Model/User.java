@@ -17,10 +17,9 @@ public class User {
     private String email;
     private String dateOfBirth;
     private boolean isChecked;
+    private int absences;
 
 
-
-    private String absences;
     @Nullable
     private String urlPhoto;
     private String ngsm;
@@ -39,7 +38,7 @@ public class User {
         this.dateOfBirth = dob;
         this.section = section;
         this.unite = unite;
-        this.absences = "0";
+        this.absences = 0;
 
     }
 
@@ -54,14 +53,14 @@ public class User {
         this.dateOfBirth = dob;
         this.section = section;
         this.unite = unite;
-        this.absences = "0";
+        this.absences = 0;
     }
 
-    public User(String nom, String pseudo, String nbrAbsences){
+    public User(String nom, String pseudo, int nbrAbsences){
         this.nom = nom;
         this.prenom = pseudo;
         this.absences = nbrAbsences;
-        this.absences = "0";
+        this.absences = 0;
 
     }
 
@@ -138,7 +137,7 @@ public class User {
         this.ngsm = ngsm;
     }
 
-    public String getAbsences() {
+    public int getAbsences() {
         return this.absences;
     }
 
@@ -156,7 +155,7 @@ public class User {
         return unite;
     }
 
-    public void setAbsences(String absences) {
+    public void setAbsences(int absences) {
         this.absences = absences;
     }
 

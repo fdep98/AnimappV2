@@ -8,13 +8,13 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 import com.example.animapp.animapp.R;
 
-public class GalerieCardViewHolder extends RecyclerView.ViewHolder {
+public class GalerieFragmentViewHolder extends RecyclerView.ViewHolder {
 
     public NetworkImageView image;
     public TextView description;
     public TextView date;
 
-    public GalerieCardViewHolder(@NonNull View itemView) {
+    public GalerieFragmentViewHolder(@NonNull View itemView) {
         super(itemView);
         image = itemView.findViewById(R.id.image);
         description = itemView.findViewById(R.id.description);
