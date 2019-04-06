@@ -201,7 +201,8 @@
                     android:layout_height="44dp"
                     android:layout_gravity="center"
                     android:drawableTint="@color/bleu2"
-                    android:inputType="date"
+                    android:clickable="true"
+                    android:editable="false"
                     android:textAlignment="viewStart"
                     tools:ignore="RtlCompat" />
             </android.support.design.widget.TextInputLayout>

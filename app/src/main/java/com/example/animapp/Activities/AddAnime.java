@@ -1,6 +1,7 @@
 package com.example.animapp.Activities;
 
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputEditText;
@@ -9,6 +10,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.DatePicker;
 
 import com.example.animapp.Database.UserHelper;
 import com.example.animapp.MainFragmentActivity;
@@ -23,7 +25,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 /*
     Permet d'ajouter un animé dans la BDD en définissant son nom, email, etc..
@@ -59,6 +64,32 @@ public class AddAnime extends AppCompatActivity {
             emailTI = findViewById(R.id.emailTI);
 
             setup();
+
+            final Calendar calendar = Calendar.getInstance();
+
+            final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+                @Override
+                public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                      int dayOfMonth) {
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, monthOfYear);
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    setDatePicked(calendar);
+                }
+
+            };
+
+            dob.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    new DatePickerDialog(AddAnime.this, date, calendar
+                            .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.DAY_OF_MONTH)).show();
+                }
+            });
 
         }
 
@@ -103,6 +134,13 @@ public class AddAnime extends AppCompatActivity {
             }
 
         }
+
+    private void setDatePicked(Calendar calendar) {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+
+        dob.setText(sdf.format(calendar.getTime()));
+    }
 
         //active le mode offline permettant d'utiliser qd même l'app
         public void setup () {
