@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
         if(currentUser != null){
             update();
         }
+        setup();
 
         animateParButton();
 
@@ -146,10 +148,9 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
         }
     }
 
-    /*@Override
     public void onBackPressed() {
-        super.onBackPressed();
-    }*/
+        moveTaskToBack(true);
+    }
 
     //lorsque l'utilisateur mettra ses données à jour
     public void update(View view){
@@ -244,6 +245,19 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
             }
         });
 
+    }
+
+    public void setup() {
+        // [START get_firestore_instance]
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // [END get_firestore_instance]
+
+        // [START set_firestore_settings]
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+        db.setFirestoreSettings(settings);
+        // [END set_firestore_settings]
     }
 
 }

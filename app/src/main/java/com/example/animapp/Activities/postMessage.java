@@ -79,6 +79,7 @@ public class postMessage extends AppCompatActivity {
     private DocumentReference userDoc;
     private FirebaseFirestore database;
     String currentDate;
+    String post;
 
 
     //date et heure
@@ -160,6 +161,21 @@ public class postMessage extends AppCompatActivity {
         addViaCam();
         addViaGall();
 
+        publier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                post = postMessage.getText().toString();
+                if (!post.isEmpty()) {
+                    Post newPost = new Post(currentUser.getEmail(), currentDate, post);
+                    PostsHelper.createUserPost(newPost);
+                    startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
+                }else{
+                    Toast.makeText(postMessage.this, "veuillez entrer un message avant la publication", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
     }
 
 
@@ -224,7 +240,6 @@ public class postMessage extends AppCompatActivity {
             publier.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final String post = postMessage.getText().toString();
                     prog.setMessage("Téléchargement...");
                     prog.show();
                     if(post != null){
@@ -279,7 +294,6 @@ public class postMessage extends AppCompatActivity {
             publier.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final String post = postMessage.getText().toString();
                     if(post != null) {
                         prog.setMessage("Téléchargement...");
                         prog.show();
