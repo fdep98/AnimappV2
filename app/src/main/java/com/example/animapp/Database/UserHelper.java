@@ -1,11 +1,15 @@
 package com.example.animapp.Database;
 
+import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.Model.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserHelper {
 
@@ -20,11 +24,6 @@ public class UserHelper {
     //Task permet de réaliser des appels asynchrones
     //set est utilisé pour créer un document, on doit lui spécifié un id en paramètre
 
-    //insertion d'un moniteur dans la bdd
-   /* public static Task<Void> createUser(String nom, String pseudo, String totem, String email, String ngsm, String dob, boolean isAnim, String unite, String section) {
-        User userToCreate = new User(nom,pseudo,totem,email,ngsm,dob, isAnim, unite, section);
-        return UserHelper.getUserCollection().document(email).set(userToCreate);
-    }*/
 
     public static Task<Void> createUser(String nom, String pseudo, String totem, String email, String ngsm, String dob, String unite, String section) {
         User userToCreate = new User(nom,pseudo,totem,email,ngsm,dob, unite, section);
@@ -46,6 +45,10 @@ public class UserHelper {
 
     public static Task<Void> updateIsChecked(String email, Boolean isChecked) {
         return UserHelper.getUserCollection().document(email).update("isChecked", isChecked);
+    }
+
+    public static Task<Void> updateGalleryList(String email, List<ImageGalerie> list) {
+        return UserHelper.getUserCollection().document(email).update("galerieList", list);
     }
 
     public static Task<Void> deleteUser(String email) {

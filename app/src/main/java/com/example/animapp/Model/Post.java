@@ -1,5 +1,7 @@
 package com.example.animapp.Model;
 
+import android.net.Uri;
+
 import java.text.DateFormat;
 
 public class Post {
@@ -7,6 +9,7 @@ public class Post {
     private String date;
     private String message;
     private String imgurl;
+    private Uri imageUri;
 
     private String id;
 
@@ -21,11 +24,11 @@ public class Post {
     }
 
     //constructeur avec image
-    public Post(String moniteur, String date, String message,String imgurl) {
+    public Post(String moniteur, String date, String message,String imageUrl) {
         this.moniteur = moniteur;
         this.date = date;
         this.message = message;
-        this.imgurl=imgurl;
+        this.imgurl=imageUrl;
     }
 
     //public Post(String id, String moniteur, String date, String message) {
@@ -73,5 +76,13 @@ public class Post {
 
     public void setImgurl(String imgurl) {
         this.imgurl = imgurl;
+    }
+
+    public Uri getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(Uri image) {
+        this.imageUri = image;
     }
 }

@@ -24,7 +24,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -90,15 +92,13 @@ public class PostFragment extends Fragment {
 
             firestoreDb.collection("userPosts")
                     .orderBy("date", Query.Direction.DESCENDING)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()) {
-                                List<DocumentSnapshot> doc = task.getResult().getDocuments();
-                                
+                        public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                            if(queryDocumentSnapshots != null){
+                                List<DocumentSnapshot> doc = queryDocumentSnapshots.getDocuments();
                                 for (DocumentSnapshot document : doc) {
-                                   // Post post = new Post(document.getString("moniteur"),document.getString("date"),document.getString("message"));
+                                    // Post post = new Post(document.getString("moniteur"),document.getString("date"),document.getString("message"));
                                     Post post = document.toObject(Post.class);
                                     statut.add(post);
 
@@ -109,9 +109,6 @@ public class PostFragment extends Fragment {
                             }
                         }
                     });
-
-
-
         }
 
     }

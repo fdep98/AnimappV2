@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,18 +26,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.webkit.MimeTypeMap;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.animapp.Activities.AccountCreation;
+import com.example.animapp.Database.ImageHelper;
 import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.animapp.R;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -53,6 +56,7 @@ public class MediaFragment extends Fragment {
     static int IMAGE_INSERTED_CODE = 0;
     FirebaseStorage storage;
     StorageReference storageRef;
+    DatabaseReference databaseRef;
     public static final int GALLERY_INTENT = 123;
     public static final int CAMERA_INTENT = 12;
     private ProgressDialog prog;
@@ -63,7 +67,7 @@ public class MediaFragment extends Fragment {
     ImageGalerie newImage;
     Uri image;
     AppCompatEditText description,date;
-    final static List<ImageGalerie> listImages = new ArrayList<>();
+    final List<ImageGalerie> listImages = new ArrayList<>();
 
 
 
@@ -86,7 +90,7 @@ public class MediaFragment extends Fragment {
 
         storage = FirebaseStorage.getInstance(); //instance de firebaseStorage;
         storageRef = storage.getReference(); //reférence vers l'emplacement de la ressource ( root)
-
+        databaseRef = FirebaseDatabase.getInstance().getReference("galerieImages");
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
@@ -108,6 +112,7 @@ public class MediaFragment extends Fragment {
 
         prog = new ProgressDialog(getContext());
         insertDate();
+
         addNewImage();
     }
 
@@ -163,6 +168,13 @@ public class MediaFragment extends Fragment {
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getActivity().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
 
     /*
         Ajoute l'image dans la base de donnée
@@ -252,16 +264,51 @@ public class MediaFragment extends Fragment {
         date.setText(sdf.format(calendar.getTime()));
     }
 
+    public void putImageInDb(){
+        final long currentTime = System.currentTimeMillis();
+
+        storageRef.child(currentUser.getEmail()).child(currentTime+"."+getFileExtension(image))
+                .putFile(image)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        storageRef.child(currentUser.getEmail()).child(currentTime+"."+getFileExtension(image))
+                                .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String imgDesc = description.getText().toString();
+                                String imgDate = date.getText().toString();
+                                //String imageUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+                                ImageGalerie newImage = new ImageGalerie(currentUser.getEmail(),uri.toString(),imgDesc,imgDate);
+
+                                ImageHelper.addImage(newImage);
+                                Toast.makeText(getActivity(), "Ajouter dans la gallerie", Toast.LENGTH_SHORT).show();
+                                picToAdd.setImageResource(0);
+                                description.setText("");
+                            }
+                        });
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
     public void addNewImage(){
         ajouter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String imgDesc = description.getText().toString();
-                String imgDate = date.getText().toString();
-                newImage = new ImageGalerie(image,imgDesc,imgDate);
-                listImages.add(newImage);
-                //IMAGE_INSERTED_CODE = 1;
-                picToAdd.setImageResource(0);
+                if(image == null){
+                    Toast.makeText(getActivity(), "Veuillez choisir une image", Toast.LENGTH_SHORT).show();
+                }else{
+                    putImageInDb();
+                }
             }
         });
     }

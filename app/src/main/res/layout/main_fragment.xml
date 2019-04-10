@@ -12,12 +12,6 @@
         android:layout_height="match_parent"
         android:layout_above="@id/BottomNav" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:layout_above="@id/BottomNav"
-        android:background="@drawable/shadow" />
-
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/BottomNav"
         android:layout_width="match_parent"

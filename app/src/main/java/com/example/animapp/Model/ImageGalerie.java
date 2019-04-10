@@ -25,20 +25,25 @@ public class ImageGalerie {
 
     private static final String TAG = ImageGalerie.class.getSimpleName();
 
+    public String monitEmail;
     public  String description;
     public  Uri imageUri;
+    public String imageUrl;
     public  String url;
     public String date;
 
-    public ImageGalerie(Uri image, String description,String date){
+    public ImageGalerie(String monitEmail, Uri image, String description,String date){
         this.description = description;
         this.imageUri = image;
         this.date = date;
+        this.monitEmail = monitEmail;
     }
-    public ImageGalerie(String description,String url,String date){
+    public ImageGalerie(String monitEmail,String imageUrl, String description,String date){
         this.description = description;
-        this.url = url;
+        this.imageUrl = imageUrl;
         this.date = date;
+        this.monitEmail = monitEmail;
+
     }
 
     public ImageGalerie(){ }
@@ -82,7 +87,7 @@ public class ImageGalerie {
     }
 
     public Uri getImageUri() {
-        return imageUri;
+        return Uri.parse(imageUrl);
     }
 
     public void setImageUri(Uri dynamicUrl) {
@@ -103,5 +108,20 @@ public class ImageGalerie {
 
     public void setDate(String date) {
         this.date = date;
+    }
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getMonitEmail() {
+        return monitEmail;
+    }
+
+    public void setMonitEmail(String monitEmail) {
+        this.monitEmail = monitEmail;
     }
 }

@@ -67,7 +67,7 @@ public class SectionCreation extends AppCompatActivity {
             if(!(inputNom.isEmpty() && inputCategorie.isEmpty() && inputDescription.isEmpty() && inputUnite.isEmpty())){
 
                 Section section = new Section(inputNom,inputCategorie,inputDescription);
-                SectionHelper.createSection(section);
+                SectionHelper.createSection(inputNom,inputCategorie,inputDescription);
                 Intent goBack = new Intent();
                 goBack.putExtra("result",inputNom);
                 setResult(RESULT_OK, goBack);

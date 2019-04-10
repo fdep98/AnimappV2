@@ -12,13 +12,16 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Database.UserHelper;
+import com.example.animapp.LastPostAdapter;
 import com.example.animapp.MainFragmentActivity;
+import com.example.animapp.Model.Post;
 import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 import com.firebase.ui.auth.AuthUI;
@@ -28,11 +31,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.protobuf.StringValue;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
 
@@ -49,11 +60,13 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
     Animation rotateForward, rotateBackward;
     boolean isOpen = false;
     ImageButton parametre;
+    List<Post> colleguePostList = new ArrayList<>();
+    ListView lastpostLV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_profil);
-
+        lastpostLV = findViewById(R.id.lastPostLV);
 
         IVphoto = findViewById(R.id.vpa_photo);
         TVnom = findViewById(R.id.vpa_nom);
@@ -66,7 +79,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
         TVemail = findViewById(R.id.vpa_email);
         TVanime = findViewById(R.id.vpa_anime);
         parametre = findViewById(R.id.parametre);
-        TVanime.setText("15");
+
 
         rotateForward =  AnimationUtils.loadAnimation(this,R.anim.rotate_forward);
         rotateBackward =  AnimationUtils.loadAnimation(this,R.anim.rotate_backward);
@@ -114,7 +127,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if(documentSnapshot.exists()){
-                                User user = documentSnapshot.toObject(User.class);
+                                final User user = documentSnapshot.toObject(User.class);
 
                                 TVnom.setText(user.getNom());
                                 TVpseudo.setText(user.getPrenom());
@@ -124,6 +137,41 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
                                 TVdob.setText(user.getDateOfBirth());
                                 TVunite.setText(user.getUnite());
                                 TVsection.setText(user.getSection());
+
+                                Query query = db.collection("users").whereEqualTo("unite",user.getUnite()) //pour récupérer les animés
+                                        .whereEqualTo("section",user.getSection())
+                                        .whereEqualTo("isAnime",true);
+
+                                Query query2 = db.collection("users").whereEqualTo("unite",user.getUnite()) //pour récupérer les autres moniteurs de la section et l'unite
+                                        .whereEqualTo("section",user.getSection())
+                                        .whereEqualTo("isAnime",false);
+
+                                query2.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                        List<User> collegue = new ArrayList<>(); //tableau des autres moniteurs de la section
+                                        String email;
+                                        for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                                            email = doc.getString("email");
+                                            if(!email.equals(user.getEmail())){
+                                                collegue.add(doc.toObject(User.class));
+                                               // Toast.makeText(profil.this, collegue.get(i).getEmail(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                        bindLastPost(collegue);
+
+                                    }
+                                });
+
+
+                                query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+                                        int nbrAnime = queryDocumentSnapshots.size();
+                                        TVanime.setText(String.valueOf(nbrAnime));
+                                    }
+                                });
 
                             }else{
                                 TVnom.setText(currentUser.getDisplayName());
@@ -258,6 +306,31 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
                 .build();
         db.setFirestoreSettings(settings);
         // [END set_firestore_settings]
+    }
+
+    public void bindLastPost(final List<User> moniteurs){
+        db.collection("userPosts") // on récupère tout les post de userPosts
+        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                Post colleguePost;
+                //pour chaque moniteur on vérifie si le moniteur a un post, si oui, on l'ajoute dans
+                for(User user : moniteurs){
+                    for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                        colleguePost = doc.toObject(Post.class);
+                        if(colleguePost.getMoniteur().equals(user.getEmail())){
+                            colleguePostList.add(colleguePost);
+                           // Toast.makeText(profil.this, colleguePost.getMessage(), Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                }
+                LastPostAdapter adapter = new LastPostAdapter(getApplicationContext(),colleguePostList);
+                lastpostLV.setAdapter(adapter);
+            }
+        });
+
     }
 
 }

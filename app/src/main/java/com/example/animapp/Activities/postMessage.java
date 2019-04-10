@@ -265,8 +265,8 @@ public class postMessage extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Uri> task) {
                                 if(task.isSuccessful()){
                                     Uri imageUri = task.getResult();
-                                    String imgUrl = imageUri.toString();
-                                    Post newPost = new Post(currentUser.getEmail(),currentDate, post, imgUrl);
+                                    String img = imageUri.toString();
+                                    Post newPost = new Post(currentUser.getEmail(),currentDate, post, img);
                                     PostsHelper.createUserPost(newPost);
                                     startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
 
@@ -315,8 +315,8 @@ public class postMessage extends AppCompatActivity {
                                     Toast.makeText(postMessage.this, "photo added", Toast.LENGTH_SHORT).show();
                                     prog.dismiss();
                                     Uri imageUri = task.getResult();
-                                    String imgUrl = imageUri.toString();
-                                    Post newPost = new Post(currentUser.getEmail(),currentDate, post, imgUrl);
+                                    String img = imageUri.toString();
+                                    Post newPost = new Post(currentUser.getEmail(),currentDate, post, img);
                                     PostsHelper.createUserPost(newPost);
                                     startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
 

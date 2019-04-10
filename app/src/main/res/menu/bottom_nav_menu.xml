@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_menu"
         android:enabled="true"
-        android:icon="@drawable/ic_home_unfilled2"
+        android:icon="@drawable/ic_tent2"
         android:title="Accueil"
         android:visible="true"
         app:showAsAction="ifRoom" />

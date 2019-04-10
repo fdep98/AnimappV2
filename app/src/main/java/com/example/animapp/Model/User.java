@@ -3,6 +3,7 @@ package com.example.animapp.Model;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class User {
@@ -17,7 +18,9 @@ public class User {
     private String email;
     private String dateOfBirth;
     private boolean isChecked;
+    private boolean isAnime;
     private int absences;
+
 
 
     @Nullable
@@ -39,6 +42,7 @@ public class User {
         this.section = section;
         this.unite = unite;
         this.absences = 0;
+        isAnime = true;
 
     }
 
@@ -53,7 +57,7 @@ public class User {
         this.dateOfBirth = dob;
         this.section = section;
         this.unite = unite;
-        this.absences = 0;
+
     }
 
     public User(String nom, String pseudo, int nbrAbsences){
@@ -61,6 +65,7 @@ public class User {
         this.prenom = pseudo;
         this.absences = nbrAbsences;
         this.absences = 0;
+
 
     }
 
@@ -171,4 +176,11 @@ public class User {
         isChecked = checked;
     }
 
+    public boolean isAnime() {
+        return isAnime;
+    }
+
+    public void setAnime(boolean anime) {
+        isAnime = anime;
+    }
 }

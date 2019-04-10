@@ -15,13 +15,9 @@ public class SectionHelper {
     }
 
     //Task permet de réaliser des appels asynchrones
-    /*public static Task<Void> createSection(String name, String categorie, String desc) {
+    public static Task<Void> createSection(String name, String categorie, String desc) {
         Section section = new Section(name, categorie, desc);
         return SectionHelper.getSectionCollection().document(name).set(section);
-    }*/
-
-    public static void createSection(Section section) {
-        SectionHelper.getSectionCollection().add(section);
     }
 
     public static Task<DocumentSnapshot> getSection(String uid){

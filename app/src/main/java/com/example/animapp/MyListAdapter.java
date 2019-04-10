@@ -25,10 +25,10 @@ import com.example.animapp.animapp.R;
 
 public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder> implements Filterable {
 
-    private ArrayList<User> userList;
-    private List<User> exampleList;
+    private List<User> userList;
+    private List<User> exampleList = new ArrayList<>();
 
-    public MyListAdapter(ArrayList<User> userList){
+    public MyListAdapter(List<User> userList){
         this.userList = userList;
         exampleList = userList;
     }

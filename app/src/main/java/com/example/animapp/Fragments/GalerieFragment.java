@@ -1,5 +1,6 @@
 package com.example.animapp.Fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,28 +15,45 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.ImageGridItemDecoration;
+import com.example.animapp.Model.User;
 import com.example.animapp.StaggeredGridLayout.StaggeredGalerieImageCardRecyclerViewAdapter;
 import com.example.animapp.animapp.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.animapp.Fragments.MediaFragment.IMAGE_INSERTED_CODE;
-import static com.example.animapp.Fragments.MediaFragment.listImages;
-
 
 public class GalerieFragment extends Fragment {
-    FirebaseStorage storage;
-    StorageReference storageRef;
+    StorageReference storage;
+    CollectionReference userRef;
     private FirebaseAuth mAuth;
     public FirebaseUser currentUser;
+    public DocumentReference galerieRef;
+    private CollectionReference imageRef;
+    private List<ImageGalerie> galerieList;
 
 
     @Override
@@ -57,36 +75,30 @@ public class GalerieFragment extends Fragment {
             activity.setSupportActionBar(toolbar);
         }
 
+        galerieList = new ArrayList<>();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        storage = FirebaseStorage.getInstance();
+        storage = FirebaseStorage.getInstance().getReference();
+
         if(currentUser != null){
-            storageRef = storage.getReference("Galerie de"+currentUser.getEmail());
+            imageRef = FirebaseFirestore.getInstance().collection("galerieImages");
+            userRef = FirebaseFirestore.getInstance().collection("galerieImages");
+
+            userRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                    for (QueryDocumentSnapshot image : queryDocumentSnapshots) {
+                        ImageGalerie img = image.toObject(ImageGalerie.class);
+                        String url = img.getImageUrl();
+                        //String imgUrl = extractUrl(url,"&");
+                        //img.setImageUrl(imgUrl);
+                       // Toast.makeText(getActivity(), url, Toast.LENGTH_SHORT).show();
+                        galerieList.add(img);
+                    }
+                }
+            });
+
         }
-
-
-        /*ImageGalerie img1, img2, img3, img4, img5, img6, img7, img8, img9, img10;
-        img1 = new ImageGalerie("Vagabond sack",
-                "https://storage.googleapis.com/material-vignettes.appspot.com/image/0-0.jpg", "13/06/19");
-        img2 = new ImageGalerie("Stella sunglasses","https://storage.googleapis.com/material-vignettes.appspot.com/image/1-0.jpg","19/03/19");
-        img3 = new ImageGalerie("Whitney belt","https://storage.googleapis.com/material-vignettes.appspot.com/image/2-0.jpg", "1/03/19");
-        img4 = new ImageGalerie("Garden strand","https://storage.googleapis.com/material-vignettes.appspot.com/image/3-0.jpg", "12/03/18");
-        img5 = new ImageGalerie("Strut earrings","https://storage.googleapis.com/material-vignettes.appspot.com/image/4-0.jpg", "9/03/20");
-        img6 = new ImageGalerie("Varsity socks","https://storage.googleapis.com/material-vignettes.appspot.com/image/5-0.jpg", "11/11/22");
-        img7 = new ImageGalerie("Weave keyring","https://storage.googleapis.com/material-vignettes.appspot.com/image/6-0.jpg", "09/06/13");
-        img8 = new ImageGalerie("Gatsby hat","https://storage.googleapis.com/material-vignettes.appspot.com/image/7-0.jpg", "12/01/01");
-        img9 = new ImageGalerie("Shrug bag","https://storage.googleapis.com/material-vignettes.appspot.com/image/8-0.jpg", "06/04/19");
-        img10 = new ImageGalerie("Gilt desk trio","https://storage.googleapis.com/material-vignettes.appspot.com/image/9-0.jpg", "19/03/19");
-        listImages.add(img1);
-        listImages.add(img2);
-        listImages.add(img3);
-        listImages.add(img4);
-        listImages.add(img5);
-        listImages.add(img6);
-        listImages.add(img7);
-        listImages.add(img8);
-        listImages.add(img9);
-        listImages.add(img10);*/
 
 
         //set up du recycler view
@@ -100,7 +112,7 @@ public class GalerieFragment extends Fragment {
             }
         });
         recyclerView.setLayoutManager(gridLayoutManager);
-        StaggeredGalerieImageCardRecyclerViewAdapter adapter = new StaggeredGalerieImageCardRecyclerViewAdapter(listImages,getActivity());
+        StaggeredGalerieImageCardRecyclerViewAdapter adapter = new StaggeredGalerieImageCardRecyclerViewAdapter(galerieList,getActivity());
         recyclerView.setAdapter(adapter);
 
         int largePadding = getResources().getDimensionPixelSize(R.dimen.grid_spacing_large);
@@ -126,6 +138,12 @@ public class GalerieFragment extends Fragment {
                 return true;
             }
         });
+    }
+
+    public String extractUrl(String url,String key){
+        //int startIndex = url.indexOf("https://firebasestorage.googleapis.com");
+        int lastIndex = url.indexOf(key);
+        return url.substring(0,lastIndex);
     }
 
     public void picUserGalerie(){

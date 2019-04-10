@@ -108,11 +108,12 @@ public class PostListAdapter extends ArrayAdapter<Post> {
                 .showImageOnLoading(defaultImage).build();
 
         //download and display image from url
-        imageLoader.displayImage(post.getImgurl(), holder.image, options);
-
+        //holder.image.setImageURI(post.getImageUri());
         holder.moniteur.setText(post.getMoniteur());
         holder.date.setText(post.getDate());
         holder.message.setText(post.getMessage());
+        imageLoader.displayImage(post.getImgurl(), holder.image, options);
+
         /*Picasso.get().load(post.getImgurl())
                 .into(holder.image);*/
 

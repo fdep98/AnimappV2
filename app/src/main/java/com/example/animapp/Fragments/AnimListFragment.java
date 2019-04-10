@@ -39,7 +39,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -55,7 +57,7 @@ public class AnimListFragment extends Fragment {
     private CollectionReference userRef;
     private DocumentReference monitRef;
     private FirebaseAuth mAuth;
-    private ArrayList<User> animListe = new ArrayList<>();
+    private List<User> animListe = new ArrayList<>();
     private FirebaseFirestore firestoreDb; //instance de la BDD firestore
     private MyListAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -188,29 +190,32 @@ public class AnimListFragment extends Fragment {
 
                         Query query1 = userRef
                                 .whereEqualTo("unite", monitUnite)
-                                .whereEqualTo("section", monitSection);
+                                .whereEqualTo("section", monitSection)
+                                .whereEqualTo("isAnime",true);
 
-                        query1.get()
-                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                                if(!document.getString("email").equals(monitEmail)){
-                                                    animListe.add(document.toObject(User.class));
-                                                }
-
-                                            }
-                                            adapter = new MyListAdapter(animListe);
-                                            list.setAdapter(adapter);
-                                        } else {
-                                            Toast.makeText(getActivity(), "Une erreur s'est produite", Toast.LENGTH_SHORT).show();
+                        query1.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                                if(e != null){
+                                    Toast.makeText(getActivity(), "listen failed", Toast.LENGTH_SHORT).show();
+                                }
+                                List<User> user = new ArrayList<>();
+                                if(!queryDocumentSnapshots.isEmpty()){
+                                    for (QueryDocumentSnapshot document :queryDocumentSnapshots) {
+                                        if(!document.getString("email").equals(monitEmail)){
+                                            user.add(document.toObject(User.class));
                                         }
-
                                     }
-                                });
+                                }
+                                animListe = user; //copie des animés qui match dans animList
+                                adapter = new MyListAdapter(animListe);
+                                list.setAdapter(adapter);
+                            }
+
+                        });
                     }
                 });
+
     }
 
     @Override
