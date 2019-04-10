@@ -145,12 +145,13 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
                                 Query query2 = db.collection("users").whereEqualTo("unite",user.getUnite()) //pour récupérer les autres moniteurs de la section et l'unite
                                         .whereEqualTo("section",user.getSection())
                                         .whereEqualTo("isAnime",false);
-
+                                final List<User> collegue = new ArrayList<>(); //tableau des autres moniteurs de la section
                                 query2.addSnapshotListener(new EventListener<QuerySnapshot>() {
                                     @Override
                                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                                        List<User> collegue = new ArrayList<>(); //tableau des autres moniteurs de la section
+
                                         String email;
+
                                         for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
                                             email = doc.getString("email");
                                             if(!email.equals(user.getEmail())){

@@ -32,7 +32,6 @@ public class User {
 
     //constructeur animé
     public User(String nom, String totem, String email, String ngsm, String dob, String unite, String section){
-        //this.id = id;
         this.nom = nom;
         this.totem = totem;
         this.section = section;
@@ -57,6 +56,7 @@ public class User {
         this.dateOfBirth = dob;
         this.section = section;
         this.unite = unite;
+        isAnime = false;
 
     }
 

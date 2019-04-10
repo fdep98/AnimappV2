@@ -111,7 +111,8 @@ public class PostListAdapter extends ArrayAdapter<Post> {
         holder.moniteur.setText(post.getMoniteur());
         holder.date.setText(post.getDate());
         holder.message.setText(post.getMessage());
-        imageLoader.displayImage(post.getImgurl(), holder.image, options);
+        Picasso.get().load(post.getImgurl()).into(holder.image);
+        //imageLoader.displayImage(post.getImgurl(), holder.image, options);
 
 
 
