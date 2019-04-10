@@ -43,7 +43,6 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
     @NonNull
     @Override
     public StaggeredGalerieImageCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        setupImageLoader();
         int layoutId = R.layout.staggered_image_gallery_card_first;
         if (viewType == 1) {
             layoutId = R.layout.shr_staggered_image_gallery_card_second;
@@ -62,15 +61,11 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
             holder.description.setText(image.getDescription());
             holder.date.setText(image.getDate());
 
-            int defaultImage=mContext.getResources().getIdentifier("@drawable/logo",null,mContext.getPackageName());
-
-            ImageLoader imageLoader = ImageLoader.getInstance();
-            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                    .cacheOnDisc(true).resetViewBeforeLoading(true)
-                    .showImageForEmptyUri(defaultImage)
-                    .showImageOnFail(defaultImage).showImageOnLoading(defaultImage).build();
-
-            imageLoader.displayImage(image.getImageUrl(), holder.image, options);
+            Picasso.get()
+                    .load(image.getImageUrl())
+                    .fit()
+                    .centerCrop()
+                    .into(holder.image);
         }
     }
 
@@ -79,20 +74,4 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
         return imageGalerieList.size();
     }
 
-    private void setupImageLoader(){
-        // UNIVERSAL IMAGE LOADER SETUP
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .cacheOnDisc(true).cacheInMemory(true)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .displayer(new FadeInBitmapDisplayer(300)).build();
-
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-                mContext)
-                .defaultDisplayImageOptions(defaultOptions)
-                .memoryCache(new WeakMemoryCache())
-                .discCacheSize(100 * 1024 * 1024).build();
-
-        ImageLoader.getInstance().init(config);
-        // END - UNIVERSAL IMAGE LOADER SETUP
-    }
 }

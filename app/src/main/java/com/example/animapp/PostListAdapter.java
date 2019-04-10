@@ -52,7 +52,6 @@ public class PostListAdapter extends ArrayAdapter<Post> {
     @Override
     public View getView(int position,  View convertView, ViewGroup parent) {
         //setup the image loader
-        setupImageLoader();
         //get the Post info
         //String moniteur=getItem(position).getMoniteur();
         //String date=getItem(position).getDate();
@@ -62,7 +61,7 @@ public class PostListAdapter extends ArrayAdapter<Post> {
         //create the post object with info
         //Post post= new Post(moniteur,date,message);
 
-
+        setupImageLoader();
         Post post= getItem(position);
 
         //creat the view result for showing the animation
@@ -100,7 +99,7 @@ public class PostListAdapter extends ArrayAdapter<Post> {
         //création image defaultImage est l'image si y'en a pas
         int defaultImage=mContext.getResources().getIdentifier("@drawable/logo",null,mContext.getPackageName());
 
-        ImageLoader imageLoader = ImageLoader.getInstance();
+       ImageLoader imageLoader = ImageLoader.getInstance();
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
                 .cacheOnDisc(true).resetViewBeforeLoading(true)
                 .showImageForEmptyUri(defaultImage)
@@ -113,9 +112,6 @@ public class PostListAdapter extends ArrayAdapter<Post> {
         holder.date.setText(post.getDate());
         holder.message.setText(post.getMessage());
         imageLoader.displayImage(post.getImgurl(), holder.image, options);
-
-        /*Picasso.get().load(post.getImgurl())
-                .into(holder.image);*/
 
 
 

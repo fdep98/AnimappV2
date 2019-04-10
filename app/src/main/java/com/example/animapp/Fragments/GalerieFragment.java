@@ -54,6 +54,7 @@ public class GalerieFragment extends Fragment {
     public DocumentReference galerieRef;
     private CollectionReference imageRef;
     private List<ImageGalerie> galerieList;
+    RecyclerView recyclerView;
 
 
     @Override
@@ -84,25 +85,13 @@ public class GalerieFragment extends Fragment {
             imageRef = FirebaseFirestore.getInstance().collection("galerieImages");
             userRef = FirebaseFirestore.getInstance().collection("galerieImages");
 
-            userRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                    for (QueryDocumentSnapshot image : queryDocumentSnapshots) {
-                        ImageGalerie img = image.toObject(ImageGalerie.class);
-                        String url = img.getImageUrl();
-                        //String imgUrl = extractUrl(url,"&");
-                        //img.setImageUrl(imgUrl);
-                       // Toast.makeText(getActivity(), url, Toast.LENGTH_SHORT).show();
-                        galerieList.add(img);
-                    }
-                }
-            });
+
 
         }
 
 
         //set up du recycler view
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2,GridLayoutManager.HORIZONTAL,false);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -112,8 +101,23 @@ public class GalerieFragment extends Fragment {
             }
         });
         recyclerView.setLayoutManager(gridLayoutManager);
-        StaggeredGalerieImageCardRecyclerViewAdapter adapter = new StaggeredGalerieImageCardRecyclerViewAdapter(galerieList,getActivity());
-        recyclerView.setAdapter(adapter);
+
+        userRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                for (QueryDocumentSnapshot image : queryDocumentSnapshots) {
+                    ImageGalerie img = image.toObject(ImageGalerie.class);
+                    String url = img.getImageUrl();
+                    //String imgUrl = extractUrl(url,"&");
+                    //img.setImageUrl(imgUrl);
+                    // Toast.makeText(getActivity(), url, Toast.LENGTH_SHORT).show();
+                    galerieList.add(img);
+                }
+                StaggeredGalerieImageCardRecyclerViewAdapter adapter = new StaggeredGalerieImageCardRecyclerViewAdapter(galerieList,getActivity());
+                recyclerView.setAdapter(adapter);
+            }
+        });
+
 
         int largePadding = getResources().getDimensionPixelSize(R.dimen.grid_spacing_large);
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.grid_spacing_small);

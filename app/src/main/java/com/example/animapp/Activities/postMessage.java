@@ -22,10 +22,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.MimeTypeMap;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,11 +33,8 @@ import com.example.animapp.Database.PostsHelper;
 import com.example.animapp.MainFragmentActivity;
 import com.example.animapp.Model.Post;
 import com.example.animapp.animapp.R;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -53,7 +48,6 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class postMessage extends AppCompatActivity {
@@ -65,7 +59,6 @@ public class postMessage extends AppCompatActivity {
     TextView monitName, monitTotem, monitPrenom;
     MaterialButton publier;
     ImageView monitImg;
-    ListView vue;
     Toolbar messageToolbar;
     ImageView picToAdd, ToolbarImg;
     FloatingActionButton optionFAB, addPicViaCamFAB, addPicViaGalFAB;
@@ -80,6 +73,7 @@ public class postMessage extends AppCompatActivity {
     private FirebaseFirestore database;
     String currentDate;
     String post;
+    Uri image;
 
 
     //date et heure
@@ -108,9 +102,6 @@ public class postMessage extends AppCompatActivity {
         rotateBackward =  AnimationUtils.loadAnimation(this,R.anim.rotate_backward);
 
 
-
-        prog = new ProgressDialog(this);
-
         //permet de retourner en arrire lorsqu'on appui sur la flèche (navigationIcon)
         messageToolbar = findViewById(R.id.messageToolbar);
         //messageToolbar.setLogo(R.mipmap.ic_launcher_round);
@@ -132,6 +123,8 @@ public class postMessage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         database = FirebaseFirestore.getInstance();
+
+        //Information sur le moniteur
         userDoc = database.collection("users").document(currentUser.getEmail());
         userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -235,96 +228,31 @@ public class postMessage extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == GALLERY_INTENT && resultCode == Activity.RESULT_OK) {
-            final Uri uri = data.getData();
-            Picasso.get().load(uri).into(picToAdd);
+            image = data.getData();
+            Picasso.get().load(image).into(picToAdd);
             publier.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    prog.setMessage("Téléchargement...");
-                    prog.show();
+                    post = postMessage.getText().toString();
                     if(!post.isEmpty()){
-                        //stockage dans la BDD
-                        final StorageReference st = storageRef.child(currentUser.getEmail()+" photos").child("post du "+currentDate); //créer un dossier photos et met le chemin vers la photo comme child
-                        st.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Toast.makeText(postMessage.this, "photo added", Toast.LENGTH_SHORT).show();
-                                prog.dismiss();
-                            }
-                        });
-                        Task<Uri> urlTask = st.putFile(uri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                            @Override
-                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                if(!task.isSuccessful()){
-                                    throw task.getException();
-                                }
-                                return storageRef.getDownloadUrl();
-                            }
-                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task) {
-                                if(task.isSuccessful()){
-                                    Uri imageUri = task.getResult();
-                                    String img = imageUri.toString();
-                                    Post newPost = new Post(currentUser.getEmail(),currentDate, post, img);
-                                    PostsHelper.createUserPost(newPost);
-                                    startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
-
-                                }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(postMessage.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
+                        putImageInDb();
                     }else{
                         Toast.makeText(postMessage.this, "veuillez entrer un message avant la publication", Toast.LENGTH_SHORT).show();
                     }
-                    //picToAdd.setImageResource(0); //clear l'image View
                 }
             });
         }
 
         if(requestCode == CAMERA_INTENT && resultCode == Activity.RESULT_OK){
             final Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-            final Uri uri = getImageUri(getApplicationContext(), imageBitmap);
-            Picasso.get().load(uri).into(picToAdd);
+            image= getImageUri(getApplicationContext(), imageBitmap);
+            Picasso.get().load(image).into(picToAdd);
             publier.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    post = postMessage.getText().toString();
                     if(!post.isEmpty()) {
-                        prog.setMessage("Téléchargement...");
-                        prog.show();
-                        //stockage dans la BDD
-                        StorageReference st = storageRef.child(currentUser.getEmail()+" photos").child("post du "+currentDate);//créer un dossier photos et met le chemin vers la photo comme child
-
-                        st.putFile(uri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                            @Override
-                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                if(!task.isSuccessful()){
-                                    throw task.getException();
-                                }
-                                return storageRef.getDownloadUrl();
-                            }
-                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task) {
-                                if(task.isSuccessful()){
-                                    Toast.makeText(postMessage.this, "photo added", Toast.LENGTH_SHORT).show();
-                                    prog.dismiss();
-                                    Uri imageUri = task.getResult();
-                                    String img = imageUri.toString();
-                                    Post newPost = new Post(currentUser.getEmail(),currentDate, post, img);
-                                    PostsHelper.createUserPost(newPost);
-                                    startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
-
-                                }else{
-                                    Toast.makeText(postMessage.this, "upload failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                        putImageInDb();
                     }else{
                         Toast.makeText(postMessage.this, "veuillez entrer un message avant la publication", Toast.LENGTH_SHORT).show();
                     }
@@ -332,6 +260,47 @@ public class postMessage extends AppCompatActivity {
             });
         }
     }
+
+    public void putImageInDb(){
+        final long currentTime = System.currentTimeMillis();
+
+        storageRef.child(currentUser.getEmail()+" Posts").child(currentTime+"."+getFileExtension(image))
+                .putFile(image)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        storageRef.child(currentUser.getEmail()+" Posts").child(currentTime+"."+getFileExtension(image))
+                                .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Post newPost = new Post(currentUser.getEmail(),currentDate, post, uri.toString());
+                                PostsHelper.createUserPost(newPost);
+                                Toast.makeText(postMessage.this, "Ajouter dans la gallerie", Toast.LENGTH_SHORT).show();
+                                picToAdd.setImageResource(0);
+                                postMessage.setText("");
+                            }
+                        });
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(postMessage.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = this.getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+
+
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);

@@ -87,7 +87,7 @@ public class ImageGalerie {
     }
 
     public Uri getImageUri() {
-        return Uri.parse(imageUrl);
+        return imageUri;
     }
 
     public void setImageUri(Uri dynamicUrl) {
