@@ -3,13 +3,16 @@ package com.example.animapp.StaggeredGridLayout;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.example.animapp.AnimListAdapter;
 import com.example.animapp.ImageRequester;
 import com.example.animapp.Model.ImageGalerie;
+import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -19,6 +22,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,10 +33,18 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
 
     private List<ImageGalerie> imageGalerieList;
     Context mContext;
+    private StaggeredGalerieImageCardRecyclerViewAdapter.OnClickListener onClickListener = null;
+    private SparseBooleanArray selectedItems;
+    private int currentSelectedIndx = -1;
 
     public StaggeredGalerieImageCardRecyclerViewAdapter(List<ImageGalerie> imageGalerieList, Context context) {
         this.imageGalerieList = imageGalerieList;
         mContext = context;
+        selectedItems = new SparseBooleanArray();
+    }
+
+    public void setOnClickListener(StaggeredGalerieImageCardRecyclerViewAdapter.OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
     @Override
@@ -55,23 +67,58 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StaggeredGalerieImageCardViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull StaggeredGalerieImageCardViewHolder holder, final int position) {
         if (imageGalerieList != null && position < imageGalerieList.size()) {
-            ImageGalerie image = imageGalerieList.get(position);
+            final ImageGalerie image = imageGalerieList.get(position);
             holder.description.setText(image.getDescription());
             holder.date.setText(image.getDate());
+            holder.parent.setActivated(selectedItems.get(position, false));
 
             Picasso.get()
                     .load(image.getImageUrl())
                     .fit()
                     .centerCrop()
                     .into(holder.image);
+            holder.parent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickListener == null) return;
+                    onClickListener.onItemClick(v, image, position);
+                }
+            });
         }
     }
 
     @Override
     public int getItemCount() {
         return imageGalerieList.size();
+    }
+
+    public int getSelectedItemCount() {
+        return selectedItems.size();
+    }
+
+    public void clearSelections() {
+        selectedItems.clear();
+        notifyDataSetChanged();
+    }
+
+    public List<Integer> getSelectedItems() {
+        List<Integer> items = new ArrayList<>(selectedItems.size());
+        for (int i = 0; i < selectedItems.size(); i++) {
+            items.add(selectedItems.keyAt(i));
+        }
+        return items;
+    }
+
+    private void resetCurrentIndex() {
+        currentSelectedIndx = -1;
+    }
+
+    public interface OnClickListener {
+        void onItemClick(View view, ImageGalerie obj, int pos);
+
+        void onItemLongClick(View view, ImageGalerie obj, int pos);
     }
 
 }

@@ -74,7 +74,7 @@ public class postMessage extends AppCompatActivity {
     String currentDate;
     String post;
     Uri image;
-
+    static String nom, prenom, totem;
 
     //date et heure
     private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy"+" à "+ "HH:mm:ss");
@@ -135,6 +135,9 @@ public class postMessage extends AppCompatActivity {
                 monitName.setText(monitNom);
                 monitTotem.setText(monitTot);
                 monitPrenom.setText(monitPren);
+                nom = monitNom;
+                prenom = monitPren;
+                totem = monitTot;
             }
         });
 
@@ -159,7 +162,7 @@ public class postMessage extends AppCompatActivity {
             public void onClick(View v) {
                 post = postMessage.getText().toString();
                 if (!post.isEmpty()) {
-                    Post newPost = new Post(currentUser.getEmail(), currentDate, post);
+                    Post newPost = new Post(currentUser.getEmail(), nom, prenom, totem, currentDate, post);
                     PostsHelper.createUserPost(newPost);
                     startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
                 }else{
@@ -274,7 +277,7 @@ public class postMessage extends AppCompatActivity {
                                 .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                Post newPost = new Post(currentUser.getEmail(),currentDate, post, uri.toString());
+                                Post newPost = new Post(currentUser.getEmail(),nom, prenom, totem,currentDate, post, uri.toString());
                                 PostsHelper.createUserPost(newPost);
                                 Toast.makeText(postMessage.this, "Ajouter dans la gallerie", Toast.LENGTH_SHORT).show();
                                 picToAdd.setImageResource(0);

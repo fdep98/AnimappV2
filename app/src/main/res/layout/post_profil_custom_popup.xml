@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="310dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/rounded_popup"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/closePopUp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="end"
+        android:drawableStart="@drawable/close2"
+        android:gravity="center"
+        android:textColor="@color/blanc"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/colleguePic"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/logo"
+            tools:srcCompat="@drawable/paysage"
+            android:layout_marginBottom="5dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/collegueName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="7dp"
+                android:textColor="@color/BleuVert"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                tools:text="Nom"
+                android:layout_marginRight="8dp"/>
+
+            <TextView
+                android:id="@+id/colleguePrenom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="7dp"
+                android:textColor="@color/BleuVert"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                tools:text="Prenom" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/collegueTotem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="7dp"
+            android:textColor="@color/BleuVert"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            tools:text="Totem" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:background="@color/blanc"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Section"
+                android:textColor="@color/bleu"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/collegueSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text="section" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:background="@color/blanc"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unité"
+                android:textColor="@color/bleu"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/collegueUnite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text="unité" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:background="@color/blanc"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/collegueAnime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Animés"
+                android:textColor="@color/bleu"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/collegueNbrAnime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text="Nbr" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/colleguePostText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        tools:text="test" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/grisClair2"
+        android:textSize="15sp"
+        tools:text="Date" />
+
+</LinearLayout>

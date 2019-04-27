@@ -1,6 +1,9 @@
 package com.example.animapp.Activities;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -40,6 +44,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.protobuf.StringValue;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,8 +53,8 @@ import javax.annotation.Nullable;
 
 public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
 
-    ImageView IVphoto;
-    TextView TVnom, TVemail, TVpseudo, TVtotem, TVsection, TVngsm, TVdob, TVunite, TVanime;
+    ImageView IVphoto, colleguePic;
+    TextView TVnom, TVemail, TVpseudo, TVtotem, TVsection, TVngsm, TVdob, TVunite, TVanime, collegueEmail, collegueNom, colleguePrenom, collegueTotem, postDate, collegueSec, collegueUn, collegueNbrAn, colleguePostText;
     private static final int SIGN_OUT_TASK = 10;
     private static final int DELETE_USER_TASK = 20;
     private static final int RC_SIGN_IN = 123;
@@ -62,6 +68,10 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
     ImageButton parametre;
     List<Post> colleguePostList = new ArrayList<>();
     ListView lastpostLV;
+    public static User curUser; //instance de l'utilisateur courant, utiliser lors de la mise à jour
+    Dialog mDialog;
+    TextView closePopup;
+    static int nbrAnimes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +90,9 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
         TVanime = findViewById(R.id.vpa_anime);
         parametre = findViewById(R.id.parametre);
 
+        mDialog = new Dialog(this);
+
+
 
         rotateForward =  AnimationUtils.loadAnimation(this,R.anim.rotate_forward);
         rotateBackward =  AnimationUtils.loadAnimation(this,R.anim.rotate_backward);
@@ -92,6 +105,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
         setup();
 
         animateParButton();
+        showPopUp();
 
     }
 
@@ -128,6 +142,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if(documentSnapshot.exists()){
                                 final User user = documentSnapshot.toObject(User.class);
+                                curUser = user;
 
                                 TVnom.setText(user.getNom());
                                 TVpseudo.setText(user.getPrenom());
@@ -138,15 +153,9 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
                                 TVunite.setText(user.getUnite());
                                 TVsection.setText(user.getSection());
 
-                                Query query = db.collection("users").whereEqualTo("unite",user.getUnite()) //pour récupérer les animés
-                                        .whereEqualTo("section",user.getSection())
-                                        .whereEqualTo("isAnime",true);
-
-                                Query query2 = db.collection("users").whereEqualTo("unite",user.getUnite()) //pour récupérer les autres moniteurs de la section et l'unite
-                                        .whereEqualTo("section",user.getSection())
-                                        .whereEqualTo("isAnime",false);
                                 final List<User> collegue = new ArrayList<>(); //tableau des autres moniteurs de la section
-                                query2.addSnapshotListener(new EventListener<QuerySnapshot>() {
+
+                                UserHelper.getCollegue(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                     @Override
                                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
@@ -165,11 +174,12 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
                                 });
 
 
-                                query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                UserHelper.getAnim(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                     @Override
                                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
                                         int nbrAnime = queryDocumentSnapshots.size();
+                                        nbrAnimes = nbrAnime;
                                         TVanime.setText(String.valueOf(nbrAnime));
                                     }
                                 });
@@ -219,7 +229,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
 
     // executer lorsque le bouton annuler est pressé (FrameLayout)
     public void cancel(View view){
-        Toast.makeText(this, "annuler", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "annuler", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(this,profil.class));
     }
 
@@ -277,6 +287,10 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
                 isOpen = false;
                 setContentView(R.layout.frame_delete_user);
                 return true;
+            case R.id.update:
+                parametre.startAnimation(rotateBackward);
+                isOpen = false;
+                startActivity(new Intent(this,UpdateProfil.class));
             default:
                 return false;
         }
@@ -319,7 +333,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
                 for(User user : moniteurs){
                     for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
                         colleguePost = doc.toObject(Post.class);
-                        if(colleguePost.getMoniteur().equals(user.getEmail())){
+                        if(colleguePost.getEmailMoniteur().equals(user.getEmail())){
                             colleguePostList.add(colleguePost);
                            // Toast.makeText(profil.this, colleguePost.getMessage(), Toast.LENGTH_SHORT).show();
 
@@ -329,6 +343,50 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
                 }
                 LastPostAdapter adapter = new LastPostAdapter(getApplicationContext(),colleguePostList);
                 lastpostLV.setAdapter(adapter);
+            }
+        });
+
+    }
+
+    public void showPopUp(){
+        mDialog.setContentView(R.layout.post_profil_custom_popup);
+        closePopup = mDialog.findViewById(R.id.closePopUp);
+        colleguePic = mDialog.findViewById(R.id.colleguePic);
+        collegueNom = mDialog.findViewById(R.id.collegueName);
+        colleguePrenom = mDialog.findViewById(R.id.colleguePrenom);
+        collegueTotem = mDialog.findViewById(R.id.collegueTotem);
+        postDate = mDialog.findViewById(R.id.date);
+        collegueSec = mDialog.findViewById(R.id.collegueSection);
+        collegueUn = mDialog.findViewById(R.id.collegueUnite);
+        collegueNbrAn = mDialog.findViewById(R.id.collegueNbrAnime);
+        colleguePostText = mDialog.findViewById(R.id.colleguePostText);
+        closePopup = mDialog.findViewById(R.id.closePopUp);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        lastpostLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+                mDialog.show();
+                Post colleguePost = (Post) adapter.getItemAtPosition(position);
+                Glide.with(getApplication())
+                        .load(R.drawable.paysage)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(colleguePic);
+                collegueNom.setText(colleguePost.getNomMoniteur());
+                colleguePrenom.setText(colleguePost.getPrenomMoniteur());
+                collegueTotem.setText(colleguePost.getTotemMoniteur());
+                collegueSec.setText(curUser.getSection());
+                collegueUn.setText(curUser.getUnite());
+                postDate.setText(colleguePost.getDate());
+                colleguePostText.setText(colleguePost.getMessage());
+                collegueNbrAn.setText(String.valueOf(nbrAnimes));
+
+                closePopup.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mDialog.dismiss();
+                    }
+                });
             }
         });
 

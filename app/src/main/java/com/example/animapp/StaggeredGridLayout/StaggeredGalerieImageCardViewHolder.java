@@ -13,11 +13,13 @@ public class StaggeredGalerieImageCardViewHolder extends RecyclerView.ViewHolder
     public ImageView image;
     public TextView description;
     public TextView date;
+    View parent;
 
     StaggeredGalerieImageCardViewHolder(@NonNull View itemView) {
         super(itemView);
         image = itemView.findViewById(R.id.image);
         description = itemView.findViewById(R.id.description);
         date = itemView.findViewById(R.id.date);
+        parent = itemView.findViewById(R.id.parent);
     }
 }

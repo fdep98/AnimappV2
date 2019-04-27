@@ -2,7 +2,10 @@
 package com.example.animapp.Fragments;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +16,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,20 +25,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ListView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Activities.AddAnime;
 import com.example.animapp.Database.UserHelper;
 import com.example.animapp.Model.User;
-import com.example.animapp.MyListAdapter;
-import com.example.animapp.UserAdapter;
+import com.example.animapp.AnimListAdapter;
+import com.example.animapp.Tools;
 import com.example.animapp.animapp.R;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -59,12 +64,22 @@ public class AnimListFragment extends Fragment {
     private FirebaseAuth mAuth;
     private List<User> animListe = new ArrayList<>();
     private FirebaseFirestore firestoreDb; //instance de la BDD firestore
-    private MyListAdapter adapter;
+    private AnimListAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     MenuItem searchItem;
-    MenuItem updateAbsc;
     SearchView searchView;
+
+    Dialog mDialog;
+    ImageView animPic;
+    ImageButton parametre;
+    TextView animNom, animNbrAbsc, animDob, animSec, animUn, animTot, animEmail, animNgsm,  closePopup;
+
+    private ActionMode actionMode;
+    Toolbar myToolbar, updateToolbar;
+    Menu menu;
+    MenuInflater inflateMe;
+    int switchToolbar = 0;
 
     @Nullable
     @Override
@@ -80,15 +95,24 @@ public class AnimListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
         list = view.findViewById(R.id.listRecyclerView);
+        mDialog = new Dialog(getContext());
+
+
+
         list.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         list.addItemDecoration(dividerItemDecoration);
         list.setLayoutManager(layoutManager);
 
-        Toolbar myToolbar = (Toolbar) getView().findViewById(R.id.toolbar);
+
+
+        myToolbar = (Toolbar) getView().findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(myToolbar);
+        updateToolbar = (Toolbar) getView().findViewById(R.id.updateAbsToolbar);
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getInstance().getCurrentUser();
@@ -102,11 +126,17 @@ public class AnimListFragment extends Fragment {
         bindAnimeList();
 
 
+
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        this.menu = menu;
+        inflateMe = inflater;
+
         inflater.inflate(R.menu.list_toolbar_menu, menu);
+
 
         final MenuItem addAnime = menu.findItem(R.id.ajouter);
         addAnime.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -114,23 +144,6 @@ public class AnimListFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 startActivity(new Intent(getActivity(), AddAnime.class));
                 return true;
-            }
-        });
-
-        updateAbsc = menu.findItem(R.id.updateAbs);
-
-        updateAbsc.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                //pour chaque item cliqué, mettre à jour le nbr d'abscences
-                for(User anim : animListe){
-                    if(anim.isChecked()){
-                        int nbrAbsences = anim.getAbsences()+1;
-                        anim.setAbsences(nbrAbsences);
-                        UserHelper.updateAbsences(anim.getEmail(),nbrAbsences);
-                    }
-                }
-                return false;
             }
         });
 
@@ -142,7 +155,7 @@ public class AnimListFragment extends Fragment {
         searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                //adapter = new MyListAdapter(animListe);
+                //adapter = new AnimListAdapter(animListe);
                //
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
@@ -208,14 +221,94 @@ public class AnimListFragment extends Fragment {
                                     }
                                 }
                                 animListe = user; //copie des animés qui match dans animList
-                                adapter = new MyListAdapter(animListe);
+                                adapter = new AnimListAdapter(animListe);
                                 list.setAdapter(adapter);
+                                adapter.setOnClickListener(new AnimListAdapter.OnClickListener() {
+                                    @Override
+                                    public void onItemClick(View view, User obj, int pos) {
+                                        if(adapter.getSelectedItemCount() > 0){
+                                           enableActionMode(pos);
+
+                                        }else{
+                                            //Toast.makeText(getActivity(), "nothing selected", Toast.LENGTH_SHORT).show();
+                                            showPopup(pos);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onItemLongClick(View view, User obj, int pos) {
+                                        myToolbar.setVisibility(View.GONE);
+                                        enableActionMode(pos);
+                                    }
+
+                                });
                             }
 
                         });
+
                     }
                 });
 
+    }
+
+    private void enableActionMode(int position) {
+        if (actionMode == null) {
+            ActionMode.Callback actionModeCallback = new ActionMode.Callback(){
+
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    mode.getMenuInflater().inflate(R.menu.update_animabs_toolbar, menu);
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
+                    int id = item.getItemId();
+                    if (id == R.id.updateAbsDown) {
+                        incNbrAbsence();
+                        mode.finish();
+                        adapter.notifyDataSetChanged();
+                        return true;
+                    }else if(id == R.id.updateAbsUp){
+                        decNbrAbsence();
+                        mode.finish();
+                        adapter.notifyDataSetChanged();
+                        return true;
+                    }
+
+                    myToolbar.setVisibility(View.VISIBLE);
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    adapter.clearSelections();
+                    actionMode = null;
+
+                    myToolbar.setVisibility(View.VISIBLE);
+                }
+            };
+            actionMode = getActivity().startActionMode(actionModeCallback);
+        }
+
+        toggleSelection(position);
+    }
+
+    private void toggleSelection(int position) {
+        adapter.toggleSelection(position);
+        int count = adapter.getSelectedItemCount();
+
+        if (count == 0) {
+           actionMode.finish();
+        } else {
+            actionMode.setTitle(String.valueOf(count));
+            actionMode.invalidate();
+        }
     }
 
     @Override
@@ -229,4 +322,79 @@ public class AnimListFragment extends Fragment {
         super.onStop();
         //adapter.stopListening();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    public void showPopup(int position){
+
+        mDialog.setContentView(R.layout.anim_list_custom_popup);
+
+        closePopup = mDialog.findViewById(R.id.closePopUp);
+        animPic = mDialog.findViewById(R.id.animPic);
+        animNom = mDialog.findViewById(R.id.animName);
+        animEmail = mDialog.findViewById(R.id.vpa_email);
+        animTot = mDialog.findViewById(R.id.animTotem);
+        animSec = mDialog.findViewById(R.id.animSection);
+        animUn = mDialog.findViewById(R.id.animUnite);
+        animDob = mDialog.findViewById(R.id.vpa_birth);
+        animNgsm = mDialog.findViewById(R.id.vpa_ngsm);
+        animNbrAbsc = mDialog.findViewById(R.id.animNbrAbs);
+        closePopup = mDialog.findViewById(R.id.closePopUp);
+        parametre =  mDialog.findViewById(R.id.parametre);
+
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mDialog.show();
+        User anim = animListe.get(position);
+
+        Glide.with(getContext())
+                .load(R.mipmap.ic_launcher)
+                .apply(RequestOptions.circleCropTransform())
+                .into(animPic);
+
+        animNom.setText(anim.getNom());
+        animTot.setText(anim.getTotem());
+        animSec.setText(anim.getSection());
+        animNbrAbsc.setText(String.valueOf(anim.getAbsences()));
+        animUn.setText(anim.getUnite());
+        animEmail.setText(anim.getEmail());
+        animNgsm.setText(anim.getNgsm());
+        animDob.setText(anim.getDateOfBirth());
+
+        closePopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+
+        parametre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),AddAnime.class));
+            }
+        });
+    }
+
+    public void incNbrAbsence(){
+        final List<Integer> selectedItemPositions = adapter.getSelectedItems();
+
+        for (int i = 0; i <= selectedItemPositions.size() - 1; i++) {
+            adapter.incNbrAbsence(selectedItemPositions.get(i));
+        }
+        adapter.notifyDataSetChanged();
+
+    }
+
+    public void decNbrAbsence(){
+        final List<Integer> selectedItemPositions = adapter.getSelectedItems();
+        //pour chaque item cliqué, mettre à jour le nbr d'abscences
+        for (int i = 0; i <= selectedItemPositions.size() - 1; i++) {
+            adapter.decNbrAbsence(selectedItemPositions.get(i));
+        }
+        adapter.notifyDataSetChanged();
+    }
+
 }

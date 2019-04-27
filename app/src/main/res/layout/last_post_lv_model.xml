@@ -32,7 +32,7 @@
                 android:layout_marginTop="26dp"
                 android:layout_toEndOf="@+id/monitImg"
                 android:textSize="11sp"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintStart_toEndOf="@+id/animPhoto"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Nom" />
 
@@ -47,7 +47,7 @@
                 android:layout_marginTop="51dp"
                 android:layout_toEndOf="@+id/monitImg"
                 android:textSize="11sp"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintStart_toEndOf="@+id/animPhoto"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Date" />
 

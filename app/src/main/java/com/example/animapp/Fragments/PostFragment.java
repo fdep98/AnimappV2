@@ -5,16 +5,23 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.animapp.Activities.Commentaires;
+import com.example.animapp.Database.PostsHelper;
 import com.example.animapp.Model.Post;
 import com.example.animapp.PostListAdapter;
 import com.example.animapp.animapp.R;
@@ -36,13 +43,16 @@ import java.util.List;
 public class PostFragment extends Fragment {
 
     private EditText edit;
-    ListView vue;
+    RecyclerView vue;
     public FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private ImageView imageView;
+    private RecyclerView.LayoutManager layoutManager;
+    public static int clicked = 0;
 
 
-    private ArrayList<Post>  statut = new ArrayList<>();
+
+    private List<Post>  statut = new ArrayList<>();
     private FirebaseFirestore firestoreDb; //instance de la BDD firestore
 
 
@@ -51,7 +61,7 @@ public class PostFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //test fil actu
-
+        setDocumentId();
         return inflater.inflate(R.layout.activity_post, container,false);
     }
 
@@ -66,6 +76,12 @@ public class PostFragment extends Fragment {
         firestoreDb = FirebaseFirestore.getInstance();
 
 
+
+
+
+        vue.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getContext());
+        vue.setLayoutManager(layoutManager);
 
         if (currentUser != null) {
             //récupère et met à jour la photo de profil
@@ -88,28 +104,28 @@ public class PostFragment extends Fragment {
                 }
             });
 
-
-
-            firestoreDb.collection("userPosts")
-                    .orderBy("date", Query.Direction.DESCENDING)
-                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                            if(queryDocumentSnapshots != null){
-                                List<DocumentSnapshot> doc = queryDocumentSnapshots.getDocuments();
-                                for (DocumentSnapshot document : doc) {
-                                    // Post post = new Post(document.getString("moniteur"),document.getString("date"),document.getString("message"));
-                                    Post post = document.toObject(Post.class);
-                                    statut.add(post);
-
-                                }
-                                //ArrayAdapter<Post> liststatut = new ArrayAdapter<Post>(getContext(), android.R.layout.simple_list_item_1, statut);
-                                PostListAdapter liststatut = new PostListAdapter(getActivity(), R.layout.post_card, statut);
-                                vue.setAdapter(liststatut);
-                            }
-                        }
-                    });
         }
 
     }
+
+    public void setDocumentId(){
+        PostsHelper.getAllPost().addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                List<Post> postDoc = new ArrayList<>();
+                if(!queryDocumentSnapshots.isEmpty()){
+                    for (DocumentSnapshot document : queryDocumentSnapshots) {
+                        Post post = document.toObject(Post.class);
+                        post.setId(document.getId());
+                        postDoc.add(post);
+
+                    }
+                }
+                statut = postDoc;
+                PostListAdapter liststatut = new PostListAdapter(statut,getActivity());
+                vue.setAdapter(liststatut);
+            }
+        });
+    }
+
 }

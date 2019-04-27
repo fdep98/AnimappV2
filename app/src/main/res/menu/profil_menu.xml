@@ -19,6 +19,14 @@
         android:visible="true"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/update"
+        android:enabled="true"
+        android:icon="@drawable/ic_build"
+        android:title="Modifier le profil"
+        android:visible="true"
+        app:showAsAction="always" />
+
 
 
 </menu>

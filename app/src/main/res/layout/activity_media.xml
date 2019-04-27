@@ -19,15 +19,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <ImageView
                 android:id="@+id/picToShare"
                 android:layout_width="365dp"
                 android:layout_height="211dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="35dp"
+                android:layout_marginBottom="25dp"
                 android:contentDescription="TODO"
-                app:srcCompat="@drawable/paysage"
-                android:layout_marginBottom="25dp"/>
+                tools:srcCompat="@drawable/paysage" />
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/description"

@@ -1,19 +1,32 @@
 package com.example.animapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.animapp.Activities.Commentaires;
+import com.example.animapp.Database.PostsHelper;
+import com.example.animapp.Fragments.PostFragment;
 import com.example.animapp.Model.Post;
+import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -25,99 +38,137 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
-public class PostListAdapter extends ArrayAdapter<Post> {
+public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHolder> {
     private Context mContext;
     private int mRessource;
     private int lastPosition=-1;
+    List<Post> posts;
+    public static String postId;
 
+    private static final int POST_WITH_PIC = 1;
+    private static final int POST_WITHOUT_PIC = 2;
 
-    static class ViewHolder {
-        TextView moniteur;
-        TextView date;
-        TextView message;
-        ImageView image;
-
+    public PostListAdapter(List<Post> posts, Context context) {
+        this.posts = posts;
+        mContext = context;
     }
 
 
-    public PostListAdapter(Context context, int resource, ArrayList<Post> objects) {
-        super(context, resource, objects);
-        this.mContext = context;
-        this.mRessource=resource;
+    public Post getItem(int position) {
+        return posts.get(position);
+    }
+
+    // Permet de déterminer la meilleure vue
+    @Override
+    public int getItemViewType(int position) {
+        final Post post= getItem(position);
+
+        if ( post.getImgurl() == null) {
+            return POST_WITH_PIC;
+        } else {
+            return POST_WITHOUT_PIC;
+        }
     }
 
     @NonNull
     @Override
-    public View getView(int position,  View convertView, ViewGroup parent) {
-        //setup the image loader
-        //get the Post info
-        //String moniteur=getItem(position).getMoniteur();
-        //String date=getItem(position).getDate();
-        //String message=getItem(position).getMessage();
-        //String imgurl=getItem(position).getImgurl();
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
+        View view;
 
-        //create the post object with info
-        //Post post= new Post(moniteur,date,message);
+        if (position == POST_WITH_PIC) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.post_card_detail, parent, false);
+            return new ViewHolder(view);
+        } else if (position == POST_WITHOUT_PIC) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.post_card_detail_with_pic, parent, false);
+            return new ViewHolder(view);
+        }
+
+        return null;
+
+    }
+
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         setupImageLoader();
-        Post post= getItem(position);
-
-        //creat the view result for showing the animation
-        final View result;
-        ViewHolder holder;//= new ViewHolder();
-
-        if(convertView==null){
-            holder= new ViewHolder();
-            LayoutInflater inflater=LayoutInflater.from(mContext);
-            convertView=inflater.inflate(mRessource,parent,false); //pas top ! voir tuto:"https://www.youtube.com/watch?v=SApBLHIpH8A&index=9&list=PLgCYzUzKIBE8TUoCyjomGFqzTFcJ05OaC"
-            holder.moniteur = (TextView) convertView.findViewById(R.id.cardMoniteur);
-            holder.date = (TextView) convertView.findViewById(R.id.cardDate);
-            holder.message = (TextView) convertView.findViewById(R.id.cardMessage);
-            holder.image=(ImageView) convertView.findViewById(R.id.cardImage);
-
-            result=convertView;
-
-            convertView.setTag(holder);
-        }
-        else{
-            holder=(ViewHolder) convertView.getTag();
-            result=convertView;
-        }
+        final Post post= getItem(position);
 
 
-
-       /* Animation animation = AnimationUtils.loadAnimation(mContext,(position>lastPosition) ? R.anim.loading_down_animation :R.anim.loading_up_animation);
-        result.startAnimation(animation);
-        lastPosition=position;*/
-
-        /*Animation animation = AnimationUtils.loadAnimation(mContext,R.anim.fui_slide_in_right);
-        result.startAnimation(animation);*/
-
-
-        //création image defaultImage est l'image si y'en a pas
-        int defaultImage=mContext.getResources().getIdentifier("@drawable/logo",null,mContext.getPackageName());
-
-       ImageLoader imageLoader = ImageLoader.getInstance();
-        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                .cacheOnDisc(true).resetViewBeforeLoading(true)
-                .showImageForEmptyUri(defaultImage)
-                .showImageOnFail(defaultImage)
-                .showImageOnLoading(defaultImage).build();
-
-        //download and display image from url
-        //holder.image.setImageURI(post.getImageUri());
-        holder.moniteur.setText(post.getMoniteur());
+        holder.moniteur.setText(post.getPrenomMoniteur());
         holder.date.setText(post.getDate());
         holder.message.setText(post.getMessage());
-        Picasso.get().load(post.getImgurl()).into(holder.image);
+        holder.nbrLike.setText(""+post.getNbrLike());
+        holder.likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(PostFragment.clicked == 0){
+                    updateNbrLikeUp(post);
+                }else if(PostFragment.clicked == 1){
+                    updateNbrLikeDown(post);
+                }
+
+            }
+        });
+
+
+
+        holder.commentaire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postId = post.getId();
+                //On lance une nouvelle recycler view comme pour les msg mais avec les commentaires
+              mContext.startActivity(new Intent(mContext, Commentaires.class));
+            }
+        });
+        Picasso.get().load(R.drawable.logo).into(holder.monitImage);
         //imageLoader.displayImage(post.getImgurl(), holder.image, options);
 
 
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+                .cacheOnDisc(true).resetViewBeforeLoading(true).build();
+        if(post.getImgurl() != null){
+            imageLoader.displayImage(post.getImgurl(), holder.image, options);
+        }
 
-        return convertView;
 
+
+
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return posts.size();
+    }
+
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView moniteur;
+        TextView date;
+        TextView message, nbrLike;
+        ImageView image,monitImage;
+        LinearLayout commentaire;
+        ImageButton likeButton;
+
+        public ViewHolder(@NonNull View view) {
+            super(view);
+            moniteur = view.findViewById(R.id.cardMoniteur);
+            date = view.findViewById(R.id.cardDate);
+            message =  view.findViewById(R.id.cardMessage);
+            image= view.findViewById(R.id.cardImage);
+            nbrLike = view.findViewById(R.id.nbrLike);
+            monitImage = view.findViewById(R.id.moniPhoto);
+            commentaire = view.findViewById(R.id.commentaire);
+            likeButton = view.findViewById(R.id.likeButton);
+        }
     }
 
 
@@ -137,4 +188,16 @@ public class PostListAdapter extends ArrayAdapter<Post> {
         ImageLoader.getInstance().init(config);
         // END - UNIVERSAL IMAGE LOADER SETUP
     }
+
+    public void updateNbrLikeUp(Post post){
+        post.setNbrLike(post.getNbrLike()+1);
+        PostsHelper.updateNbrLike(post);
+        PostFragment.clicked = 1;
+    }
+    public void updateNbrLikeDown(Post post){
+        post.setNbrLike(post.getNbrLike()-1);
+        PostsHelper.updateNbrLike(post);
+        PostFragment.clicked = 0;
+    }
+
 }

@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +16,10 @@ public class UserHelper {
 
 
     private static final String COLLECTION_NAME_USER = "users";
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public static CollectionReference getUserCollection(){
-        return FirebaseFirestore.getInstance().collection(COLLECTION_NAME_USER);
+        return db.collection(COLLECTION_NAME_USER);
     }
 
 
@@ -53,6 +55,27 @@ public class UserHelper {
 
     public static Task<Void> deleteUser(String email) {
         return UserHelper.getUserCollection().document(email).delete();
+    }
+
+    //Récupère les animés du moniteur
+    public static Query getAnim(User user){
+        Query query = db.collection("users").whereEqualTo("unite",user.getUnite()) //pour récupérer les animés
+                .whereEqualTo("section",user.getSection())
+                .whereEqualTo("isAnime",true);
+        return query;
+    }
+
+    //Récupère les autres moniteurs de la section et l'unite
+    public static Query getCollegue(User user){
+        Query query = db.collection("users").whereEqualTo("unite",user.getUnite()) //pour récupérer les autres moniteurs de la section et l'unite
+                .whereEqualTo("section",user.getSection())
+                .whereEqualTo("isAnime",false);
+        return query;
+    }
+
+    public static Query getCurrentUser(String email){
+        Query query = db.collection("users").whereEqualTo("email",email);
+        return query;
     }
 
 }

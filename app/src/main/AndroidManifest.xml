@@ -20,6 +20,9 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name="com.example.animapp.Activities.swipePic"></activity>
+        <activity android:name="com.example.animapp.Activities.Commentaires" />
+        <activity android:name="com.example.animapp.Activities.UpdateProfil" />
         <activity android:name="com.example.animapp.Activities.postMessage" />
         <activity android:name="com.example.animapp.MainFragmentActivity" />
         <activity android:name="com.example.animapp.Activities.AddAnime" />

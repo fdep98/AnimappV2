@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/messageToolbar"
-        layout="@layout/message_toolbar" />
+        layout="@layout/post_message_toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"

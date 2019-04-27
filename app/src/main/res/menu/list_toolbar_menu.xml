@@ -19,18 +19,7 @@
         android:title="absences"
         app:showAsAction="ifRoom"/>
 
-   <item
-        android:id="@+id/updateAbs"
-        android:enabled="true"
-        android:icon="@drawable/ic_thumb_down"
-        android:title="update "
-        app:showAsAction="ifRoom" />
-    <!--<item
-       android:id="@+id/delete"
-       android:enabled="true"
-       android:icon="@drawable/ic_delete"
-       android:title="delete "
-       app:showAsAction="ifRoom" />-->
+
 
 
 </menu>

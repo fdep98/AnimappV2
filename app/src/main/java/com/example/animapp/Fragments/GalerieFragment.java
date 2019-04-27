@@ -1,5 +1,6 @@
 package com.example.animapp.Fragments;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.animapp.Activities.swipePic;
 import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.ImageGridItemDecoration;
 import com.example.animapp.Model.User;
@@ -53,9 +56,10 @@ public class GalerieFragment extends Fragment {
     public FirebaseUser currentUser;
     public DocumentReference galerieRef;
     private CollectionReference imageRef;
-    private List<ImageGalerie> galerieList;
+    public static List<ImageGalerie> galerieList;
     RecyclerView recyclerView;
-
+    StaggeredGalerieImageCardRecyclerViewAdapter adapter;
+    private ActionMode actionMode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,8 +98,23 @@ public class GalerieFragment extends Fragment {
                         }
 
                     }
-                    StaggeredGalerieImageCardRecyclerViewAdapter adapter = new StaggeredGalerieImageCardRecyclerViewAdapter(galerieList,getActivity());
+                    adapter = new StaggeredGalerieImageCardRecyclerViewAdapter(galerieList,getActivity());
                     recyclerView.setAdapter(adapter);
+                    adapter.setOnClickListener(new StaggeredGalerieImageCardRecyclerViewAdapter.OnClickListener() {
+                        @Override
+                        public void onItemClick(View view, ImageGalerie obj, int pos) {
+                            if(adapter.getSelectedItemCount() > 0){
+                                enableActionMode(pos);
+                            }else{
+                               startActivity(new Intent(getActivity(), swipePic.class));
+                            }
+                        }
+
+                        @Override
+                        public void onItemLongClick(View view, ImageGalerie obj, int pos) {
+
+                        }
+                    });
                 }
             });
 
@@ -121,6 +140,37 @@ public class GalerieFragment extends Fragment {
         recyclerView.addItemDecoration(new ImageGridItemDecoration(largePadding, smallPadding));
 
         return view;
+    }
+
+    private void enableActionMode(int position) {
+        if (actionMode == null) {
+            ActionMode.Callback actionModeCallback = new ActionMode.Callback(){
+
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
+                    int id = item.getItemId();
+                  return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    //adapter.clearSelections();
+                    actionMode = null;
+
+                }
+            };
+            actionMode = getActivity().startActionMode(actionModeCallback);
+        }
     }
 
     @Override

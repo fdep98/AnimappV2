@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/RippleStyleBlack"
     android:layout_width="160dp"
     android:layout_height="180dp"
     android:layout_marginLeft="16dp"

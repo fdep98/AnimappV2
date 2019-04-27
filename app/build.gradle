@@ -63,6 +63,8 @@ dependencies {
     //image loader
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
+    //ripple
+    implementation 'com.balysv:material-ripple:1.0.2'
 
 }
 apply plugin: 'com.google.gms.google-services'

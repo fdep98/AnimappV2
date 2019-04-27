@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.button.MaterialButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -49,6 +50,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
     User new_user;
 
     EditText email,mdp,nom,prenom,totem,ngsm, dob;
+    public TextInputLayout emailTI, mdpTI, nomTI, prenomTI, totemTI, ngsmTI, dobTI;
     Spinner unite,section;
     MaterialButton profil;
     private ArrayList<String> unitList = new ArrayList<>();
@@ -71,6 +73,15 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
         email =  findViewById(R.id.emailET);
         ngsm =  findViewById(R.id.ngsmET);
         dob = findViewById(R.id.dobET);
+
+        nomTI =  findViewById(R.id.nomTI);
+        prenomTI =  findViewById(R.id.prenomTI);
+        mdpTI =  findViewById(R.id.mdpTI);
+        totemTI = findViewById(R.id.totemTI);
+        emailTI =  findViewById(R.id.emailTI);
+        ngsmTI =  findViewById(R.id.ngsmTI);
+        dobTI = findViewById(R.id.dobTI);
+
         unite =  findViewById(R.id.uniteSpinner);
         section =  findViewById(R.id.sectionSpinner);
         unitList.add("");
@@ -124,23 +135,20 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
 
         new_user = new User(inputName,inputTotem,inputEmail,inputTel,inputDob,inputUnite,inputSection);
         if(inputName.isEmpty()){
-            Toast.makeText(this, "Il manque certaine informations afin de créer votre profil", Toast.LENGTH_SHORT).show();
+            emailTI.setError("veuillez entrer un nom");
             nom.requestFocus();
             return;
         }
         else if(inputPrenom.isEmpty()){
-            Toast.makeText(this, "Il manque certaine informations afin de créer votre profil", Toast.LENGTH_SHORT).show();
+            emailTI.setError("veuillez entrer un prenom");
             prenom.requestFocus();
             return;
         }
         else if(!inputTel.equals("")&&inputTel.length()!=10){
-            Toast.makeText(this, "Ce numéro de gsm est invalide", Toast.LENGTH_SHORT).show();
+            emailTI.setError("Mot de passe trop court");
             ngsm.requestFocus();
             ngsm.setText("");
             return;
-        }
-        else if(!inputDob.isEmpty()&&false) {
-            //TODO vérifie le champ date de naissance
         }else{
             mAuth.createUserWithEmailAndPassword(inputEmail, inputMdp)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {

@@ -50,7 +50,6 @@ public class UserAdapter extends FirestoreRecyclerAdapter<User, UserAdapter.User
                 nom = itemView.findViewById(R.id.nom);
                 totem = itemView.findViewById(R.id.totem);
                 nbrAbsences = itemView.findViewById(R.id.nbrAbsences);
-                checkBox = itemView.findViewById(R.id.check);
         }
     }
 }
