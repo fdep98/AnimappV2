@@ -29,7 +29,7 @@
                 android:id="@+id/monitImg"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginRight="2dp" />
+                android:layout_marginStart="12dp" />
 
             <EditText
                 android:id="@+id/edit"

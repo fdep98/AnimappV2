@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Model.PostCommentaire;
 import com.example.animapp.animapp.R;
 import com.squareup.picasso.Picasso;
@@ -51,7 +53,16 @@ public class PostCommentaireAdapter extends RecyclerView.Adapter<PostCommentaire
         holder.monitNom.setText(postCommentaire.getNomMoniteur());
         holder.monitCommentaire.setText(postCommentaire.getCommentaire());
         holder.date.setText(postCommentaire.getDate());
-        Picasso.get().load(R.drawable.logo).into(holder.monitPic);
+        if(postCommentaire.getMonitPicUrl() != null){
+            Glide.with(mContext).load(postCommentaire.getMonitPicUrl())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.monitPic);
+        }else{
+            Glide.with(mContext).load(R.drawable.logo)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.monitPic);
+        }
+
     }
 
 

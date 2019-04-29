@@ -5,14 +5,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.animapp.Database.CommentsHelper;
 import com.example.animapp.Database.UserHelper;
-import com.example.animapp.Fragments.PostFragment;
+import com.example.animapp.Model.Post;
 import com.example.animapp.Model.PostCommentaire;
 import com.example.animapp.Model.User;
 import com.example.animapp.PostCommentaireAdapter;
@@ -20,7 +19,6 @@ import com.example.animapp.PostListAdapter;
 import com.example.animapp.animapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -34,7 +32,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-public class Commentaires extends AppCompatActivity {
+public class PostCommentaires extends AppCompatActivity {
 
     private List<PostCommentaire> usersComs = new ArrayList<>();
     ImageButton commenter;
@@ -43,11 +41,13 @@ public class Commentaires extends AppCompatActivity {
     public FirebaseAuth mAuth;
     FirebaseUser currentUser;
     User currentMonit;
-   String commentaireId;
+    String commentaireId;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView commentairesRecyclerView;
     PostCommentaireAdapter commentaireAdapter;
-
+    public static int nbrCommentaire = 0;
+    Date date;
+    Post postSend;
 
     private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy"+" à "+ "HH:mm:ss");
 
@@ -56,8 +56,7 @@ public class Commentaires extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_commentaire);
 
-        final Date date = new Date();
-        currentDate = df.format(date);
+
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -73,8 +72,12 @@ public class Commentaires extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         commentairesRecyclerView.setLayoutManager(layoutManager);
 
+        if(getIntent().getExtras() != null){
+            postSend = (Post) getIntent().getExtras().getSerializable("Post");
+        }
+
         //récupère les information sur l'utilisateur
-        UserHelper.getCurrentUser(currentUser.getEmail()).
+        UserHelper.getCurrentUser(currentUser.getUid()).
                 addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -86,35 +89,62 @@ public class Commentaires extends AppCompatActivity {
             }
         });
 
-        CommentsHelper.getAllPostComments().addSnapshotListener(new EventListener<QuerySnapshot>() {
+        CommentsHelper.getAllPostComments()
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                final List<PostCommentaire> com = new ArrayList<>();
+                PostCommentaire post;
+                if(!queryDocumentSnapshots.isEmpty()) {
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        if(getIntent().getExtras() != null){
+                            post = (doc.toObject(PostCommentaire.class));
+                            if(post.getIdCommentaire().equals(postSend.getId())){
+                                com.add(post);
 
-                if(!queryDocumentSnapshots.isEmpty()){
-                    List<PostCommentaire> com = new ArrayList<>();
-                    for(DocumentSnapshot doc : queryDocumentSnapshots){
-                       com.add(doc.toObject(PostCommentaire.class));
+                            }
+                        }else{
+                            post = (doc.toObject(PostCommentaire.class));
+                            if(post.getIdCommentaire().equals(PostListAdapter.postId)){
+                                com.add(post);
+
+                            }
+                        }
 
                     }
                     usersComs = com;
-                    commentaireAdapter = new PostCommentaireAdapter(getApplicationContext(), usersComs);
-                    commentairesRecyclerView.setAdapter(commentaireAdapter);
                 }
-            }
+                commenter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        date = new Date();
+                        currentDate = df.format(date);
+
+                        if(!commentaire.getText().toString().isEmpty()){
+                            PostCommentaire newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(),currentDate,commentaire.getText().toString(),commentaireId);
+                            newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
+                            com.add(newComment);
+
+                            CommentsHelper.createUserComment(newComment);
+                            commentaire.setText("");
+                        }else{
+                            Toast.makeText(PostCommentaires.this, "Veuillez entrer un commentaire avant l'envoi", Toast.LENGTH_SHORT).show();
+                        }
+
+                        usersComs = com;
+                        nbrCommentaire = usersComs.size();
+
+                    }
+                });
+
+                commentaireAdapter = new PostCommentaireAdapter(getApplicationContext(), usersComs);
+                commentairesRecyclerView.setAdapter(commentaireAdapter);
+
+                }
 
         });
-
-        commenter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PostCommentaire newComment = new PostCommentaire(currentMonit.getNom(),currentDate,commentaire.getText().toString(),commentaireId);
-                usersComs.add(newComment);
-                CommentsHelper.createUserComment(newComment);
-                commentaire.setText("");
-            }
-        });
-
 
     }
+
 
 }

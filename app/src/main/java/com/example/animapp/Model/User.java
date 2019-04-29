@@ -1,12 +1,8 @@
 package com.example.animapp.Model;
 
-import android.support.annotation.Nullable;
+import java.io.Serializable;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class User {
+public class User implements Serializable {
 
     private String id;
     private String nom;
@@ -19,13 +15,10 @@ public class User {
     private String dateOfBirth;
     private boolean isChecked;
     private boolean isAnime;
-    private int absences;
-
-
-
-    @Nullable
     private String urlPhoto;
     private String ngsm;
+    private int absences;
+
 
     public User() {
     }
@@ -41,7 +34,7 @@ public class User {
         this.section = section;
         this.unite = unite;
         this.absences = 0;
-        isAnime = true;
+        this.isAnime = true;
 
     }
 
@@ -56,7 +49,7 @@ public class User {
         this.dateOfBirth = dob;
         this.section = section;
         this.unite = unite;
-        isAnime = false;
+        this.isAnime = false;
 
     }
 
@@ -65,7 +58,6 @@ public class User {
         this.prenom = pseudo;
         this.absences = nbrAbsences;
         this.absences = 0;
-
 
     }
 
@@ -147,13 +139,11 @@ public class User {
     }
 
 
-
-    @Nullable
     public String getUrlPhoto() {
         return urlPhoto;
     }
 
-    public void setUrlPhoto(@Nullable String urlPhoto) {
+    public void setUrlPhoto(String urlPhoto) {
         this.urlPhoto = urlPhoto;
     }
     public String getUnite() {
@@ -177,10 +167,10 @@ public class User {
     }
 
     public boolean isAnime() {
-        return isAnime;
+        return this.isAnime;
     }
 
     public void setAnime(boolean anime) {
-        isAnime = anime;
+        this.isAnime = anime;
     }
 }

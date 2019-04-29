@@ -1,85 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<ScrollView
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:orientation="vertical"
-    tools:context="com.example.animapp.Activities.Connexion"
-    android:background="@color/bleuBlanc">
-
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/logo"
-        android:tint="?android:attr/textColorPrimary" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="80dp"
-        android:fontFamily="casual"
-        android:text="AnimApp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-        android:textColor="@color/bleu2"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/bleuBlanc"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        tools:context="com.example.animapp.Activities.Connexion"
+        android:background="@color/bleuBlanc">
 
-        <Button
-            android:id="@+id/emailSignin"
-            style="@style/FirebaseUI.Button.AccountChooser.GoogleButton"
 
-            android:layout_width="251dp"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="55dp"
+            android:background="@drawable/logo"
+            android:tint="?android:attr/textColorPrimary" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corner"
-            android:backgroundTint="@color/bleu"
-            android:drawableLeft="@drawable/fui_ic_mail_white_24dp"
-            android:elevation="2dp"
-            android:gravity="center"
-            android:onClick="emailSignin"
-            android:text="Connexion via email"
-            android:textColor="#FFF" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="60dp"
+            android:fontFamily="casual"
+            android:text="AnimApp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+            android:textColor="@color/bleu2"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/googleSignin"
-            style="@style/FirebaseUI.Button.AccountChooser.GoogleButton"
-            android:layout_width="251dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corner"
-            android:backgroundTint="@color/blanc"
-            android:drawableLeft="@drawable/googleg_standard_color_18"
-            android:elevation="2dp"
-            android:gravity="center"
-            android:onClick="signInGoogle"
-            android:text="Connexion via Google"
-            android:textColor="@color/bleu2" />
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/creerCompte"
-            style="@style/FirebaseUI.Button.AccountChooser.GoogleButton"
-            android:layout_width="251dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corner"
-            android:backgroundTint="@color/bleu2"
-            android:drawableLeft="@android:drawable/ic_menu_myplaces"
-            android:elevation="2dp"
-            android:gravity="center"
-            android:onClick="createAccount"
-            android:text="Créer un compte"
-            android:textColor="#FFEDFFFF" />
+            <Button
+                android:id="@+id/emailSignin"
+                style="@style/FirebaseUI.Button.AccountChooser.GoogleButton"
+
+                android:layout_width="251dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/bleu"
+                android:drawableLeft="@drawable/fui_ic_mail_white_24dp"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:onClick="emailSignin"
+                android:text="Connexion via email"
+                android:textColor="#FFF" />
+
+            <Button
+                android:id="@+id/googleSignin"
+                style="@style/FirebaseUI.Button.AccountChooser.GoogleButton"
+                android:layout_width="251dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/blanc"
+                android:drawableLeft="@drawable/googleg_standard_color_18"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:onClick="signInGoogle"
+                android:text="Connexion via Google"
+                android:textColor="@color/bleu2" />
+
+            <Button
+                android:id="@+id/creerCompte"
+                style="@style/FirebaseUI.Button.AccountChooser.GoogleButton"
+                android:layout_width="251dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner"
+                android:backgroundTint="@color/bleu2"
+                android:drawableLeft="@android:drawable/ic_menu_myplaces"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:onClick="createAccount"
+                android:text="Créer un compte"
+                android:textColor="#FFEDFFFF" />
+        </LinearLayout>
+
+
     </LinearLayout>
-
-
-</LinearLayout>
+</ScrollView>

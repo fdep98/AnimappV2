@@ -4,6 +4,7 @@ import com.example.animapp.Model.ImageGalerie;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.List;
 
@@ -22,8 +23,16 @@ public class ImageHelper {
     public static void addImage(ImageGalerie imageGalerie){
         ImageHelper.getImageCollection().add(imageGalerie);
     }
+    //Récupère les utilisateurs
+    public static Query getAllImages(){
+        Query query = FirebaseFirestore.getInstance().collection("galerieImages");
+        return query;
+    }
     public static Task<Void> updateImageUri(String email, String imageUrl) {
         return ImageHelper.getImageCollection().document(email).update("galerieList", imageUrl);
+    }
+    public static Task<Void> deleteImage(String id) {
+        return ImageHelper.getImageCollection().document(id).delete();
     }
 
 }

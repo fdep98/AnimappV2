@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="#F6F8FC"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/body"
@@ -21,7 +22,7 @@
         <include
             android:id="@+id/updateAbsToolbar"
             layout="@layout/update_animabs_toolbar"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -35,14 +36,12 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginLeft="210dp"
                 android:layout_marginTop="0dp"
-                android:layout_marginEnd="88dp"
+                android:layout_marginEnd="77dp"
                 android:text="Absences"
                 android:textColor="@color/bleu"
                 android:textStyle="bold" />
 
         </RelativeLayout>
-
-
 
 
         <android.support.v7.widget.RecyclerView

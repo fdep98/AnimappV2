@@ -28,15 +28,13 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Activities.AddAnime;
 import com.example.animapp.Database.UserHelper;
-import com.example.animapp.Model.User;
 import com.example.animapp.AnimListAdapter;
-import com.example.animapp.Tools;
+import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,7 +45,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -120,7 +117,7 @@ public class AnimListFragment extends Fragment {
         if(currentUser != null){
             firestoreDb = FirebaseFirestore.getInstance();
             userRef = firestoreDb.collection("users");
-            monitRef = firestoreDb.collection("users").document(currentUser.getEmail()); //réference vers le doc du moniteur connecté
+            monitRef = firestoreDb.collection("users").document(currentUser.getUid()); //réference vers le doc du moniteur connecté
         }
 
         bindAnimeList();
@@ -193,6 +190,7 @@ public class AnimListFragment extends Fragment {
 
 
     public void bindAnimeList() {
+
         monitRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -201,49 +199,44 @@ public class AnimListFragment extends Fragment {
                         final String monitSection = documentSnapshot.getString("section");
                         final String monitEmail = documentSnapshot.getString("email");
 
-                        Query query1 = userRef
-                                .whereEqualTo("unite", monitUnite)
-                                .whereEqualTo("section", monitSection)
-                                .whereEqualTo("isAnime",true);
-
-                        query1.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        UserHelper.getAllUsers()
+                                .whereEqualTo("unite",monitUnite)
+                                .whereEqualTo("section",monitSection)
+                                .whereEqualTo("anime",true)
+                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                                if(e != null){
-                                    Toast.makeText(getActivity(), "listen failed", Toast.LENGTH_SHORT).show();
-                                }
-                                List<User> user = new ArrayList<>();
                                 if(!queryDocumentSnapshots.isEmpty()){
-                                    for (QueryDocumentSnapshot document :queryDocumentSnapshots) {
-                                        if(!document.getString("email").equals(monitEmail)){
-                                            user.add(document.toObject(User.class));
+                                    List<User> user = new ArrayList<>();
+                                    for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                                        if(!doc.getString("email").equals(monitEmail)){
+                                            user.add(doc.toObject(User.class));
                                         }
                                     }
+                                    animListe = user; //copie des animés qui match dans animList
+                                    adapter = new AnimListAdapter(animListe);
+                                    list.setAdapter(adapter);
+                                    adapter.setOnClickListener(new AnimListAdapter.OnClickListener() {
+                                        @Override
+                                        public void onItemClick(View view, User obj, int pos) {
+                                            if(adapter.getSelectedItemCount() > 0){
+                                                enableActionMode(pos);
+
+                                            }else{
+                                                //Toast.makeText(getActivity(), "nothing selected", Toast.LENGTH_SHORT).show();
+                                                showPopup(pos);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onItemLongClick(View view, User obj, int pos) {
+                                            myToolbar.setVisibility(View.GONE);
+                                            enableActionMode(pos);
+                                        }
+
+                                    });
                                 }
-                                animListe = user; //copie des animés qui match dans animList
-                                adapter = new AnimListAdapter(animListe);
-                                list.setAdapter(adapter);
-                                adapter.setOnClickListener(new AnimListAdapter.OnClickListener() {
-                                    @Override
-                                    public void onItemClick(View view, User obj, int pos) {
-                                        if(adapter.getSelectedItemCount() > 0){
-                                           enableActionMode(pos);
-
-                                        }else{
-                                            //Toast.makeText(getActivity(), "nothing selected", Toast.LENGTH_SHORT).show();
-                                            showPopup(pos);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onItemLongClick(View view, User obj, int pos) {
-                                        myToolbar.setVisibility(View.GONE);
-                                        enableActionMode(pos);
-                                    }
-
-                                });
                             }
-
                         });
 
                     }
@@ -251,7 +244,7 @@ public class AnimListFragment extends Fragment {
 
     }
 
-    private void enableActionMode(int position) {
+    private void enableActionMode(final int position) {
         if (actionMode == null) {
             ActionMode.Callback actionModeCallback = new ActionMode.Callback(){
 
@@ -274,8 +267,13 @@ public class AnimListFragment extends Fragment {
                         mode.finish();
                         adapter.notifyDataSetChanged();
                         return true;
-                    }else if(id == R.id.updateAbsUp){
+                    }else if(id == R.id.updateAbsUp) {
                         decNbrAbsence();
+                        mode.finish();
+                        adapter.notifyDataSetChanged();
+                        return true;
+                    }else if(id == R.id.delete){
+                        deleteAnim();
                         mode.finish();
                         adapter.notifyDataSetChanged();
                         return true;
@@ -386,6 +384,15 @@ public class AnimListFragment extends Fragment {
         }
         adapter.notifyDataSetChanged();
 
+    }
+
+    public void deleteAnim(){
+        final List<Integer> selectedItemPositions = adapter.getSelectedItems();
+
+        for (int i = 0; i <= selectedItemPositions.size() - 1; i++) {
+          adapter.deleteAnime(selectedItemPositions.get(i));
+        }
+        adapter.notifyDataSetChanged();
     }
 
     public void decNbrAbsence(){

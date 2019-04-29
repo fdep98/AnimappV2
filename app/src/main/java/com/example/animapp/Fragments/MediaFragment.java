@@ -180,8 +180,6 @@ public class MediaFragment extends Fragment {
         Ajoute l'image dans la base de donnée
      */
     public void sharePic( @Nullable final Intent data){
-        prog.setMessage("Téléchargement...");
-        prog.show();
         //stockage dans la BDD
         Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
         Uri uri = getImageUri(getContext(),imageBitmap);
@@ -265,26 +263,31 @@ public class MediaFragment extends Fragment {
     }
 
     public void putImageInDb(){
+        prog.setTitle("Téléchargement");
+        prog.setMessage("Téléchargement de l'image");
+        prog.show();
         final long currentTime = System.currentTimeMillis();
 
-        storageRef.child(currentUser.getEmail()).child(currentTime+"."+getFileExtension(image))
+        storageRef.child(currentUser.getUid()).child(currentTime+"."+getFileExtension(image))
                 .putFile(image)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        storageRef.child(currentUser.getEmail()).child(currentTime+"."+getFileExtension(image))
+                        storageRef.child(currentUser.getUid()).child(currentTime+"."+getFileExtension(image))
                                 .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
                                 String imgDesc = description.getText().toString();
                                 String imgDate = date.getText().toString();
                                 //String imageUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
-                                ImageGalerie newImage = new ImageGalerie(currentUser.getEmail(),uri.toString(),imgDesc,imgDate);
+                                ImageGalerie newImage = new ImageGalerie(currentUser.getUid(),uri.toString(),imgDesc,imgDate);
 
                                 ImageHelper.addImage(newImage);
-                                Toast.makeText(getActivity(), "Ajouter dans la gallerie", Toast.LENGTH_SHORT).show();
+                                prog.dismiss();
+                                //Toast.makeText(getActivity(), "Ajouter dans la gallerie", Toast.LENGTH_SHORT).show();
                                 picToAdd.setImageResource(0);
+                                image = null;
                                 description.setText("");
                             }
                         });
@@ -308,6 +311,7 @@ public class MediaFragment extends Fragment {
                     Toast.makeText(getActivity(), "Veuillez choisir une image", Toast.LENGTH_SHORT).show();
                 }else{
                     putImageInDb();
+
                 }
             }
         });

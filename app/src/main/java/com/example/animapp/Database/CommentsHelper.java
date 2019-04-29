@@ -6,8 +6,13 @@ import com.example.animapp.PostListAdapter;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import javax.annotation.Nullable;
 
 public class CommentsHelper {
 
@@ -34,9 +39,13 @@ public class CommentsHelper {
             return query;
         }
         public static Query getAllPostComments(){
-        return CommentsHelper.getAllComments().whereEqualTo("idCommentaire", PostListAdapter.postId);
+        return db.collection("userComments")
+                .orderBy("date", Query.Direction.DESCENDING);
         }
 
+    public static Query getAllPostsComments(){
+        return db.collection("userComments").whereEqualTo("idCommentaire", PostListAdapter.postId);
+    }
 
 
 }

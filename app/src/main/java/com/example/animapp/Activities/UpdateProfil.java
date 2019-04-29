@@ -2,6 +2,7 @@ package com.example.animapp.Activities;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,39 +13,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.example.animapp.Database.ImageHelper;
 import com.example.animapp.Database.UserHelper;
-import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
-import com.google.android.gms.tasks.OnCompleteListener;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
+
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -52,12 +41,11 @@ import com.google.firebase.storage.UploadTask;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+
 import java.util.Locale;
 
-import javax.annotation.Nullable;
 
-public class UpdateProfil extends AppCompatActivity  implements AdapterView.OnItemSelectedListener {
+public class UpdateProfil extends AppCompatActivity{
 
     private static final int UNITE_CODE_CREATION = 11;
     private static final int SECTION_CODE_CREATION = 22;
@@ -70,7 +58,7 @@ public class UpdateProfil extends AppCompatActivity  implements AdapterView.OnIt
     DatabaseReference databaseRef;
     private FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
 
-    User new_user;
+    User new_user, curUser;
     String inputEmail, inputMdp,inputName,inputPrenom, inputTotem, inputTel, inputDob,inputUnite,inputSection;
 
     EditText email,mdp,nom,prenom,totem,ngsm, dob;
@@ -80,6 +68,8 @@ public class UpdateProfil extends AppCompatActivity  implements AdapterView.OnIt
     private ArrayList<String> unitList = new ArrayList<>();
     private ArrayList<String> sectionList = new ArrayList<>();
     Uri image;
+    ProgressDialog progressDialog ;
+
     // FirebaseUser currentUser;
 
     @Override
@@ -111,38 +101,17 @@ public class UpdateProfil extends AppCompatActivity  implements AdapterView.OnIt
         ngsmTI =  findViewById(R.id.ngsmTI);
         dobTI = findViewById(R.id.dobTI);
 
-        unite =  findViewById(R.id.uniteSpinner);
-        section =  findViewById(R.id.sectionSpinner);
-        unitList.add("");
-        sectionList.add("");
-        unitList.add("Créer une unité");
-        sectionList.add("Créer une section");
-
-        bindUniteSpinner();
-        bindSectionSpinner();
-
-
-
-//-------------------------------------------SPINNER---------------------------------------------//
-
-        //adapter pour l'unité
-        Spinner uSpinner = (Spinner) findViewById(R.id.uniteSpinner);
-        Spinner sSpinner = (Spinner) findViewById(R.id.sectionSpinner);
-
-        ArrayAdapter<String> uAdapter, sAdapter;
-
-        uAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, unitList);
-        uAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        uSpinner.setAdapter(uAdapter);
-        uSpinner.setOnItemSelectedListener(this);
-
-        //adapter pour la section
-        sAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, sectionList);
-        sAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sSpinner.setAdapter(sAdapter);
-        sSpinner.setOnItemSelectedListener(this);
-
+        progressDialog = new ProgressDialog(UpdateProfil.this);
+        curUser = (User) getIntent().getExtras().getSerializable("User");
         setup();
+
+
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addData();
+            }
+        });
     }
 
     public void onResume(){
@@ -159,134 +128,102 @@ public class UpdateProfil extends AppCompatActivity  implements AdapterView.OnIt
         inputTotem =  totem.getText().toString();
         inputTel = ngsm.getText().toString();
         inputDob =  dob.getText().toString();
-        inputUnite = unite.getSelectedItem().toString();
-        inputSection = section.getSelectedItem().toString();
-
-        new_user = new User(inputName,inputTotem,inputEmail,inputTel,inputDob,inputUnite,inputSection);
-        if(inputName.isEmpty()){
-            inputName = profil.curUser.getNom();
-        }
-        else if(inputPrenom.isEmpty()){
-            inputPrenom = profil.curUser.getPrenom();
-        }
-        else if(!inputTel.equals("")&&inputTel.length()!=10){
-            emailTI.setError("Mot de passe trop court");
+        inputUnite = curUser.getUnite();
+        inputSection = curUser.getSection();
+        if(inputEmail.isEmpty() && inputName.isEmpty() && inputDob.isEmpty() && inputTel.isEmpty() && inputMdp.isEmpty() && inputPrenom.isEmpty() && inputTotem.isEmpty() && image == null){
+            Toast.makeText(this, "Pour la mise à jour, veuillez entrer des données", Toast.LENGTH_SHORT).show();
+        }else if(!inputMdp.isEmpty() && inputMdp.length() > 5){
+            mdpTI.setError("Mot de passe trop court");
+            mdp.setText("");
+        }else if(!(inputTel.isEmpty()) && inputTel.length()!=10){
+            ngsmTI.setError("Numéro invalide");
             ngsm.requestFocus();
             ngsm.setText("");
-        }else if(inputTel.equals("")){
-            inputTel = profil.curUser.getNgsm();
-        }
-        else if(inputMdp.isEmpty()){
-            inputMdp = profil.curUser.getMdp();
-        }
-        else if(inputTotem.isEmpty()){
-            inputTotem = profil.curUser.getTotem();
-        }
-        else if(inputDob.isEmpty()){
-            inputDob = profil.curUser.getDateOfBirth();
-        }
-        else if(inputPrenom.isEmpty()){
-            inputPrenom = profil.curUser.getPrenom();
-        }
-        else{
-            mAuth.createUserWithEmailAndPassword(inputEmail, inputMdp)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                //currentUser = mAuth.getCurrentUser();
-                                UserHelper.createUser(inputName, inputPrenom, inputTotem, inputEmail, inputTel, inputDob, inputUnite, inputSection);
-                                Toast.makeText(UpdateProfil.this, "Votre profil a été créer avec succès", Toast.LENGTH_SHORT).show();
-                                new_user.setId(mAuth.getCurrentUser().getUid());
-                                //insert l'utilisateur dans authentification de firebase
-                                putImageInDb();
-                                Intent main = new Intent(UpdateProfil.this, profil.class);
-                                startActivity(main);
+        }else{
+            if(image == null){
+                new_user.setUrlPhoto(curUser.getUrlPhoto());
+            }
+            if(inputName.isEmpty()){
+                inputName = curUser.getNom();
+            }
+            if(inputPrenom.isEmpty()){
+                inputPrenom = curUser.getPrenom();
+            }
+            if(inputTel.isEmpty()){
+                inputTel = curUser.getNgsm();
+            }
+            if(inputMdp.isEmpty()){
+                inputMdp = curUser.getMdp();
+            }
+            if(inputTotem.isEmpty()){
+                inputTotem = curUser.getTotem();
+            }
+            if(inputDob.isEmpty()){
+                inputDob = curUser.getDateOfBirth();
+            }
+            if(inputPrenom.isEmpty()){
+                inputPrenom = curUser.getPrenom();
+            }
+            if(inputEmail.isEmpty()){
+                inputEmail = curUser.getEmail();
+            }
+            new_user= new User(inputName, inputPrenom, inputTotem, inputEmail, inputTel, inputDob, inputUnite, inputSection);
+            new_user.setId(curUser.getId());
 
-                            }else{
-                                String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                                switch (errorCode){
-                                    case "ERROR_EMAIL_ALREADY_IN_USE":
-                                        Toast.makeText(UpdateProfil.this, "Cette adresse email est déjà utilisée", Toast.LENGTH_SHORT).show();
-                                        email.requestFocus();
-                                        email.setText("");
-                                        break;
-                                    case "ERROR_INVALID_EMAIL":
-                                        Toast.makeText(UpdateProfil.this, "Cette adresse email est invalide", Toast.LENGTH_SHORT).show();
-                                        email.requestFocus();
-                                        break;
-                                    case "ERROR_WEAK_PASSWORD":
-                                        Toast.makeText(UpdateProfil.this, "Votre mot de passe n'est pas assez robuste", Toast.LENGTH_SHORT).show();
-                                        mdp.requestFocus();
-                                        mdp.setText("");
-                                        break;
-                                    default :
-                                        Toast.makeText(UpdateProfil.this, "Une erreur inattendue s'est produite", Toast.LENGTH_SHORT).show();
-                                        break;
-                                }
+            if(!new_user.getId().isEmpty()){
+                if(image != null){
+                    putImageInDb(new_user);
+                    Toast.makeText(UpdateProfil.this, "Votre profil a été mis à jour", Toast.LENGTH_SHORT).show();
+                    //insert l'utilisateur dans authentification de firebase
+                    Intent main = new Intent(UpdateProfil.this, profil.class);
+                    startActivity(main);
+                }else{
+                    UserHelper.updateUser(new_user);
+                    Toast.makeText(UpdateProfil.this, "Votre profil a été mis à jour", Toast.LENGTH_SHORT).show();
+                    //insert l'utilisateur dans authentification de firebase
+                    Intent main = new Intent(UpdateProfil.this, profil.class);
+                    startActivity(main);
+                }
+
+            }
+        }
+
+
+    }
+    public void putImageInDb(final User user){
+        progressDialog.setTitle("Téléchargement");
+        progressDialog.setMessage("Ajout de l'image");
+        progressDialog.show();
+        final long currentTime = System.currentTimeMillis();
+
+        storageRef.child(currentUser.getUid()).child(currentTime+"."+getFileExtension(image))
+                .putFile(image)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        storageRef.child(currentUser.getUid()).child(currentTime+"."+getFileExtension(image))
+                                .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(final Uri uri) {
+                                user.setUrlPhoto(uri.toString());
+                                UserHelper.updateUser(user);
+                                progressDialog.dismiss();
                             }
-                        }
-                    });
+                        });
 
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(UpdateProfil.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-
-
-        }
-
-    }
-
-    private void setDatePicked(Calendar calendar) {
-        String myFormat = "MM/dd/yy";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
-
-        dob.setText(sdf.format(calendar.getTime()));
-    }
-
-
-
-    //lance une intent pour acceder au menu principale
-    public void goToMain(View view){
-        addData();
-    }
-
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        switch(parent.getId()){
-            case R.id.uniteSpinner:
-                String uPicked = parent.getItemAtPosition(position).toString();
-                if(uPicked.equals("Créer une unité")){
-                    Intent intent = new Intent(this, UniteCreation.class);
-                    startActivityForResult(intent, UNITE_CODE_CREATION);
-                }
-                break;
-            case R.id.sectionSpinner:
-                String sPicked = parent.getItemAtPosition(position).toString();
-                if(sPicked.equals("Créer une section")){
-                    Intent intent = new Intent(this, SectionCreation.class);
-                    startActivityForResult(intent, SECTION_CODE_CREATION);
-                }
-                break;
-        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == UNITE_CODE_CREATION){
-            if (resultCode == RESULT_OK) {
-                String unitName = data.getStringExtra("result");
-                unitList.add(unitName);
-
-            }
-        }
-        if (requestCode == SECTION_CODE_CREATION){
-            if (resultCode == RESULT_OK) {
-                String sectionName = data.getStringExtra("result");
-                sectionList.add(sectionName);
-            }
-        }
 
         if (requestCode == GALLERY_INTENT && resultCode == Activity.RESULT_OK) {
             final Uri uri = data.getData();
@@ -294,12 +231,25 @@ public class UpdateProfil extends AppCompatActivity  implements AdapterView.OnIt
         }
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        Toast.makeText(this, "veuillez selectionner une unite et une section", Toast.LENGTH_SHORT).show();
+    public void addPic(View view){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*"); //on ne veut que les image
+        startActivityForResult(intent,GALLERY_INTENT);
     }
 
-    //active le mode offline permettant d'utiliser qd même l'app
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = this.getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+    private void setDatePicked(Calendar calendar) {
+        String myFormat = "MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+
+        dob.setText(sdf.format(calendar.getTime()));
+    }
+
+//active le mode offline permettant d'utiliser qd même l'app
     public void setup() {
         // [START get_firestore_instance]
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -312,49 +262,6 @@ public class UpdateProfil extends AppCompatActivity  implements AdapterView.OnIt
         db.setFirestoreSettings(settings);
         // [END set_firestore_settings]
     }
-
-    /*
-        remplit les spinner via une arrayList suivant les données présente dans la BDD
-     */
-    public void bindUniteSpinner(){
-        //on va à la référence du doc unite
-        firestoreDb.collection("unites")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            List<DocumentSnapshot> unitDocList = task.getResult().getDocuments();
-                            for(DocumentSnapshot doc : unitDocList){
-                                String unitName = doc.getString("nom");
-                                unitList.add(unitName);
-                            }
-                            //Toast.makeText(AccountCreation.this, unitDocList.toString(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
-    public void bindSectionSpinner(){
-        //on va à la référence du doc section
-        firestoreDb.collection("sections")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            List<DocumentSnapshot> unitDocList = task.getResult().getDocuments();
-                            for(DocumentSnapshot doc : unitDocList){
-                                String unitName = doc.getString("nom");
-                                sectionList.add(unitName);
-                            }
-                            //Toast.makeText(AccountCreation.this, unitDocList.toString(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-    }
-
     public void insertDate(View view){
         final Calendar calendar = Calendar.getInstance();
 
@@ -376,55 +283,5 @@ public class UpdateProfil extends AppCompatActivity  implements AdapterView.OnIt
                 calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    public void addPic(View view){
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*"); //on ne veut que les image
-        startActivityForResult(intent,GALLERY_INTENT);
-    }
 
-    public void putImageInDb(){
-        final long currentTime = System.currentTimeMillis();
-
-        storageRef.child(currentUser.getEmail()).child(currentTime+"."+getFileExtension(image))
-                .putFile(image)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        storageRef.child(currentUser.getEmail()).child(currentTime+"."+getFileExtension(image))
-                                .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(final Uri uri) {
-                                UserHelper.getCurrentUser(currentUser.getEmail()).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                                        if (queryDocumentSnapshots != null){
-                                            for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                                                User curUser = doc.toObject(User.class);
-                                                curUser.setUrlPhoto(uri.toString());
-                                            }
-
-                                        }
-                                    }
-                                }) ;
-                            }
-                        });
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(UpdateProfil.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-    }
-
-
-    private String getFileExtension(Uri uri) {
-        ContentResolver cR = this.getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
-    }
 }

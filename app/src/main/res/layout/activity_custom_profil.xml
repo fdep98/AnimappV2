@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:background="@color/bleuBlanc"
     tools:context="com.example.animapp.Activities.profil">
 
         <RelativeLayout
@@ -11,137 +12,6 @@
             android:background="@color/bleuBlanc"
             android:orientation="vertical">
 
-
-            <RelativeLayout
-                android:id="@+id/reviewInfo"
-                android:layout_width="370dp"
-                android:layout_height="165dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="520dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/profil_card_view"
-                android:elevation="2dp">
-
-                <TextView
-                    android:id="@+id/infos"
-                    android:layout_width="67dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="120dp"
-                    android:text="Infos"
-                    android:textColor="@color/bleurFonce"
-                    android:textSize="15dp" />
-
-                <TextView
-                    android:id="@+id/vpa_email"
-                    android:layout_width="187dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="42dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="101dp"
-                    android:gravity="right"
-                    android:textSize="15dp"
-                    android:textStyle="italic"
-                    tools:text="Email" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="13dp"
-                    android:layout_marginTop="43dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_toLeftOf="@id/vpa_email"
-                    android:text="Email:"
-                    android:textColor="@color/bleu"
-                    android:textSize="15dp"
-                    android:textStyle="bold|italic"
-                    tools:text="Email:" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="81dp"
-                    android:layout_marginEnd="3dp"
-                    android:layout_marginRight="-1dp"
-                    android:layout_marginBottom="68dp"
-                    android:layout_toStartOf="@+id/vpa_ngsm"
-                    android:layout_toLeftOf="@id/vpa_email"
-                    android:text="Numéro:"
-                    android:textColor="@color/bleu"
-                    android:textSize="15dp"
-                    android:textStyle="bold|italic"
-                    tools:text="Numéro:" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="13dp"
-                    android:layout_marginTop="126dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_marginBottom="21dp"
-                    android:layout_toLeftOf="@id/vpa_email"
-                    android:text="Naissance:"
-                    android:textColor="@color/bleu"
-                    android:textSize="15dp"
-                    android:textStyle="bold|italic"
-                    tools:text="Naissance:" />
-
-                <TextView
-                    android:id="@+id/vpa_ngsm"
-                    android:layout_width="183dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="79dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="63dp"
-                    android:gravity="right"
-                    android:textSize="15dp"
-                    android:textStyle="italic"
-                    tools:text="Numéro de gsm" />
-
-                <TextView
-                    android:id="@+id/vpa_birth"
-                    android:layout_width="185dp"
-                    android:layout_height="28dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="121dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_toEndOf="@+id/textView6"
-                    android:gravity="right"
-                    android:textSize="15dp"
-                    android:textStyle="italic"
-                    tools:text="Date d'anniversaire" />
-
-            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/profilTopLayout"
@@ -179,6 +49,7 @@
                     android:layout_marginTop="33dp"
                     android:layout_marginEnd="151dp"
                     android:layout_marginBottom="120dp"
+                    android:elevation="12dp"
                     tools:srcCompat="@mipmap/ic_launcher_round" />
 
                 <ImageButton
@@ -238,172 +109,298 @@
             </RelativeLayout>
 
 
-            <RelativeLayout
-                android:id="@+id/bilanInfo"
-                android:layout_width="370dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="205dp"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/profil_card_view"
-                android:elevation="2dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/profilTopLayout"
+                android:layout_marginTop="-48dp"
+                android:gravity="center"
+                android:background="@color/transparent"
+                android:paddingBottom="30dp"
+                android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/uniteRL"
-                    android:layout_width="123dp"
-                    android:layout_height="53dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="47dp"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/vpa_section"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="25dp"
-                        android:gravity="center"
-                        tools:text="S1" />
-
-                    <TextView
-                        android:id="@+id/unite"
-                        android:layout_width="121dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:text="Section"
-                        android:textColor="@color/bleu"
-                        android:textStyle="bold" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/sectionRL"
-                    android:layout_width="123dp"
-                    android:layout_height="53dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginStart="123dp"
-                    android:layout_marginTop="47dp"
-                    android:layout_marginEnd="123dp"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/uniteInfo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:text="Unité"
-                        android:textColor="@color/bleu"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/vpa_unite"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="25dp"
-                        android:gravity="center"
-                        tools:text="U1" />
-
-
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:id="@+id/gradeRL"
-                    android:layout_width="123dp"
-                    android:layout_height="53dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginTop="23dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="25dp"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/animeInfo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:text="Animés"
-                        android:textColor="@color/bleu"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/vpa_anime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="25dp"
-                        android:gravity="center"
-                        tools:text="G1" />
-
-                </RelativeLayout>
-
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:id="@+id/postInfo"
-                android:layout_width="370dp"
-                android:layout_height="180dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="324dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/profil_card_view"
-                android:elevation="2dp">
-
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="108dp"
+                    android:id="@+id/bilanInfo"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="top|left"
-                    android:text="Derniers posts"
-                    android:textColor="@color/bleurFonce"
-                    android:textSize="15dp" />
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/profil_card_view"
+                    android:elevation="2dp">
 
-                <ListView
-                    android:id="@+id/lastPostLV"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/textView11"
-                    android:layout_marginTop="6dp"/>
-            </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/uniteRL"
+                        android:layout_width="123dp"
+                        android:layout_height="53dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="47dp"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/vpa_section"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="25dp"
+                            android:gravity="center"
+                            tools:text="S1" />
+
+                        <TextView
+                            android:id="@+id/unite"
+                            android:layout_width="121dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="Section"
+                            android:textColor="@color/bleu"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/sectionRL"
+                        android:layout_width="123dp"
+                        android:layout_height="53dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="123dp"
+                        android:layout_marginTop="47dp"
+                        android:layout_marginEnd="123dp"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/uniteInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="Unité"
+                            android:textColor="@color/bleu"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/vpa_unite"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="25dp"
+                            android:gravity="center"
+                            tools:text="U1" />
+
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/gradeRL"
+                        android:layout_width="123dp"
+                        android:layout_height="53dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="23dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="25dp"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/animeInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="Animés"
+                            android:textColor="@color/bleu"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/vpa_anime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="25dp"
+                            android:gravity="center"
+                            tools:text="G1" />
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/postInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="180dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/profil_card_view"
+                    android:elevation="2dp">
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="108dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="top|left"
+                        android:text="Derniers posts"
+                        android:textColor="@color/bleurFonce"
+                        android:textSize="15dp" />
+
+                    <ListView
+                        android:id="@+id/lastPostLV"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/textView11"
+                        android:layout_marginTop="6dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/reviewInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="165dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/profil_card_view"
+                    android:elevation="2dp">
+
+                    <TextView
+                        android:id="@+id/infos"
+                        android:layout_width="67dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="120dp"
+                        android:text="Infos"
+                        android:textColor="@color/bleurFonce"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/vpa_email"
+                        android:layout_width="187dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="42dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginBottom="101dp"
+                        android:gravity="right"
+                        android:textSize="15dp"
+                        android:textStyle="italic"
+                        tools:text="Email" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="43dp"
+                        android:layout_toLeftOf="@id/vpa_email"
+                        android:text="Email:"
+                        android:textColor="@color/bleu"
+                        android:textSize="15dp"
+                        android:textStyle="bold|italic"
+                        tools:text="Email:" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="81dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginBottom="68dp"
+                        android:layout_toStartOf="@+id/vpa_ngsm"
+                        android:layout_toLeftOf="@id/vpa_email"
+                        android:text="Numéro:"
+                        android:textColor="@color/bleu"
+                        android:textSize="15dp"
+                        android:textStyle="bold|italic"
+                        tools:text="Numéro:" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="126dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginBottom="21dp"
+                        android:layout_toLeftOf="@id/vpa_email"
+                        android:text="Naissance:"
+                        android:textColor="@color/bleu"
+                        android:textSize="15dp"
+                        android:textStyle="bold|italic"
+                        tools:text="Naissance:" />
+
+                    <TextView
+                        android:id="@+id/vpa_ngsm"
+                        android:layout_width="183dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="79dp"
+                        android:layout_marginBottom="63dp"
+                        android:gravity="right"
+                        android:textSize="15dp"
+                        android:textStyle="italic"
+                        tools:text="Numéro de gsm" />
+
+                    <TextView
+                        android:id="@+id/vpa_birth"
+                        android:layout_width="185dp"
+                        android:layout_height="28dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="121dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="right"
+                        android:textSize="15dp"
+                        android:textStyle="italic"
+                        tools:text="Date d'anniversaire" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
 
         </RelativeLayout>
 </ScrollView>

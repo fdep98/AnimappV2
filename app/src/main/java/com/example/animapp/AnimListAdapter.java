@@ -3,8 +3,6 @@ package com.example.animapp;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 
 import android.support.v7.widget.RecyclerView;
@@ -57,7 +55,7 @@ public class AnimListAdapter extends RecyclerView.Adapter<AnimListAdapter.ViewHo
         final User anim = userList.get(position);
 
         holder.nom.setText(anim.getNom());
-        holder.totem.setText(anim.getPrenom());
+        holder.totem.setText(anim.getTotem());
         holder.nbrAbsences.setText("" + anim.getAbsences());
 
         holder.parent.setActivated(selectedItems.get(position, false));
@@ -79,7 +77,7 @@ public class AnimListAdapter extends RecyclerView.Adapter<AnimListAdapter.ViewHo
                 }
                 onClickListener.onItemLongClick(v, anim, position);
                 anim.setChecked(true);
-                UserHelper.updateIsChecked(anim.getEmail(), true);
+                UserHelper.updateIsChecked(anim.getId(), true);
                 return true;
             }
         });
@@ -207,7 +205,7 @@ public class AnimListAdapter extends RecyclerView.Adapter<AnimListAdapter.ViewHo
     public void incNbrAbsence(int position){
         int nbrAbsences = userList.get(position).getAbsences()+1;
         userList.get(position).setAbsences(nbrAbsences);
-        UserHelper.updateAbsences(userList.get(position).getEmail(),nbrAbsences);
+        UserHelper.updateAbsences(userList.get(position).getId(),nbrAbsences);
         resetCurrentIndex();
     }
 
@@ -217,7 +215,11 @@ public class AnimListAdapter extends RecyclerView.Adapter<AnimListAdapter.ViewHo
             nbrAbsences = 0;
         }
         userList.get(position).setAbsences(nbrAbsences);
-        UserHelper.updateAbsences(userList.get(position).getEmail(),nbrAbsences);
+        UserHelper.updateAbsences(userList.get(position).getId(),nbrAbsences);
+        resetCurrentIndex();
+    }
+    public void deleteAnime(int pos){
+        UserHelper.deleteAnime(userList.get(pos).getId());
         resetCurrentIndex();
     }
 }

@@ -6,28 +6,24 @@
         android:enabled="true"
         android:icon="@drawable/ic_tent2"
         android:title="Accueil"
-        android:visible="true"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_photo"
         android:enabled="true"
         android:icon="@drawable/ic_photo_cadre"
         android:title="Galerie"
-        android:visible="true"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_list"
         android:enabled="true"
         android:icon="@drawable/ic_list"
         android:title="Liste"
-        android:visible="true"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_profil"
         android:enabled="true"
         android:icon="@drawable/ic_profil_unfilled"
         android:title="Profil"
-        android:visible="true"
         app:showAsAction="ifRoom" />
 
 </menu>

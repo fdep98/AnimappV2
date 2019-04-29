@@ -24,12 +24,14 @@ import android.view.animation.AnimationUtils;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Database.PostsHelper;
+import com.example.animapp.Fragments.AnimListFragment;
 import com.example.animapp.MainFragmentActivity;
 import com.example.animapp.Model.Post;
 import com.example.animapp.animapp.R;
@@ -39,7 +41,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -66,15 +71,16 @@ public class postMessage extends AppCompatActivity {
     boolean isOpen = false; //afin de savoir si le FAB est ouvert ou fermé
     FirebaseStorage storage;
     StorageReference storageRef;
-    private ProgressDialog prog;
     public FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private DocumentReference userDoc;
     private FirebaseFirestore database;
     String currentDate;
+    Date date;
     String post;
     Uri image;
-    static String nom, prenom, totem;
+    static String nom, prenom, totem, monitPhoto;
+    ProgressDialog progressDialog;
 
     //date et heure
     private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy"+" à "+ "HH:mm:ss");
@@ -114,8 +120,8 @@ public class postMessage extends AppCompatActivity {
             }
         });
 
-
-        Date date = new Date();
+        progressDialog = new ProgressDialog(postMessage.this);
+        date = new Date();
         currentDate = df.format(date);
 
         storage = FirebaseStorage.getInstance(); //instance de firebaseStorage;
@@ -125,7 +131,7 @@ public class postMessage extends AppCompatActivity {
         database = FirebaseFirestore.getInstance();
 
         //Information sur le moniteur
-        userDoc = database.collection("users").document(currentUser.getEmail());
+        userDoc = database.collection("users").document(currentUser.getUid());
         userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -135,24 +141,29 @@ public class postMessage extends AppCompatActivity {
                 monitName.setText(monitNom);
                 monitTotem.setText(monitTot);
                 monitPrenom.setText(monitPren);
+                if (currentUser != null) {
+                    //récupère et met à jour la photo de profil
+                    if (currentUser.getPhotoUrl() != null) {
+                        Glide.with(getApplicationContext())
+                                .load(currentUser.getPhotoUrl())
+                                .apply(RequestOptions.circleCropTransform())
+                                .into(monitImg);
+                    } else {
+                        Glide.with(getApplicationContext())
+                                .load(documentSnapshot.getString("urlPhoto"))
+                                .apply(RequestOptions.circleCropTransform())
+                                .into(monitImg);
+
+                    }
+                }
+                monitPhoto = documentSnapshot.getString("urlPhoto");
                 nom = monitNom;
                 prenom = monitPren;
                 totem = monitTot;
             }
         });
 
-        if (currentUser != null) {
-            //récupère et met à jour la photo de profil
-            if (currentUser.getPhotoUrl() != null) {
-                Glide.with(this)
-                        .load(currentUser.getPhotoUrl())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(monitImg);
-            } else {
-                monitImg.setImageResource(R.mipmap.ic_launcher_round);
 
-            }
-        }
         optionFAB();
         addViaCam();
         addViaGall();
@@ -160,11 +171,15 @@ public class postMessage extends AppCompatActivity {
         publier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 post = postMessage.getText().toString();
                 if (!post.isEmpty()) {
-                    Post newPost = new Post(currentUser.getEmail(), nom, prenom, totem, currentDate, post);
+                    final Post newPost = new Post(currentUser.getUid(), nom, prenom, totem, currentDate, post);
+                    newPost.setMonitPhoto(monitPhoto);
                     PostsHelper.createUserPost(newPost);
+                    PostsHelper.updatePostId(newPost);
                     startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
+                    date = new Date();
                 }else{
                     Toast.makeText(postMessage.this, "veuillez entrer un message avant la publication", Toast.LENGTH_SHORT).show();
                 }
@@ -256,6 +271,7 @@ public class postMessage extends AppCompatActivity {
                     post = postMessage.getText().toString();
                     if(!post.isEmpty()) {
                         putImageInDb();
+
                     }else{
                         Toast.makeText(postMessage.this, "veuillez entrer un message avant la publication", Toast.LENGTH_SHORT).show();
                     }
@@ -265,21 +281,26 @@ public class postMessage extends AppCompatActivity {
     }
 
     public void putImageInDb(){
+        progressDialog.setTitle("Téléchargement");
+        progressDialog.setMessage("Téléchargement de l'image");
+        progressDialog.show();
         final long currentTime = System.currentTimeMillis();
 
-        storageRef.child(currentUser.getEmail()+" Posts").child(currentTime+"."+getFileExtension(image))
+        storageRef.child(currentUser.getUid()+" Posts").child(currentTime+"."+getFileExtension(image))
                 .putFile(image)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        storageRef.child(currentUser.getEmail()+" Posts").child(currentTime+"."+getFileExtension(image))
+                        storageRef.child(currentUser.getUid()+" Posts").child(currentTime+"."+getFileExtension(image))
                                 .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                Post newPost = new Post(currentUser.getEmail(),nom, prenom, totem,currentDate, post, uri.toString());
+                                Post newPost = new Post(currentUser.getUid(),nom, prenom, totem,currentDate, post, uri.toString());
+                                newPost.setMonitPhoto(monitPhoto);
                                 PostsHelper.createUserPost(newPost);
-                                Toast.makeText(postMessage.this, "Ajouter dans la gallerie", Toast.LENGTH_SHORT).show();
+                                PostsHelper.updatePostId(newPost);
+                                progressDialog.dismiss();
                                 picToAdd.setImageResource(0);
                                 postMessage.setText("");
                             }
@@ -318,24 +339,6 @@ public class postMessage extends AppCompatActivity {
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
-    /*
-        Ajoute l'image dans la base de donnée
-     */
-    public void sharePic( @Nullable final Intent data){
-        prog.setMessage("Téléchargement...");
-        prog.show();
-        //stockage dans la BDD
-        Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-        Uri uri = getImageUri(this,imageBitmap);
-        StorageReference st = storageRef.child("photos").child(uri.getLastPathSegment()); //créer un dossier photos et met le chemin vers la photo comme child
-        st.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(postMessage.this, "photo added", Toast.LENGTH_SHORT).show();
-                prog.dismiss();
-            }
-        });
-    }
 
     /*
         Affiche un dialog demandant à l'utilisateur confirmation avant de partager une image

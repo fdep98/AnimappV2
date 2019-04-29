@@ -2,10 +2,10 @@ package com.example.animapp.Model;
 
 import android.net.Uri;
 
-import java.text.DateFormat;
+import java.io.Serializable;
 
-public class Post {
-    private String emailMoniteur;
+public class Post implements Serializable {
+    private String idMoniteur;
     private String nomMoniteur;
     private String prenomMoniteur;
     private String totemMoniteur;
@@ -13,27 +13,30 @@ public class Post {
     private String message;
     private String imgurl;
     private Uri imageUri;
+    private String monitPhoto;
 
     private String id;
     private int nbrLike;
+    private int nbrCommentaire;
 
     public Post(){
         //constructeur par défault, required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public Post(String emailMoniteur, String nomMoniteur, String prenomMoniteur, String totemMoniteur, String date, String message) {
-        this.emailMoniteur = emailMoniteur;
+    public Post(String idMoniteur, String nomMoniteur, String prenomMoniteur, String totemMoniteur, String date, String message) {
+        this.idMoniteur = idMoniteur;
         this.date = date;
         this.message = message;
         this.nomMoniteur = nomMoniteur;
         this.prenomMoniteur = prenomMoniteur;
         this.totemMoniteur = totemMoniteur;
         this.nbrLike = 0;
+        nbrCommentaire = 0;
     }
 
     //constructeur avec image
-    public Post(String emailMoniteur, String nomMoniteur, String prenomMoniteur, String totemMoniteur, String date, String message,String imageUrl) {
-        this.emailMoniteur = emailMoniteur;
+    public Post(String idMoniteur, String nomMoniteur, String prenomMoniteur, String totemMoniteur, String date, String message,String imageUrl) {
+        this.idMoniteur = idMoniteur;
         this.nomMoniteur = nomMoniteur;
         this.totemMoniteur = totemMoniteur;
         this.prenomMoniteur = prenomMoniteur;
@@ -41,6 +44,7 @@ public class Post {
         this.message = message;
         this.imgurl=imageUrl;
         this.nbrLike = 0;
+        nbrCommentaire = 0;
     }
 
 
@@ -51,12 +55,12 @@ public class Post {
       //  this.id = id;
     //}
 
-    public String getEmailMoniteur() {
-        return emailMoniteur;
+    public String getIdMoniteur() {
+        return idMoniteur;
     }
 
-    public void setEmailMoniteur(String emailMoniteur) {
-        this.emailMoniteur = emailMoniteur;
+    public void setIdMoniteur(String idMoniteur) {
+        this.idMoniteur = idMoniteur;
     }
 
     public String getDate() {
@@ -129,5 +133,21 @@ public class Post {
 
     public void setNbrLike(int nbrLike) {
         this.nbrLike = nbrLike;
+    }
+
+    public int getNbrCommentaire() {
+        return nbrCommentaire;
+    }
+
+    public void setNbrCommentaire(int nbrCommentaire) {
+        this.nbrCommentaire = nbrCommentaire;
+    }
+
+    public String getMonitPhoto() {
+        return monitPhoto;
+    }
+
+    public void setMonitPhoto(String monitPhoto) {
+        this.monitPhoto = monitPhoto;
     }
 }

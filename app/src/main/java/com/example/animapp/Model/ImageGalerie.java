@@ -25,28 +25,29 @@ public class ImageGalerie {
 
     private static final String TAG = ImageGalerie.class.getSimpleName();
 
-    public String monitEmail;
+    public String monitId;
     public  String description;
     public  Uri imageUri;
     public String imageUrl;
     public  String url;
     public String date;
 
-    public ImageGalerie(String monitEmail, Uri image, String description,String date){
+    public ImageGalerie(){}
+
+    public ImageGalerie(String monitId, Uri image, String description,String date){
         this.description = description;
         this.imageUri = image;
         this.date = date;
-        this.monitEmail = monitEmail;
+        this.monitId = monitId;
     }
-    public ImageGalerie(String monitEmail,String imageUrl, String description,String date){
+    public ImageGalerie(String monitId,String imageUrl, String description,String date){
         this.description = description;
         this.imageUrl = imageUrl;
         this.date = date;
-        this.monitEmail = monitEmail;
+        this.monitId = monitId;
 
     }
 
-    public ImageGalerie(){ }
 
     /**
      * Loads a raw JSON at R.raw.products and converts it into a list of ProductEntry objects
@@ -117,11 +118,11 @@ public class ImageGalerie {
         this.imageUrl = imageUrl;
     }
 
-    public String getMonitEmail() {
-        return monitEmail;
+    public String getMonitId() {
+        return monitId;
     }
 
-    public void setMonitEmail(String monitEmail) {
-        this.monitEmail = monitEmail;
+    public void setMonitId(String monitId) {
+        this.monitId = monitId;
     }
 }

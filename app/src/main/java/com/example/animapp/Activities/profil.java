@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -17,11 +16,13 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.animapp.Database.PostsHelper;
 import com.example.animapp.Database.UserHelper;
 import com.example.animapp.LastPostAdapter;
 import com.example.animapp.MainFragmentActivity;
@@ -39,12 +40,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.protobuf.StringValue;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,15 +60,18 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
     public FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     public static List<User> animeList = new ArrayList<>();
+    List<User> collegue = new ArrayList<>(); //tableau des autres moniteurs de la section;
     Animation rotateForward, rotateBackward;
     boolean isOpen = false;
     ImageButton parametre;
     List<Post> colleguePostList = new ArrayList<>();
     ListView lastpostLV;
-    public static User curUser; //instance de l'utilisateur courant, utiliser lors de la mise à jour
+    User curUser; //instance de l'utilisateur courant, utiliser lors de la mise à jour
     Dialog mDialog;
     TextView closePopup;
     static int nbrAnimes;
+    RelativeLayout postInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +89,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
         TVemail = findViewById(R.id.vpa_email);
         TVanime = findViewById(R.id.vpa_anime);
         parametre = findViewById(R.id.parametre);
+        postInfo = findViewById(R.id.postInfo);
 
         mDialog = new Dialog(this);
 
@@ -123,85 +124,83 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
 
     public void update(){
         if(currentUser!= null){
-            userRef = db.collection("users").document(currentUser.getEmail());
-
-            //récupère et met à jour la photo de profil
-            if(currentUser.getPhotoUrl() != null){
-                Glide.with(this)
-                        .load(currentUser.getPhotoUrl())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(IVphoto);
-            }else{
-                IVphoto.setImageResource(R.mipmap.ic_launcher_round);
-            }
+            userRef = db.collection("users").document(currentUser.getUid());
 
             //le snapshot contient toute les données de l'utilisateur
-            userRef.get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if(documentSnapshot.exists()){
-                                final User user = documentSnapshot.toObject(User.class);
-                                curUser = user;
-
-                                TVnom.setText(user.getNom());
-                                TVpseudo.setText(user.getPrenom());
-                                TVtotem.setText(user.getTotem());
-                                TVemail.setText(user.getEmail());
-                                TVngsm.setText(user.getNgsm());
-                                TVdob.setText(user.getDateOfBirth());
-                                TVunite.setText(user.getUnite());
-                                TVsection.setText(user.getSection());
-
-                                final List<User> collegue = new ArrayList<>(); //tableau des autres moniteurs de la section
-
-                                UserHelper.getCollegue(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-
-                                        String email;
-
-                                        for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                                            email = doc.getString("email");
-                                            if(!email.equals(user.getEmail())){
-                                                collegue.add(doc.toObject(User.class));
-                                               // Toast.makeText(profil.this, collegue.get(i).getEmail(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                        bindLastPost(collegue);
-
-                                    }
-                                });
-
-
-                                UserHelper.getAnim(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-
-                                        int nbrAnime = queryDocumentSnapshots.size();
-                                        nbrAnimes = nbrAnime;
-                                        TVanime.setText(String.valueOf(nbrAnime));
-                                    }
-                                });
-
-                            }else{
-                                TVnom.setText(currentUser.getDisplayName());
-                                //TVpseudo.setText(currentUser);
-                                //TVtotem.setText(inTotem);
-                                TVemail.setText(currentUser.getEmail());
-                                TVngsm.setText(currentUser.getPhoneNumber());
-                                //TVdob.setText(currentUser.get);
-                                //TVunite.setText(inUnite);
-                                //TVsection.setText(inSection);
-                                //Toast.makeText(profil.this, "le document n'existe pas", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
+            userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(profil.this, "Erreur", Toast.LENGTH_SHORT).show();
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    if(documentSnapshot.exists()){
+                        if(documentSnapshot.exists()){
+                            final User user = documentSnapshot.toObject(User.class);
+                            curUser = user;
+
+                            //récupère et met à jour la photo de profil
+                            if(currentUser.getPhotoUrl() != null){
+                                Glide.with(getApplicationContext())
+                                        .load(currentUser.getPhotoUrl())
+                                        .apply(RequestOptions.circleCropTransform())
+                                        .into(IVphoto);
+                            }else{
+                                Glide.with(getApplicationContext())
+                                        .load(user.getUrlPhoto())
+                                        .apply(RequestOptions.circleCropTransform())
+                                        .into(IVphoto);
+                            }
+
+                            TVnom.setText(user.getNom());
+                            TVpseudo.setText(user.getPrenom());
+                            TVtotem.setText(user.getTotem());
+                            TVemail.setText(user.getEmail());
+                            TVngsm.setText(user.getNgsm());
+                            TVdob.setText(user.getDateOfBirth());
+                            TVunite.setText(user.getUnite());
+                            TVsection.setText(user.getSection());
+
+
+
+                            UserHelper.getCollegue(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                    String id;
+                                    List<User> col = new ArrayList<>();
+                                    for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                                        id = doc.getString("id");
+                                        if(!id.equals(user.getId())){
+                                            col.add(doc.toObject(User.class));
+                                            // Toast.makeText(profil.this, collegue.get(i).getEmail(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                    collegue = col;
+                                    bindLastPost(collegue);
+                                }
+                            });
+
+
+                            UserHelper.getAnim(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                    int nbrAnime = queryDocumentSnapshots.size();
+                                    nbrAnimes = nbrAnime;
+                                    TVanime.setText(String.valueOf(nbrAnime));
+                                }
+                            });
+
+                        }else{
+                            TVnom.setText(currentUser.getDisplayName());
+                            //TVpseudo.setText(currentUser);
+                            //TVtotem.setText(inTotem);
+                            TVemail.setText(currentUser.getEmail());
+                            TVngsm.setText(currentUser.getPhoneNumber());
+                            //TVdob.setText(currentUser.get);
+                            //TVunite.setText(inUnite);
+                            //TVsection.setText(inSection);
+                            //Toast.makeText(profil.this, "le document n'existe pas", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
             });
+
         }else{
             //Toast.makeText(this, "current user null", Toast.LENGTH_SHORT).show();
         }
@@ -220,7 +219,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
     // executer lorsque le bouton confirmer est pressé (FrameLayout)
     public void confirm(View view){
         Toast.makeText(this, "confirmer", Toast.LENGTH_SHORT).show();
-        UserHelper.deleteUser(mAuth.getCurrentUser().getEmail());
+        UserHelper.deleteUser(mAuth.getCurrentUser().getUid());
         AuthUI.getInstance()
                 .delete(this)
                 .addOnSuccessListener(this, updateUIAfterRESTRequestsCompleted(DELETE_USER_TASK));
@@ -290,7 +289,9 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
             case R.id.update:
                 parametre.startAnimation(rotateBackward);
                 isOpen = false;
-                startActivity(new Intent(this,UpdateProfil.class));
+                Intent intent = new Intent(this,UpdateProfil.class);
+                intent.putExtra("User",curUser);
+                startActivity(intent);
             default:
                 return false;
         }
@@ -324,25 +325,39 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
     }
 
     public void bindLastPost(final List<User> moniteurs){
-        db.collection("userPosts") // on récupère tout les post de userPosts
-        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+        PostsHelper.getAllPost().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 Post colleguePost;
                 //pour chaque moniteur on vérifie si le moniteur a un post, si oui, on l'ajoute dans
-                for(User user : moniteurs){
-                    for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                        colleguePost = doc.toObject(Post.class);
-                        if(colleguePost.getEmailMoniteur().equals(user.getEmail())){
-                            colleguePostList.add(colleguePost);
-                           // Toast.makeText(profil.this, colleguePost.getMessage(), Toast.LENGTH_SHORT).show();
-
+                if(!queryDocumentSnapshots.isEmpty()){
+                    List<Post> colPost = new ArrayList<>();
+                    for(User user : moniteurs){
+                        for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                            colleguePost = doc.toObject(Post.class);
+                            if(colleguePost.getIdMoniteur().equals(user.getId())){
+                                colPost.add(colleguePost);
+                                // Toast.makeText(profil.this, colleguePost.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
-
+                    }
+                    colleguePostList = colPost;
+                    if(colleguePostList.size() == 0){
+                        postInfo.setVisibility(View.GONE);
+                    }else{
+                        LastPostAdapter adapter = new LastPostAdapter(getApplicationContext(),colleguePostList);
+                        lastpostLV.setAdapter(adapter);
                     }
                 }
-                LastPostAdapter adapter = new LastPostAdapter(getApplicationContext(),colleguePostList);
-                lastpostLV.setAdapter(adapter);
+            }
+        });
+
+        db.collection("userPosts") // on récupère tout les post de userPosts
+        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+
             }
         });
 
@@ -356,9 +371,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
         colleguePrenom = mDialog.findViewById(R.id.colleguePrenom);
         collegueTotem = mDialog.findViewById(R.id.collegueTotem);
         postDate = mDialog.findViewById(R.id.date);
-        collegueSec = mDialog.findViewById(R.id.collegueSection);
-        collegueUn = mDialog.findViewById(R.id.collegueUnite);
-        collegueNbrAn = mDialog.findViewById(R.id.collegueNbrAnime);
+
         colleguePostText = mDialog.findViewById(R.id.colleguePostText);
         closePopup = mDialog.findViewById(R.id.closePopUp);
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -368,18 +381,23 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
             public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
                 mDialog.show();
                 Post colleguePost = (Post) adapter.getItemAtPosition(position);
-                Glide.with(getApplication())
-                        .load(R.drawable.paysage)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(colleguePic);
+                if(colleguePost.getMonitPhoto() != null){
+                    Glide.with(getApplication())
+                            .load(colleguePost.getMonitPhoto())
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(colleguePic);
+                }else{
+                    Glide.with(getApplication())
+                            .load(R.drawable.logo)
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(colleguePic);
+                }
+
                 collegueNom.setText(colleguePost.getNomMoniteur());
                 colleguePrenom.setText(colleguePost.getPrenomMoniteur());
                 collegueTotem.setText(colleguePost.getTotemMoniteur());
-                collegueSec.setText(curUser.getSection());
-                collegueUn.setText(curUser.getUnite());
                 postDate.setText(colleguePost.getDate());
                 colleguePostText.setText(colleguePost.getMessage());
-                collegueNbrAn.setText(String.valueOf(nbrAnimes));
 
                 closePopup.setOnClickListener(new View.OnClickListener() {
                     @Override

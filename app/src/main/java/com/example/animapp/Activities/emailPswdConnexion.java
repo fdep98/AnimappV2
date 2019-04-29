@@ -70,19 +70,19 @@ public class emailPswdConnexion extends AppCompatActivity implements View.OnClic
                             String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                             switch (errorCode){
                                 case "ERROR_INVALID_EMAIL":
-                                    Toast.makeText(emailPswdConnexion.this, "The email address is badly formatted.", Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(emailPswdConnexion.this, "The email address is badly formatted.", Toast.LENGTH_LONG).show();
                                     emailTI.setError("Adresse email incohérente");
                                     emailTI.requestFocus();
                                     break;
                                 case "ERROR_WRONG_PASSWORD":
-                                    Toast.makeText(emailPswdConnexion.this, "The password is invalid or the user does not have a password.", Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(emailPswdConnexion.this, "The password is invalid or the user does not have a password.", Toast.LENGTH_LONG).show();
                                     mdpTI.setError("Mot de passe incorrect ");
                                     mdpTI.requestFocus();
                                     TextInputEditText tmp = findViewById(R.id.mdpET); // j'arrive pas a faire mieux
                                     tmp.setText("");
                                     break;
                                 case "ERROR_USER_NOT_FOUND":
-                                    Toast.makeText(emailPswdConnexion.this, "The supplied credentials do not correspond to the previously signed in user.", Toast.LENGTH_LONG).show();
+                                   // Toast.makeText(emailPswdConnexion.this, "The supplied credentials do not correspond to the previously signed in user.", Toast.LENGTH_LONG).show();
                                     emailTI.setError("Cette adresse email ne possède aucune compte");
                                     emailTI.requestFocus();
                                     break;

@@ -1,6 +1,5 @@
 package com.example.animapp.Activities;
 
-import android.app.Activity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +23,7 @@ public class swipePic extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_swipe_pic);
+        setContentView(R.layout.activity_swipe_gallery_pic);
 
         backToGallery = findViewById(R.id.backToGallery);
         viewPager = findViewById(R.id.pager);

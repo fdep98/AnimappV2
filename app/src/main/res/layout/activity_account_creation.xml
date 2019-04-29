@@ -1,55 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <ScrollView
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/bleuBlanc"
     tools:context="com.example.animapp.Activities.AccountCreation">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/bleuBlanc"
         android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="6dp">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="62dp"
-            android:layout_height="53dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/logo"
-            android:tint="?android:attr/textColorPrimary" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_marginBottom="10dp"
-            android:fontFamily="casual"
-            android:text="Création du Profil"
-            android:textColor="@color/bleu2"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="399dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bleu"
+            android:paddingTop="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="35dp"
+                android:fontFamily="casual"
+                android:gravity="left"
+                android:text="Création de compte"
+                android:textColor="@color/blanc"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="53dp"
+                android:layout_height="53dp"
+                android:layout_gravity="right"
+                android:src="@drawable/logo"
+                android:tint="?android:attr/textColorPrimary" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="15dp"
+            android:background="@color/bleuBlanc"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent"
@@ -61,17 +65,17 @@
                 android:id="@+id/emailTI"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blanc"
+                android:background="@color/bleuBlanc"
                 android:hint="email"
                 android:textColorHint="@color/brunRouge"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/emailET"
-                    android:layout_width="344dp"
+                    android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_gravity="center"
-                    android:drawableTint="@color/bleu2"
+                    android:background="@color/blanc"
                     android:inputType="textEmailAddress"
                     android:textAlignment="viewStart"
                     tools:ignore="RtlCompat" />
@@ -81,17 +85,17 @@
                 android:id="@+id/mdpTI"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blanc"
+                android:background="@color/bleuBlanc"
                 android:hint="mot de passe"
                 android:textColorHint="@color/brunRouge"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/mdpET"
-                    android:layout_width="344dp"
+                    android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_gravity="center"
-                    android:drawableTint="@color/bleu2"
+                    android:background="@color/blanc"
                     android:inputType="textPassword"
                     android:textAlignment="viewStart"
                     tools:ignore="RtlCompat" />
@@ -101,17 +105,17 @@
                 android:id="@+id/nomTI"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blanc"
+                android:background="@color/bleuBlanc"
                 android:hint="nom"
                 android:textColorHint="@color/brunRouge"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/nomET"
-                    android:layout_width="344dp"
+                    android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_gravity="center"
-                    android:drawableTint="@color/bleu2"
+                    android:background="@color/blanc"
                     android:inputType="text"
                     android:textAlignment="viewStart"
                     tools:ignore="RtlCompat" />
@@ -122,17 +126,17 @@
                 android:id="@+id/prenomTI"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blanc"
+                android:background="@color/bleuBlanc"
                 android:hint="prenom"
                 android:textColorHint="@color/brunRouge"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/prenomET"
-                    android:layout_width="344dp"
+                    android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_gravity="center"
-                    android:drawableTint="@color/bleu2"
+                    android:background="@color/blanc"
                     android:inputType="text"
                     android:textAlignment="viewStart"
                     android:textColorLink="@color/bleu2"
@@ -147,17 +151,17 @@
                 android:id="@+id/totemTI"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blanc"
+                android:background="@color/bleuBlanc"
                 android:hint="totem"
                 android:textColorHint="@color/brunRouge"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/totemET"
-                    android:layout_width="344dp"
+                    android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_gravity="center"
-                    android:drawableTint="@color/bleu2"
+                    android:background="@color/blanc"
                     android:inputType="text"
                     android:textAlignment="viewStart"
                     tools:ignore="RtlCompat" />
@@ -171,17 +175,17 @@
                 android:id="@+id/ngsmTI"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blanc"
+                android:background="@color/bleuBlanc"
                 android:hint="n° de gsm"
                 android:textColorHint="@color/brunRouge"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/ngsmET"
-                    android:layout_width="344dp"
+                    android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_gravity="center"
-                    android:drawableTint="@color/bleu2"
+                    android:background="@color/blanc"
                     android:inputType="phone"
                     android:textAlignment="viewStart"
                     tools:ignore="RtlCompat" />
@@ -192,6 +196,7 @@
                 android:id="@+id/dobTI"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
+                android:layout_marginBottom="12dp"
                 android:background="@color/blanc"
                 android:hint="date d'anniversaire"
                 android:textColorHint="@color/brunRouge"
@@ -199,7 +204,7 @@
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/dobET"
-                    android:layout_width="344dp"
+                    android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_gravity="center"
                     android:drawableTint="@color/bleu2"
@@ -215,16 +220,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="7dp"
                 android:gravity="center"
+
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
-                    android:paddingLeft="28dp"
+                    android:gravity="center"
                     android:text="Unite"
                     android:textColor="@color/brunRouge"
                     android:textSize="17sp" />
@@ -250,10 +255,10 @@
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
-                    android:paddingLeft="28dp"
+                    android:gravity="center"
+
                     android:text="Section"
                     android:textColor="@color/brunRouge"
                     android:textSize="17sp"
@@ -268,18 +273,29 @@
                     android:visibility="visible" />
             </LinearLayout>
 
-            <android.support.design.button.MaterialButton
-                android:id="@+id/profil"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:elevation="6dp"
-                android:onClick="goToMain"
-                android:text="Profil"
-                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-                android:textStyle="bold"
-                app:backgroundTint="@color/bleu" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="15dp">
+
+                <android.support.design.button.MaterialButton
+                    android:id="@+id/profil"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="3dp"
+                    android:text="Créer "
+                    android:onClick="goToMain"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/bleu"
+                    app:cornerRadius="20dp" />
+
+            </RelativeLayout>
+
         </LinearLayout>
 
     </LinearLayout>

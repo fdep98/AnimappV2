@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -19,15 +18,14 @@ import android.widget.Toast;
 import com.example.animapp.Database.UserHelper;
 import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -43,6 +41,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
 
     private static final int UNITE_CODE_CREATION = 11;
     private static final int SECTION_CODE_CREATION = 22;
+
     public DatabaseReference db;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
@@ -56,6 +55,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
     private ArrayList<String> unitList = new ArrayList<>();
     private ArrayList<String> sectionList = new ArrayList<>();
    // FirebaseUser currentUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +133,6 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
         final String inputUnite = unite.getSelectedItem().toString();
         final String inputSection = section.getSelectedItem().toString();
 
-        new_user = new User(inputName,inputTotem,inputEmail,inputTel,inputDob,inputUnite,inputSection);
         if(inputName.isEmpty()){
             emailTI.setError("veuillez entrer un nom");
             nom.requestFocus();
@@ -156,9 +155,11 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 //currentUser = mAuth.getCurrentUser();
-                                UserHelper.createUser(inputName, inputPrenom, inputTotem, inputEmail,inputTel, inputDob, inputUnite, inputSection);
-                                Toast.makeText(AccountCreation.this, "Votre profil a été créer avec succès", Toast.LENGTH_SHORT).show();
+                                User newUser = new User(inputName, inputPrenom, inputTotem, inputEmail,inputTel, inputDob, inputUnite, inputSection);
+                                new_user = newUser;
                                 new_user.setId(mAuth.getCurrentUser().getUid());
+                                UserHelper.createUser(new_user);
+                                Toast.makeText(AccountCreation.this, "Votre profil a été créer avec succès", Toast.LENGTH_SHORT).show();
                                 //insert l'utilisateur dans authentification de firebase
                                 Intent main = new Intent(AccountCreation.this, profil.class);
                                 startActivity(main);
@@ -181,7 +182,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
                                         mdp.setText("");
                                         break;
                                     default :
-                                        Toast.makeText(AccountCreation.this, "Une erreur inattendue s'est produite", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AccountCreation.this, "Une erreur inattendue s'est produite"+task.getException(), Toast.LENGTH_SHORT).show();
                                         break;
                                 }
                             }
@@ -195,7 +196,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
     }
 
     private void setDatePicked(Calendar calendar) {
-        String myFormat = "MM/dd/yy";
+        String myFormat = "dd/MM/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
 
         dob.setText(sdf.format(calendar.getTime()));
@@ -329,4 +330,5 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
                 .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
+
 }

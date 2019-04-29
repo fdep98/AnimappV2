@@ -45,9 +45,16 @@ public class LastPostAdapter extends ArrayAdapter<Post> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Glide.with(getContext()).load(R.drawable.paysage)
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.monitImage);
+        if(monitPost.getMonitPhoto() != null){
+            Glide.with(getContext()).load(monitPost.getMonitPhoto())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.monitImage);
+        }else{
+            Glide.with(getContext()).load(R.drawable.logo)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.monitImage);
+        }
+
         holder.monitNom.setText(monitPost.getPrenomMoniteur());
         holder.monitPost.setText(monitPost.getMessage());
         String dateSubstrng = monitPost.getDate().substring(0,monitPost.getDate().indexOf('à'));
