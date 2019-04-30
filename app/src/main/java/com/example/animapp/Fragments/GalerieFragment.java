@@ -16,8 +16,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.animapp.Activities.swipePic;
+import com.example.animapp.Database.ImageHelper;
 import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.ImageGridItemDecoration;
 import com.example.animapp.StaggeredGridLayout.StaggeredGalerieImageCardRecyclerViewAdapter;
@@ -75,34 +77,35 @@ public class GalerieFragment extends Fragment {
         storage = FirebaseStorage.getInstance().getReference();
 
         if(currentUser != null){
-            imageRef = FirebaseFirestore.getInstance().collection("galerieImages");
-                imageRef.orderBy("date").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            ImageHelper.getAllImages().orderBy("date").addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                        for (QueryDocumentSnapshot image : queryDocumentSnapshots) {
-                            ImageGalerie img = image.toObject(ImageGalerie.class);
-                            if(img.getMonitId().equals(currentUser.getUid())){
-                                galerieList.add(img);
+                        if(!queryDocumentSnapshots.isEmpty()){
+                            for (QueryDocumentSnapshot image : queryDocumentSnapshots) {
+                                ImageGalerie img = image.toObject(ImageGalerie.class);
+                                    galerieList.add(img);
                             }
-                        }
-                        adapter = new StaggeredGalerieImageCardRecyclerViewAdapter(galerieList,getActivity());
-                        recyclerView.setAdapter(adapter);
-                        adapter.setOnClickListener(new StaggeredGalerieImageCardRecyclerViewAdapter.OnClickListener() {
-                            @Override
-                            public void onItemClick(View view, ImageGalerie obj, int pos) {
-                                if(adapter.getSelectedItemCount() > 0){
-                                    enableActionMode(pos);
-                                }else{
-                                    startActivity(new Intent(getActivity(), swipePic.class));
+                            Toast.makeText(getActivity(), String.valueOf(galerieList.size()), Toast.LENGTH_SHORT).show();
+                            adapter = new StaggeredGalerieImageCardRecyclerViewAdapter(galerieList,getActivity());
+                            recyclerView.setAdapter(adapter);
+                            adapter.setOnClickListener(new StaggeredGalerieImageCardRecyclerViewAdapter.OnClickListener() {
+                                @Override
+                                public void onItemClick(View view, ImageGalerie obj, int pos) {
+                                    if(adapter.getSelectedItemCount() > 0){
+                                        enableActionMode(pos);
+                                    }else{
+                                        startActivity(new Intent(getActivity(), swipePic.class));
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onItemLongClick(View view, ImageGalerie obj, int pos) {
-                                toolbar.setVisibility(View.GONE);
-                                enableActionMode(pos);
-                            }
-                        });
+                                @Override
+                                public void onItemLongClick(View view, ImageGalerie obj, int pos) {
+                                    toolbar.setVisibility(View.GONE);
+                                    enableActionMode(pos);
+                                }
+                            });
+                        }
+
                     }
                 });
 

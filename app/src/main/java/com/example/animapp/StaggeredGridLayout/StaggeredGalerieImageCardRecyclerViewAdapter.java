@@ -150,8 +150,10 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
     }
 
     public void deletePic(int position){
-        ImageHelper.deleteImage(imageGalerieList.get(position).getImgId());
-        resetCurrentIndex();
+        if(imageGalerieList.get(position).getImgId() != null){
+            ImageHelper.deleteImage(imageGalerieList.get(position).getImgId());
+            resetCurrentIndex();
+        }
     }
 
 

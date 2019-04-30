@@ -287,8 +287,7 @@ public class MediaFragment extends Fragment {
                                     @Override
                                     public void onSuccess(DocumentReference documentReference) {
                                         if(documentReference != null){
-                                            newImage.setImageUrl(documentReference.getId());
-                                            ImageHelper.updateImageUrl(newImage);
+                                            documentReference.update("imgId",documentReference.getId());
                                         }
                                     }
                                 });

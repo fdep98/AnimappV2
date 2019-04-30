@@ -173,15 +173,15 @@ public class postMessage extends AppCompatActivity {
             public void onClick(View v) {
 
                 post = postMessage.getText().toString();
-                if (!post.isEmpty()) {
+                if (!(post.isEmpty()) || image != null) {
                     final Post newPost = new Post(currentUser.getUid(), nom, prenom, totem, currentDate, post);
                     newPost.setMonitPhoto(monitPhoto);
                     PostsHelper.createUserPost(newPost);
                     PostsHelper.updatePostId(newPost);
                     startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
                     date = new Date();
-                }else{
-                    Toast.makeText(postMessage.this, "veuillez entrer un message avant la publication", Toast.LENGTH_SHORT).show();
+                }else if((post.isEmpty()) && image == null){
+                    Toast.makeText(postMessage.this, "veuillez entrer un message ou une image avant la publication", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -252,11 +252,7 @@ public class postMessage extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     post = postMessage.getText().toString();
-                    if(!post.isEmpty()){
                         putImageInDb();
-                    }else{
-                        Toast.makeText(postMessage.this, "veuillez entrer un message avant la publication", Toast.LENGTH_SHORT).show();
-                    }
                 }
             });
         }
@@ -269,12 +265,7 @@ public class postMessage extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     post = postMessage.getText().toString();
-                    if(!post.isEmpty()) {
                         putImageInDb();
-
-                    }else{
-                        Toast.makeText(postMessage.this, "veuillez entrer un message avant la publication", Toast.LENGTH_SHORT).show();
-                    }
                 }
             });
         }

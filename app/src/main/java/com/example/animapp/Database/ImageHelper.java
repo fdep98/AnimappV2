@@ -45,8 +45,8 @@ public class ImageHelper {
             }
         });
     }
-    public static Task<Void> deleteImage(String id) {
-        return ImageHelper.getImageCollection().document(id).delete();
+    public static Task<Void> deleteImage(String idImage) {
+        return ImageHelper.getImageCollection().document(idImage).delete();
     }
 
 
