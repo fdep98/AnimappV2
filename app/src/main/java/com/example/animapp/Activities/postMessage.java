@@ -79,6 +79,7 @@ public class postMessage extends AppCompatActivity {
     Date date;
     String post;
     Uri image;
+    String imageUrl;
     static String nom, prenom, totem, monitPhoto;
     ProgressDialog progressDialog;
 
@@ -88,6 +89,7 @@ public class postMessage extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_message);
 
@@ -173,14 +175,14 @@ public class postMessage extends AppCompatActivity {
             public void onClick(View v) {
 
                 post = postMessage.getText().toString();
-                if (!post.isEmpty()) {
+                if (!post.isEmpty() || image!= null || !(imageUrl.isEmpty())) {
                     final Post newPost = new Post(currentUser.getUid(), nom, prenom, totem, currentDate, post);
                     newPost.setMonitPhoto(monitPhoto);
                     PostsHelper.createUserPost(newPost);
                     PostsHelper.updatePostId(newPost);
                     startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
                     date = new Date();
-                }else{
+                }else if(post.isEmpty() && image!= null && (imageUrl.isEmpty())){
                     Toast.makeText(postMessage.this, "veuillez entrer un message avant la publication", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -286,34 +288,72 @@ public class postMessage extends AppCompatActivity {
         progressDialog.show();
         final long currentTime = System.currentTimeMillis();
 
-        storageRef.child(currentUser.getUid()+" Posts").child(currentTime+"."+getFileExtension(image))
-                .putFile(image)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+        if(getIntent().getExtras()!=null) {
+            String url = getIntent().getStringExtra("photo");
+            Picasso.get().load(url).into(picToAdd);
+            imageUrl = url;
 
-                        storageRef.child(currentUser.getUid()+" Posts").child(currentTime+"."+getFileExtension(image))
-                                .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Post newPost = new Post(currentUser.getUid(),nom, prenom, totem,currentDate, post, uri.toString());
-                                newPost.setMonitPhoto(monitPhoto);
-                                PostsHelper.createUserPost(newPost);
-                                PostsHelper.updatePostId(newPost);
-                                progressDialog.dismiss();
-                                picToAdd.setImageResource(0);
-                                postMessage.setText("");
-                            }
-                        });
+            storageRef.child(currentUser.getUid() + " Posts").child(imageUrl)
+                    .putFile(image)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(postMessage.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                            storageRef.child(currentUser.getUid() + " Posts").child(imageUrl)
+                                    .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Post newPost = new Post(currentUser.getUid(), nom, prenom, totem, currentDate, post, imageUrl);
+                                    newPost.setMonitPhoto(monitPhoto);
+                                    PostsHelper.createUserPost(newPost);
+                                    PostsHelper.updatePostId(newPost);
+                                    progressDialog.dismiss();
+                                    picToAdd.setImageResource(0);
+                                    postMessage.setText("");
+                                }
+                            });
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(postMessage.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }else{
+            storageRef.child(currentUser.getUid()+" Posts").child(currentTime+"."+getFileExtension(image))
+                    .putFile(image)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            storageRef.child(currentUser.getUid()+" Posts").child(currentTime+"."+getFileExtension(image))
+                                    .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    imageUrl = uri.toString();
+                                    Post newPost = new Post(currentUser.getUid(),nom, prenom, totem,currentDate, post, imageUrl);
+                                    newPost.setMonitPhoto(monitPhoto);
+                                    PostsHelper.createUserPost(newPost);
+                                    PostsHelper.updatePostId(newPost);
+                                    progressDialog.dismiss();
+                                    picToAdd.setImageResource(0);
+                                    postMessage.setText("");
+                                }
+                            });
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(postMessage.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+        }
+
 
     }
 

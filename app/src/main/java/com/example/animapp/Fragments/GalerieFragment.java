@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.animapp.Activities.postMessage;
 import com.example.animapp.Activities.swipePic;
 import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.ImageGridItemDecoration;
@@ -156,7 +157,7 @@ public class GalerieFragment extends Fragment {
 
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    mode.getMenuInflater().inflate(R.menu.delete_post_toolbar, menu);
+                    mode.getMenuInflater().inflate(R.menu.galerie_share_toolbar, menu);
                     return true;
                 }
 
@@ -174,7 +175,11 @@ public class GalerieFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                         return true;
                     }
-
+                    if(id == R.id.share){
+                        sharePic();
+                        mode.finish();
+                        return true;
+                    }
                     toolbar.setVisibility(View.VISIBLE);
                     return false;
                 }
@@ -213,5 +218,14 @@ public class GalerieFragment extends Fragment {
             adapter.deletePic(selectedItemPositions.get(i));
         }
         adapter.notifyDataSetChanged();
+    }
+
+    public void sharePic(){
+        final List<Integer> selectedItemPositions = adapter.getSelectedItems();
+        String url = adapter.sharePic(selectedItemPositions.get(0));
+        adapter.notifyDataSetChanged();
+        Intent intent= new Intent(getActivity(),postMessage.class);
+        intent.putExtra("photo",url);
+        startActivity(intent);
     }
 }
