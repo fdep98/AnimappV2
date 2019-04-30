@@ -49,6 +49,7 @@ public class GalerieFragment extends Fragment {
     RecyclerView recyclerView;
     StaggeredGalerieImageCardRecyclerViewAdapter adapter;
     private ActionMode actionMode;
+    Toolbar toolbar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class GalerieFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_gallery, container,false);
 
         //setUp du toolbar
-        Toolbar toolbar = view.findViewById(R.id.galerie_toolbar);
+        toolbar = view.findViewById(R.id.galerie_toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if(activity != null){
             activity.setSupportActionBar(toolbar);
@@ -98,7 +99,8 @@ public class GalerieFragment extends Fragment {
 
                             @Override
                             public void onItemLongClick(View view, ImageGalerie obj, int pos) {
-
+                                toolbar.setVisibility(View.GONE);
+                                enableActionMode(pos);
                             }
                         });
                     }
@@ -129,36 +131,6 @@ public class GalerieFragment extends Fragment {
         return view;
     }
 
-    private void enableActionMode(int position) {
-        if (actionMode == null) {
-            ActionMode.Callback actionModeCallback = new ActionMode.Callback(){
-
-                @Override
-                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    return true;
-                }
-
-                @Override
-                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                    return false;
-                }
-
-                @Override
-                public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
-                    int id = item.getItemId();
-                  return false;
-                }
-
-                @Override
-                public void onDestroyActionMode(ActionMode mode) {
-                    //adapter.clearSelections();
-                    actionMode = null;
-
-                }
-            };
-            actionMode = getActivity().startActionMode(actionModeCallback);
-        }
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -178,13 +150,68 @@ public class GalerieFragment extends Fragment {
         });
     }
 
-    public String extractUrl(String url,String key){
-        //int startIndex = url.indexOf("https://firebasestorage.googleapis.com");
-        int lastIndex = url.indexOf(key);
-        return url.substring(0,lastIndex);
+    private void enableActionMode(final int position) {
+        if (actionMode == null) {
+            ActionMode.Callback actionModeCallback = new ActionMode.Callback(){
+
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    mode.getMenuInflater().inflate(R.menu.delete_post_toolbar, menu);
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
+                    int id = item.getItemId();
+                    if(id == R.id.delete){
+                        deletePic();
+                        mode.finish();
+                        adapter.notifyDataSetChanged();
+                        return true;
+                    }
+
+                    toolbar.setVisibility(View.VISIBLE);
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    adapter.clearSelections();
+                    actionMode = null;
+
+                    toolbar.setVisibility(View.VISIBLE);
+                }
+            };
+            actionMode = getActivity().startActionMode(actionModeCallback);
+        }
+
+        toggleSelection(position);
     }
 
-    public void picUserGalerie(){
+    private void toggleSelection(int position) {
+        adapter.toggleSelection(position);
+        int count = adapter.getSelectedItemCount();
 
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle("Supprimer une image");
+            actionMode.setSubtitle(String.valueOf(count)+" sélectionné");
+            actionMode.invalidate();
+        }
+    }
+
+    public void deletePic(){
+        final List<Integer> selectedItemPositions = adapter.getSelectedItems();
+
+        for (int i = 0; i <= selectedItemPositions.size() - 1; i++) {
+            adapter.deletePic(selectedItemPositions.get(i));
+        }
+        adapter.notifyDataSetChanged();
     }
 }

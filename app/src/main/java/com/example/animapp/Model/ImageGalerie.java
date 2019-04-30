@@ -25,12 +25,13 @@ public class ImageGalerie {
 
     private static final String TAG = ImageGalerie.class.getSimpleName();
 
-    public String monitId;
-    public  String description;
-    public  Uri imageUri;
-    public String imageUrl;
-    public  String url;
-    public String date;
+    private String monitId;
+    private   String description;
+    private   Uri imageUri;
+    private String imageUrl;
+    private   String url;
+    private String date;
+    private String imgId;
 
     public ImageGalerie(){}
 
@@ -124,5 +125,13 @@ public class ImageGalerie {
 
     public void setMonitId(String monitId) {
         this.monitId = monitId;
+    }
+
+    public String getImgId() {
+        return imgId;
+    }
+
+    public void setImgId(String imgId) {
+        this.imgId = imgId;
     }
 }

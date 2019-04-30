@@ -116,7 +116,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         holder.date.setText(post.getDate());
         holder.message.setText(post.getMessage());
 
-        if(post.getNbrLike() >= 0){
+        if(post.getNbrLike() > 0){
             holder.nbrLike.setText(""+post.getNbrLike());
         }else{
             holder.nbrLike.setText("");
@@ -215,7 +215,29 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     public void setOnClickListener(PostListAdapter.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
+    public void clearSelections() {
+        selectedItems.clear();
+        notifyDataSetChanged();
+    }
 
+    public List<Integer> getSelectedItems() {
+        List<Integer> items = new ArrayList<>(selectedItems.size());
+        for (int i = 0; i < selectedItems.size(); i++) {
+            items.add(selectedItems.keyAt(i));
+        }
+        return items;
+    }
+
+    public void toggleSelection(int pos) {
+        currentSelectedIndx = pos;
+        if (selectedItems.get(pos, false)) {
+            selectedItems.delete(pos);
+
+        } else {
+            selectedItems.put(pos, true);
+        }
+        notifyItemChanged(pos);
+    }
     public int getSelectedItemCount() {
         return selectedItems.size();
     }
@@ -257,29 +279,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         }
     }
 
-    public void clearSelections() {
-        selectedItems.clear();
-        notifyDataSetChanged();
-    }
 
-    public List<Integer> getSelectedItems() {
-        List<Integer> items = new ArrayList<>(selectedItems.size());
-        for (int i = 0; i < selectedItems.size(); i++) {
-            items.add(selectedItems.keyAt(i));
-        }
-        return items;
-    }
-
-    public void toggleSelection(int pos) {
-        currentSelectedIndx = pos;
-        if (selectedItems.get(pos, false)) {
-            selectedItems.delete(pos);
-
-        } else {
-            selectedItems.put(pos, true);
-        }
-        notifyItemChanged(pos);
-    }
 
 
     private void setupImageLoader(){

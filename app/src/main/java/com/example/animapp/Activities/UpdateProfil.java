@@ -192,7 +192,7 @@ public class UpdateProfil extends AppCompatActivity{
     }
     public void putImageInDb(final User user){
         progressDialog.setTitle("Téléchargement");
-        progressDialog.setMessage("Ajout de l'image");
+        progressDialog.setMessage("Ajout de l'image...");
         progressDialog.show();
         final long currentTime = System.currentTimeMillis();
 

@@ -21,7 +21,8 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.animapp.Activities.PostPicSwipe"/>
+        <activity android:name="com.example.animapp.Activities.OtherUserProfil"></activity>
+        <activity android:name="com.example.animapp.Activities.PostPicSwipe" />
         <activity android:name="com.example.animapp.Activities.swipePic" />
         <activity android:name="com.example.animapp.Activities.PostCommentaires" />
         <activity android:name="com.example.animapp.Activities.UpdateProfil" />

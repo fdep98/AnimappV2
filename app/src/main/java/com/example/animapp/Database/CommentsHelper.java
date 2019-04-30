@@ -29,8 +29,8 @@ public class CommentsHelper {
         }
 
 
-        public static Task<Void> deleteComment(String email) {
-            return  CommentsHelper.getCommentsCollection().document(email).delete();
+        public static Task<Void> deleteComment(String id) {
+            return  CommentsHelper.getCommentsCollection().document(id).delete();
         }
 
 

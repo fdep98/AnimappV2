@@ -37,8 +37,8 @@ public class GalerieFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Gal
     public void onBindViewHolder(@NonNull GalerieFragmentViewHolder holder, int position) {
         if(listIG != null && position < listIG.size()){
             ImageGalerie imageGalerie = listIG.get(position);
-            holder.description.setText(imageGalerie.description);
-            holder.date.setText(imageGalerie.date);
+            holder.description.setText(imageGalerie.getDescription());
+            holder.date.setText(imageGalerie.getDate());
             Glide.with(mcontext).load(imageGalerie.getImageUri()).into(holder.image);
 
         }

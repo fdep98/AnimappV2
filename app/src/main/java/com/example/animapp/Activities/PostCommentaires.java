@@ -4,6 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -48,6 +51,7 @@ public class PostCommentaires extends AppCompatActivity {
     public static int nbrCommentaire = 0;
     Date date;
     Post postSend;
+    ActionMode actionMode;
 
     private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy"+" à "+ "HH:mm:ss");
 
@@ -139,12 +143,90 @@ public class PostCommentaires extends AppCompatActivity {
 
                 commentaireAdapter = new PostCommentaireAdapter(getApplicationContext(), usersComs);
                 commentairesRecyclerView.setAdapter(commentaireAdapter);
+                commentaireAdapter.setOnClickListener(new PostCommentaireAdapter.OnClickListener() {
+                    @Override
+                    public void onItemClick(View view, PostCommentaire obj, int pos) {
+                        if(commentaireAdapter.getSelectedItemCount() > 0){
+                            enableActionMode(pos);
+                        }
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, PostCommentaire obj, int pos) {
+                        enableActionMode(pos);
+                    }
+                });
 
                 }
 
         });
 
     }
+    private void enableActionMode(final int position) {
+        if (actionMode == null) {
+            ActionMode.Callback actionModeCallback = new ActionMode.Callback(){
 
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    mode.getMenuInflater().inflate(R.menu.delete_post_toolbar, menu);
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
+                    int id = item.getItemId();
+                    if(id == R.id.delete){
+                        deleteComment();
+                        mode.finish();
+                        commentaireAdapter.notifyDataSetChanged();
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    commentaireAdapter.clearSelections();
+                    actionMode = null;
+
+                }
+            };
+            actionMode = startActionMode(actionModeCallback);
+        }
+
+        toggleSelection(position);
+    }
+
+    private void toggleSelection(int position) {
+        commentaireAdapter.toggleSelection(position);
+        int count = commentaireAdapter.getSelectedItemCount();
+
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle("Supprimer un commentaire");
+            actionMode.setSubtitle(String.valueOf(count)+" sélectionné");
+            actionMode.invalidate();
+        }
+    }
+
+    public void deleteComment(){
+        final List<Integer> selectedItemPositions = commentaireAdapter.getSelectedItems();
+
+        for (int i = 0; i <= selectedItemPositions.size() - 1; i++) {
+            if(usersComs.get(i).getIdMoniteur().equals(currentUser.getUid())){
+                commentaireAdapter.deleteAnime(selectedItemPositions.get(i));
+            }else{
+                Toast.makeText(this, "Vous devez être l'auteur du post pour le supprimer", Toast.LENGTH_SHORT).show();
+            }
+        }
+        commentaireAdapter.notifyDataSetChanged();
+    }
 
 }

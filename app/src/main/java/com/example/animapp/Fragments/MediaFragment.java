@@ -40,6 +40,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -264,7 +265,7 @@ public class MediaFragment extends Fragment {
 
     public void putImageInDb(){
         prog.setTitle("Téléchargement");
-        prog.setMessage("Téléchargement de l'image");
+        prog.setMessage("Téléchargement de l'image...");
         prog.show();
         final long currentTime = System.currentTimeMillis();
 
@@ -281,9 +282,17 @@ public class MediaFragment extends Fragment {
                                 String imgDesc = description.getText().toString();
                                 String imgDate = date.getText().toString();
                                 //String imageUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
-                                ImageGalerie newImage = new ImageGalerie(currentUser.getUid(),uri.toString(),imgDesc,imgDate);
+                                final ImageGalerie newImage = new ImageGalerie(currentUser.getUid(),uri.toString(),imgDesc,imgDate);
+                                ImageHelper.addImage(newImage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        if(documentReference != null){
+                                            newImage.setImageUrl(documentReference.getId());
+                                            ImageHelper.updateImageUrl(newImage);
+                                        }
+                                    }
+                                });
 
-                                ImageHelper.addImage(newImage);
                                 prog.dismiss();
                                 //Toast.makeText(getActivity(), "Ajouter dans la gallerie", Toast.LENGTH_SHORT).show();
                                 picToAdd.setImageResource(0);

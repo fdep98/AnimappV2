@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.animapp.AnimListAdapter;
+import com.example.animapp.Database.ImageHelper;
 import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.animapp.R;
 import com.squareup.picasso.Picasso;
@@ -23,7 +25,8 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
 
     private List<ImageGalerie> imageGalerieList;
     Context mContext;
-    private StaggeredGalerieImageCardRecyclerViewAdapter.OnClickListener onClickListener = null;
+    private OnClickListener onClickListener = null;
+
     private SparseBooleanArray selectedItems;
     private int currentSelectedIndx = -1;
 
@@ -33,7 +36,7 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
         selectedItems = new SparseBooleanArray();
     }
 
-    public void setOnClickListener(StaggeredGalerieImageCardRecyclerViewAdapter.OnClickListener onClickListener) {
+    public void setOnClickListener(OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
@@ -76,7 +79,46 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
                     onClickListener.onItemClick(v, image, position);
                 }
             });
+
+            holder.parent.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (onClickListener == null) {
+                        return false;
+                    }
+                    onClickListener.onItemLongClick(v, image, position);
+                    return true;
+                }
+            });
+            toggleCheckedIcon(holder,position);
         }
+
+    }
+
+    private void toggleCheckedIcon(StaggeredGalerieImageCardViewHolder holder, int position) {
+        if (selectedItems.get(position, false)) {
+            holder.parent.setBackgroundResource(R.color.bleuBlanc);
+            if (currentSelectedIndx == position) resetCurrentIndex();
+        } else {
+            holder.parent.setBackgroundResource(R.color.blanc);
+            if (currentSelectedIndx == position) resetCurrentIndex();
+        }
+    }
+
+    public void toggleSelection(int pos) {
+        currentSelectedIndx = pos;
+        if (selectedItems.get(pos, false)) {
+            selectedItems.delete(pos);
+
+        } else {
+            selectedItems.put(pos, true);
+        }
+        notifyItemChanged(pos);
+    }
+
+    public void clearSelections() {
+        selectedItems.clear();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -88,10 +130,6 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
         return selectedItems.size();
     }
 
-    public void clearSelections() {
-        selectedItems.clear();
-        notifyDataSetChanged();
-    }
 
     public List<Integer> getSelectedItems() {
         List<Integer> items = new ArrayList<>(selectedItems.size());
@@ -110,5 +148,12 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
 
         void onItemLongClick(View view, ImageGalerie obj, int pos);
     }
+
+    public void deletePic(int position){
+        ImageHelper.deleteImage(imageGalerieList.get(position).getImgId());
+        resetCurrentIndex();
+    }
+
+
 
 }

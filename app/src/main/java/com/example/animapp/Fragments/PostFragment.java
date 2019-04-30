@@ -130,7 +130,7 @@ public class PostFragment extends Fragment {
     }
 
     public void setDocumentId(){
-        PostsHelper.getAllPost().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+       /* PostsHelper.getAllPost().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<Post> postDoc = new ArrayList<>();
@@ -166,8 +166,8 @@ public class PostFragment extends Fragment {
                     }
                 });
             }
-        });
-        /*.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        });*/
+        PostsHelper.getAllPost().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                 List<Post> postDoc = new ArrayList<>();
@@ -186,6 +186,7 @@ public class PostFragment extends Fragment {
                     @Override
                     public void onItemClick(View view, Post obj, int pos) {
                         if(adapter.getSelectedItemCount() > 0){
+                            enableActionMode(pos);
                         }else{
                             Intent intent = new Intent(getActivity(),PostPicSwipe.class);
                             Bundle bundle = new Bundle();
@@ -203,7 +204,7 @@ public class PostFragment extends Fragment {
                     }
                 });
             }
-        });*/
+        });
     }
 
     private void enableActionMode(final int position) {

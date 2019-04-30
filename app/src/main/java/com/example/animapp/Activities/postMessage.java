@@ -282,7 +282,7 @@ public class postMessage extends AppCompatActivity {
 
     public void putImageInDb(){
         progressDialog.setTitle("Téléchargement");
-        progressDialog.setMessage("Téléchargement de l'image");
+        progressDialog.setMessage("Téléchargement de l'image...");
         progressDialog.show();
         final long currentTime = System.currentTimeMillis();
 

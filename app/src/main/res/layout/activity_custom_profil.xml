@@ -130,13 +130,14 @@
                     android:elevation="2dp">
 
                     <RelativeLayout
-                        android:id="@+id/uniteRL"
+                        android:id="@+id/sectionRL"
                         android:layout_width="123dp"
                         android:layout_height="53dp"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentBottom="true"
                         android:layout_centerInParent="true"
+                        android:clickable="true"
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="47dp"
                         android:gravity="center">
@@ -166,7 +167,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/sectionRL"
+                        android:id="@+id/uniteRL"
                         android:layout_width="123dp"
                         android:layout_height="53dp"
                         android:layout_alignParentStart="true"
@@ -174,6 +175,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
                         android:layout_centerInParent="true"
+                        android:clickable="true"
                         android:layout_marginStart="123dp"
                         android:layout_marginTop="47dp"
                         android:layout_marginEnd="123dp"
@@ -207,7 +209,7 @@
 
 
                     <RelativeLayout
-                        android:id="@+id/gradeRL"
+                        android:id="@+id/nbrAnimeRL"
                         android:layout_width="123dp"
                         android:layout_height="53dp"
                         android:layout_alignParentTop="true"
