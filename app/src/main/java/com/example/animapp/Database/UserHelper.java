@@ -125,5 +125,9 @@ public class UserHelper {
         Query query = db.collection("users").whereEqualTo("id",id);
         return query;
     }
+    public static Query getOtherUsers(String postId){
+        Query query = db.collection("users").whereEqualTo("id",postId);
+        return query;
+    }
 
 }

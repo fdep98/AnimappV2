@@ -3,9 +3,6 @@ package com.example.animapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -15,20 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.animapp.Activities.OtherUserProfil;
 import com.example.animapp.Activities.PostCommentaires;
-import com.example.animapp.Database.CommentsHelper;
 import com.example.animapp.Database.PostsHelper;
 import com.example.animapp.Fragments.PostFragment;
-import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.Model.Post;
-import com.example.animapp.Model.PostCommentaire;
-import com.example.animapp.StaggeredGridLayout.StaggeredGalerieImageCardRecyclerViewAdapter;
 import com.example.animapp.animapp.R;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -39,7 +32,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +44,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     private int lastPosition=-1;
     List<Post> posts;
     public static String postId;
+
 
     private static final int POST_WITH_PIC = 1;
     private static final int POST_WITHOUT_PIC = 2;
@@ -195,6 +188,26 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
                 return true;
             }
         });
+
+
+        final String postOtherId = post.getIdMoniteur();
+
+        //test lorsque j'appuie sur image profil je suis renvoyé vers le profil du monit
+        holder.monitImage.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+
+            public void onClick(View v) {
+
+
+
+                Intent otherintent=new Intent(mContext, OtherUserProfil.class);
+                otherintent.putExtra("postOtherId",postOtherId);
+                mContext.startActivity(otherintent);
+            }
+        });
+
+
         toggleChecked(holder,position);
 
     }

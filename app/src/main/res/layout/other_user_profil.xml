@@ -191,7 +191,7 @@
 
                 </RelativeLayout>
 
-
+                <!--
                 <RelativeLayout
                     android:id="@+id/nbrAnimeRL"
                     android:layout_width="123dp"
@@ -229,6 +229,7 @@
                         tools:text="G1" />
 
                 </RelativeLayout>
+                -->
 
 
             </RelativeLayout>
