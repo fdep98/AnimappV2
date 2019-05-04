@@ -20,6 +20,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.animapp.Activities.MediaActvity;
+
+import com.example.animapp.Activities.postMessage;
+
 import com.example.animapp.Activities.swipePic;
 import com.example.animapp.Database.ImageHelper;
 import com.example.animapp.Model.ImageGalerie;
@@ -143,7 +146,7 @@ public class GalerieFragment extends Fragment {
 
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    mode.getMenuInflater().inflate(R.menu.delete_post_toolbar, menu);
+                    mode.getMenuInflater().inflate(R.menu.galerie_share_toolbar, menu);
                     return true;
                 }
 
@@ -162,6 +165,12 @@ public class GalerieFragment extends Fragment {
                         return true;
                     }
 
+                    addPicParent.setVisibility(View.VISIBLE);
+                    if(id == R.id.share){
+                        sharePic();
+                        mode.finish();
+                        return true;
+                    }
                     addPicParent.setVisibility(View.VISIBLE);
                     return false;
                 }
@@ -187,7 +196,6 @@ public class GalerieFragment extends Fragment {
         if (count == 0) {
             actionMode.finish();
         } else {
-            actionMode.setTitle("Supprimer une image");
             actionMode.setSubtitle(String.valueOf(count)+" sélectionné");
             actionMode.invalidate();
         }
@@ -200,5 +208,14 @@ public class GalerieFragment extends Fragment {
             adapter.deletePic(selectedItemPositions.get(i));
         }
         adapter.notifyDataSetChanged();
+    }
+
+    public void sharePic(){
+        final List<Integer> selectedItemPositions = adapter.getSelectedItems();
+        String url = adapter.sharePic(selectedItemPositions.get(0));
+        adapter.notifyDataSetChanged();
+        Intent intent= new Intent(getActivity(),postMessage.class);
+        intent.putExtra("photo",url);
+        startActivity(intent);
     }
 }

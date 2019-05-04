@@ -8,12 +8,28 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="234dp"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:background="@drawable/rounded_popup"
         android:orientation="vertical"
         tools:layout_editor_absoluteY="316dp">
+
+        <TextView
+            android:id="@+id/colleguePostText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.569"
+            tools:text="test" />
 
         <TextView
             android:id="@+id/closePopUp"
@@ -68,9 +84,9 @@
             android:layout_alignParentTop="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="36dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="8dp"
             android:layout_toEndOf="@+id/colleguePic"
             android:clickable="true"
             android:text="Commentaires"
@@ -78,11 +94,11 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.973"
+            app:layout_constraintHorizontal_bias="0.993"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView2"
-            app:layout_constraintVertical_bias="0.64"
+            app:layout_constraintTop_toBottomOf="@+id/colleguePostText"
+            app:layout_constraintVertical_bias="1.0"
             app:layout_constraintVertical_weight="1"
             tools:ignore="MissingConstraints" />
 
@@ -97,6 +113,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:layout_toEndOf="@+id/collegueName"
+            android:textColor="#05BBF2"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -114,7 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
@@ -125,8 +142,8 @@
             app:layout_constraintHorizontal_bias="0.006"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@+id/heart_vector"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView2"
-            app:layout_constraintVertical_bias="0.263"
+            app:layout_constraintTop_toBottomOf="@+id/colleguePostText"
+            app:layout_constraintVertical_bias="1.0"
             app:layout_constraintVertical_weight="1"
             tools:ignore="MissingConstraints"
             tools:text="Nbr" />
@@ -136,7 +153,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
@@ -145,11 +162,11 @@
             android:textSize="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.003"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@+id/postNbrLike"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView2"
-            app:layout_constraintVertical_bias="0.333"
+            app:layout_constraintTop_toBottomOf="@+id/colleguePostText"
+            app:layout_constraintVertical_bias="1.0"
             app:layout_constraintVertical_weight="1"
             tools:ignore="MissingConstraints" />
 
@@ -158,7 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="44dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
@@ -169,8 +186,8 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView2"
-            app:layout_constraintVertical_bias="0.578"
+            app:layout_constraintTop_toBottomOf="@+id/colleguePostText"
+            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_weight="1"
             tools:ignore="MissingConstraints"
             tools:text="Nbr" />
@@ -178,13 +195,16 @@
         <com.sdsmdg.harjot.vectormaster.VectorMasterView
             android:id="@+id/heart_vector"
             android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_height="32dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.011"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+            app:layout_constraintTop_toBottomOf="@+id/colleguePostText"
             app:layout_constraintVertical_bias="0.0"
             app:vector_src="@drawable/ic_heart"
             tools:ignore="MissingConstraints" />
@@ -306,34 +326,6 @@
                         tools:text="Nbr" />
                 </LinearLayout>
             </LinearLayout>-->
-        <ScrollView
-            android:id="@+id/scrollView2"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="45dp"
-            android:background="#FBFCFD"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.45"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
-            app:layout_constraintVertical_weight="1"
-            tools:ignore="MissingConstraints">
-
-            <TextView
-                android:id="@+id/colleguePostText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                tools:text="test" />
-        </ScrollView>
 
 
         <TextView
@@ -346,7 +338,6 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:paddingBottom="15dp"
-            android:textColor="@color/fui_bgAnonymous"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

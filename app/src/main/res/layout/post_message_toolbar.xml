@@ -19,6 +19,6 @@
         android:layout_height="35dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="150dp"
-        android:background="@mipmap/ic_launcher_round" />
+        android:background="@drawable/logo" />
 
 </android.support.v7.widget.Toolbar>

@@ -83,10 +83,10 @@ public class PostsHelper {
             }
         });
 
-        if(post.getImgurl() != null){
+        /*if(post.getImgurl() != null){
             FirebaseStorage storage = FirebaseStorage.getInstance();
             storage.getReferenceFromUrl(post.getImgurl()).delete();
-        }
+        }*/
 
     }
 

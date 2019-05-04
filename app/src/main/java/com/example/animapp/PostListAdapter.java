@@ -122,11 +122,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         holder.date.setText(post.getDate());
         holder.message.setText(post.getMessage());
 
-        if(post.getNbrLike() > 0){
-            holder.nbrLike.setText(""+post.getNbrLike());
-        }else{
-            holder.nbrLike.setText("");
-        }
+        holder.nbrLike.setText(""+post.getNbrLike());
+
 
         final PathModel outline = holder.heartVector.getPathModelByName("outline");
 
@@ -177,12 +174,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         });
 
 
-        if(post.getNbrCommentaire() > 0){
             holder.nbrCommentaire.setText(String.valueOf(post.getNbrCommentaire()));
-        }else{
-            holder.nbrCommentaire.setText("");
-        }
-
 
 
 

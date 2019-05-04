@@ -90,6 +90,7 @@ public class postMessage extends AppCompatActivity {
     Date date;
     String post;
     Uri image;
+    String imageUrl;
     static String nom, prenom, totem, monitPhoto;
     ProgressDialog progressDialog;
 
@@ -99,6 +100,7 @@ public class postMessage extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_message);
 
@@ -141,6 +143,13 @@ public class postMessage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         database = FirebaseFirestore.getInstance();
+
+
+        if(getIntent().getExtras()!=null) {
+            String url = getIntent().getStringExtra("photo");
+            Picasso.get().load(url).into(picToAdd);
+            imageUrl = url;
+        }
 
         //Information sur le moniteur
         userDoc = database.collection("users").document(currentUser.getUid());
@@ -188,23 +197,24 @@ public class postMessage extends AppCompatActivity {
         publier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 post = postMessage.getText().toString();
-                if (!(post.isEmpty()) || image != null) {
-                    final Post newPost = new Post(currentUser.getUid(), nom, prenom, totem, currentDate, post);
-                    newPost.setMonitPhoto(monitPhoto);
-                    PostsHelper.createUserPost(newPost);
-                    PostsHelper.updatePostId(newPost);
-                    startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
-                    date = new Date();
-                }else if((post.isEmpty()) && image == null){
-                    Toast.makeText(postMessage.this, "veuillez entrer un message ou une image avant la publication", Toast.LENGTH_SHORT).show();
+                    if (!post.isEmpty() && imageUrl == null && image == null) {
+
+                        final Post newPost = new Post(currentUser.getUid(), nom, prenom, totem, currentDate, post);
+                        newPost.setMonitPhoto(monitPhoto);
+                        PostsHelper.createUserPost(newPost);
+                        PostsHelper.updatePostId(newPost);
+                        startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
+                        date = new Date();
+                    } else if(imageUrl != null){
+                        putImageInDb();
+                    }else if((post.isEmpty()) && image == null && imageUrl == null){
+                        Toast.makeText(postMessage.this, "veuillez entrer un message ou une image avant la publication", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
         });
-
-
     }
+
 
 
     public void optionFAB(){
@@ -269,7 +279,7 @@ public class postMessage extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     post = postMessage.getText().toString();
-                        putImageInDb();
+                       putImageInDb();
 
                 }
             });
@@ -283,7 +293,7 @@ public class postMessage extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     post = postMessage.getText().toString();
-                        putImageInDb();
+                       putImageInDb();
 
                 }
             });
@@ -296,46 +306,63 @@ public class postMessage extends AppCompatActivity {
         progressDialog.show();
         final long currentTime = System.currentTimeMillis();
 
-        storageRef.child(currentUser.getUid()).child(currentTime+"."+getFileExtension(image))
-                .putFile(image)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+        if(getIntent().getExtras()!= null && imageUrl != null) {
+            if(postMessage.getText() != null){
+                post = postMessage.getText().toString();
+            }
+            Post newPost = new Post(currentUser.getUid(), nom, prenom, totem, currentDate, post, imageUrl);
+            newPost.setMonitPhoto(monitPhoto);
 
-                        storageRef.child(currentUser.getUid()).child(currentTime+"."+getFileExtension(image))
-                                .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Post newPost = new Post(currentUser.getUid(),nom, prenom, totem,currentDate, post, uri.toString());
-                                newPost.setMonitPhoto(monitPhoto);
+            PostsHelper.createUserPost(newPost);
+            PostsHelper.updatePostId(newPost);
+            progressDialog.dismiss();
+            picToAdd.setImageResource(0);
+            postMessage.setText("");
+            startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
+        }else if(image != null){
+            storageRef.child(currentUser.getUid()).child(currentTime + "." + getFileExtension(image))
+                    .putFile(image)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                ImageGalerie newImage = new ImageGalerie(currentUser.getUid(),uri.toString(),currentDate);
-                                ImageHelper.addImage(newImage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        if(documentReference != null){
-                                            documentReference.update("imgId",documentReference.getId());
+                            storageRef.child(currentUser.getUid()).child(currentTime + "." + getFileExtension(image))
+                                    .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Post newPost = new Post(currentUser.getUid(), nom, prenom, totem, currentDate, post, uri.toString());
+                                    newPost.setMonitPhoto(monitPhoto);
+
+                                    ImageGalerie newImage = new ImageGalerie(currentUser.getUid(), uri.toString(), currentDate);
+                                    ImageHelper.addImage(newImage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            if (documentReference != null) {
+                                                documentReference.update("imgId", documentReference.getId());
+                                            }
                                         }
-                                    }
-                                });
+                                    });
 
-                                PostsHelper.createUserPost(newPost);
-                                PostsHelper.updatePostId(newPost);
-                                progressDialog.dismiss();
-                                picToAdd.setImageResource(0);
-                                postMessage.setText("");
-                                startActivity(new Intent(postMessage.this,MainFragmentActivity.class));
-                            }
-                        });
+                                    PostsHelper.createUserPost(newPost);
+                                    PostsHelper.updatePostId(newPost);
+                                    progressDialog.dismiss();
+                                    picToAdd.setImageResource(0);
+                                    postMessage.setText("");
+                                    startActivity(new Intent(postMessage.this, MainFragmentActivity.class));
+                                }
+                            });
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(postMessage.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(postMessage.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+
+
     }
 
     private String getFileExtension(Uri uri) {
@@ -353,48 +380,5 @@ public class postMessage extends AppCompatActivity {
         return Uri.parse(path);
     }
 
-    //Retourne l'extension d'un fichier, ex pour jpg, retourne jpeg
-    private String getUriExtension(Uri uri){
-        ContentResolver contentResolver = getContentResolver();
-        MimeTypeMap  mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
-    }
-
-
-    /*
-        Affiche un dialog demandant à l'utilisateur confirmation avant de partager une image
-     */
-    public void showDialog(View view,@Nullable final Intent data){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        builder.setTitle("Partager une image");
-        builder.setMessage("Etes vous sur de vouloir partager l'image? ");
-        builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                /*prog.setMessage("Téléchargement...");
-                prog.show();
-                //stockage dans la BDD
-                Uri uri = data.getData(); //on stock l'image enregistrée
-                StorageReference st = storageRef.child("photos").child(uri.getLastPathSegment()); //créer un dossier photos et met le chemin vers la photo comme child
-                st.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(MediaActivity.this, "photo added", Toast.LENGTH_SHORT).show();
-                        prog.dismiss();
-                    }
-                });*/
-            }
-        })
-                .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //fermer le dialogue
-                    }
-                });
-
-        //creation et affichage du builder
-        builder.create().show();
-    }
 
 }

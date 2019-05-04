@@ -160,6 +160,12 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
         }
     }
 
+    public String sharePic(int pos){
+        ImageGalerie image = imageGalerieList.get(pos);
+        String url = image.getImageUrl();
+        resetCurrentIndex();
+        return url;
+    }
 
 
 }
