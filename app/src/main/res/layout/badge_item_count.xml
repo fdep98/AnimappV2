@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/postNbrLike"
+        android:layout_width="82dp"
+        android:layout_height="72dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="455dp"
+        android:layout_marginEnd="71dp"
+        android:background="@drawable/badge_item_count"
+        android:textColor="@color/bleu"
+        android:textSize="40sp"
+        tools:text="Nbr" />
+
+    <TextView
+        android:id="@+id/postNbrCommentaire"
+        android:layout_width="82dp"
+        android:layout_height="72dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="512dp"
+        android:layout_marginEnd="17dp"
+        android:background="@drawable/badge_item_count"
+        android:textColor="@color/bleu"
+        android:textSize="40sp"
+        tools:text="Nbr" />
+
+</RelativeLayout>

@@ -49,6 +49,7 @@
                 android:layout_marginTop="33dp"
                 android:layout_marginEnd="151dp"
                 android:layout_marginBottom="120dp"
+                android:clickable="true"
                 android:elevation="12dp"
                 tools:srcCompat="@mipmap/ic_launcher_round" />
 
@@ -108,128 +109,90 @@
             <RelativeLayout
                 android:id="@+id/bilanInfo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="75dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="15dp"
+                android:gravity="center"
                 android:background="@drawable/profil_card_view"
                 android:elevation="2dp">
 
-                <RelativeLayout
-                    android:id="@+id/sectionRL"
-                    android:layout_width="123dp"
-                    android:layout_height="53dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="47dp"
-                    android:gravity="center">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/vpa_section"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="25dp"
-                        android:gravity="center"
-                        tools:text="S1" />
+                    <RelativeLayout
+                        android:id="@+id/sectionRL"
+                        android:layout_width="123dp"
+                        android:layout_height="53dp"
+                        android:layout_marginLeft="40dp"
+                        android:clickable="true"
+                        android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/unite"
-                        android:layout_width="121dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:text="Section"
-                        android:textColor="@color/bleu"
-                        android:textStyle="bold" />
-                </RelativeLayout>
+                        <TextView
+                            android:id="@+id/vpa_section"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="25dp"
+                            android:gravity="center"
+                            tools:text="S1" />
 
-                <RelativeLayout
-                    android:id="@+id/uniteRL"
-                    android:layout_width="123dp"
-                    android:layout_height="53dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginStart="123dp"
-                    android:layout_marginTop="47dp"
-                    android:layout_marginEnd="123dp"
-                    android:gravity="center">
+                        <TextView
+                            android:id="@+id/unite"
+                            android:layout_width="121dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="Section"
+                            android:textColor="@color/bleu"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/uniteInfo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:text="Unité"
-                        android:textColor="@color/bleu"
-                        android:textStyle="bold" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
 
-                    <TextView
-                        android:id="@+id/vpa_unite"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="25dp"
-                        android:gravity="center"
-                        tools:text="U1" />
+                    <RelativeLayout
+                        android:id="@+id/uniteRL"
+                        android:layout_width="123dp"
+                        android:layout_height="53dp"
+                        android:layout_marginRight="40dp"
+                        android:clickable="true"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/uniteInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="Unité"
+                            android:textColor="@color/bleu"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/vpa_unite"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="25dp"
+                            android:gravity="center"
+                            tools:text="U1" />
 
 
-                </RelativeLayout>
-
-                <!--
-                <RelativeLayout
-                    android:id="@+id/nbrAnimeRL"
-                    android:layout_width="123dp"
-                    android:layout_height="53dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginTop="23dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="25dp"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/animeInfo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:text="Animés"
-                        android:textColor="@color/bleu"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/vpa_anime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="25dp"
-                        android:gravity="center"
-                        tools:text="G1" />
-
-                </RelativeLayout>
-                -->
+                    </RelativeLayout>
+                </LinearLayout>
 
 
             </RelativeLayout>
@@ -353,6 +316,46 @@
                     android:textSize="15dp"
                     android:textStyle="italic"
                     tools:text="Date d'anniversaire" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/postInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="216dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/profil_card_view"
+                android:elevation="2dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:id="@+id/postTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="120dp"
+                    android:text="Derniers posts"
+                    android:textColor="@color/bleurFonce"
+                    android:textSize="15dp" />
+
+                <ListView
+                    android:id="@+id/lastPostLV"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignTop="@+id/postTitle"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:scrollbars="none"
+                    android:layout_marginTop="30dp" />
 
             </RelativeLayout>
         </LinearLayout>

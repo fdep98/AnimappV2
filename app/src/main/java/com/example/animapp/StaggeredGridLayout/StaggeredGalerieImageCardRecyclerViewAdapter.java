@@ -1,6 +1,7 @@
 package com.example.animapp.StaggeredGridLayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
@@ -8,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.animapp.Activities.swipePic;
 import com.example.animapp.AnimListAdapter;
 import com.example.animapp.Database.ImageHelper;
 import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.animapp.R;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,8 +78,9 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
             holder.parent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onClickListener == null) return;
-                    onClickListener.onItemClick(v, image, position);
+                    Intent intent = new Intent(mContext, swipePic.class);
+                    intent.putExtra("GalleryList", (ArrayList<ImageGalerie>) imageGalerieList);
+                    mContext.startActivity(intent);
                 }
             });
 
@@ -151,7 +155,7 @@ public class StaggeredGalerieImageCardRecyclerViewAdapter extends RecyclerView.A
 
     public void deletePic(int position){
         if(imageGalerieList.get(position).getImgId() != null){
-            ImageHelper.deleteImage(imageGalerieList.get(position).getImgId());
+            ImageHelper.deleteImage(imageGalerieList.get(position));
             resetCurrentIndex();
         }
     }

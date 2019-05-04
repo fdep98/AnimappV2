@@ -12,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 
 import javax.annotation.Nullable;
 
@@ -36,7 +37,7 @@ public class PostsHelper {
         PostsHelper.getAllPost().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(!queryDocumentSnapshots.isEmpty()){
+                if(queryDocumentSnapshots != null){
                     for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
                         if(doc.toObject(Post.class).getDate().equals(post.getDate())){
                             doc.getReference().update("id",doc.getReference().getId());
@@ -53,11 +54,14 @@ public class PostsHelper {
     }
 
 
-    public static void deletePost(final Post post) {
-        PostsHelper.getPostCollection().whereEqualTo("id",post.getId()).addSnapshotListener(new EventListener<QuerySnapshot>() {
+    public static void deletePost(Post post) {
+        PostsHelper.getPostCollection()
+                .whereEqualTo("id",post.getId())
+                .whereEqualTo("idMoniteur",post.getIdMoniteur())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(!queryDocumentSnapshots.isEmpty()){
+                if(queryDocumentSnapshots != null){
                     for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
                         doc.getReference().delete();
                     }
@@ -66,16 +70,24 @@ public class PostsHelper {
         });
 
 
-        CommentsHelper.getAllComments().whereEqualTo("idCommentaire", post.getId()).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        CommentsHelper.getAllComments()
+                .whereEqualTo("idMoniteur",post.getIdMoniteur())
+                .whereEqualTo("idPost", post.getId()).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(!queryDocumentSnapshots.isEmpty()){
+                if(queryDocumentSnapshots != null){
                     for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
                         doc.getReference().delete();
                     }
                 }
             }
         });
+
+        if(post.getImgurl() != null){
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            storage.getReferenceFromUrl(post.getImgurl()).delete();
+        }
+
     }
 
     //Récupère les animés du moniteur
@@ -96,7 +108,7 @@ public class PostsHelper {
     }
 
     public static Query getAllPostComments(Post post){
-        return CommentsHelper.getAllComments().whereEqualTo("idCommentaire", post.getId());
+        return CommentsHelper.getAllComments().whereEqualTo("idPost", post.getId());
     }
 
     public static Task<Void> updateNbrCommentaire(final Post post) {

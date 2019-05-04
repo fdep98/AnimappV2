@@ -27,7 +27,8 @@ public class swipePic extends AppCompatActivity {
 
         backToGallery = findViewById(R.id.backToGallery);
         viewPager = findViewById(R.id.pager);
-        adapter = new SwipeGalleryAdapter(this,GalerieFragment.galerieList);
+        listImage = (List<ImageGalerie>) getIntent().getExtras().getSerializable("GalleryList");
+        adapter = new SwipeGalleryAdapter(this,listImage);
         viewPager.setAdapter(adapter);
 
         // close button click event
@@ -39,10 +40,4 @@ public class swipePic extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        int pos = getIntent().getIntExtra("position", 0);
-        viewPager.setCurrentItem(pos);
-    }
 }

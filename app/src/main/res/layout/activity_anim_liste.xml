@@ -11,12 +11,11 @@
         android:id="@+id/body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/BottomNav"
         android:background="#FFFFFF"
         android:orientation="vertical">
 
         <include
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbarAnimList"
             layout="@layout/anim_list_toolbar" />
 
         <include

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Type;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ImageGalerie {
+public class ImageGalerie implements Serializable {
 
     private static final String TAG = ImageGalerie.class.getSimpleName();
 
@@ -35,12 +36,12 @@ public class ImageGalerie {
 
     public ImageGalerie(){}
 
-    public ImageGalerie(String monitId, Uri image, String description,String date){
-        this.description = description;
-        this.imageUri = image;
+    public ImageGalerie(String monitId, String imageUrl,String date){
+        this.imageUrl = imageUrl;
         this.date = date;
         this.monitId = monitId;
     }
+
     public ImageGalerie(String monitId,String imageUrl, String description,String date){
         this.description = description;
         this.imageUrl = imageUrl;

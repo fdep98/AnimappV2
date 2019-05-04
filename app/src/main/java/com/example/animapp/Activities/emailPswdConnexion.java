@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.animapp.MainFragmentActivity;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,7 +48,7 @@ public class emailPswdConnexion extends AppCompatActivity implements View.OnClic
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            startActivity(new Intent(emailPswdConnexion.this, profil.class));
+            startActivity(new Intent(emailPswdConnexion.this, MainFragmentActivity.class));
         }
         //updateUI(currentUser);
     }
@@ -65,7 +66,7 @@ public class emailPswdConnexion extends AppCompatActivity implements View.OnClic
                         if(task.isSuccessful()){
                             //connection réussie
                             FirebaseUser user = mAuth.getCurrentUser();
-                            startActivity(new Intent(emailPswdConnexion.this,profil.class));
+                            startActivity(new Intent(emailPswdConnexion.this,MainFragmentActivity.class));
                         }else{
                             String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                             switch (errorCode){

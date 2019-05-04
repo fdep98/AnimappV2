@@ -52,17 +52,17 @@ public class PostFragment extends Fragment {
     private ImageView imageView;
     private RecyclerView.LayoutManager layoutManager;
     public static int clicked = 0;
-    PostListAdapter adapter;
+    private PostListAdapter adapter;
 
     private List<Post>  postList = new ArrayList<>();
     private FirebaseFirestore firestoreDb; //instance de la BDD firestore
     private ActionMode actionMode;
-    public static User curUser;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //test fil actu
-        setDocumentId();
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.activity_post_fragment, container,false);
     }
 
@@ -78,42 +78,15 @@ public class PostFragment extends Fragment {
 
 
 
-
+        Glide.with(getActivity())
+                //.load(user.getUrlPhoto())
+                .load(R.drawable.logo)
+                //.apply(RequestOptions.circleCropTransform())
+                .into(imageView);
 
         vue.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
         vue.setLayoutManager(layoutManager);
-
-        if (currentUser != null) {
-            //récupère et met à jour la photo de profil
-
-            UserHelper.getAllUsers().whereEqualTo("id",currentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    if(!queryDocumentSnapshots.isEmpty()){
-                        User user = new User();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                            user = documentSnapshot.toObject(User.class);
-                            if (currentUser.getPhotoUrl() != null) {
-                                Glide.with(getActivity())
-                                        .load(currentUser.getPhotoUrl())
-                                        //.apply(RequestOptions.circleCropTransform())
-                                        .into(imageView);
-                            }else{
-                                Glide.with(getActivity())
-                                        //.load(user.getUrlPhoto())
-                                        .load(R.drawable.logo)
-                                        //.apply(RequestOptions.circleCropTransform())
-                                        .into(imageView);
-                            }
-                        }
-                        curUser = user;
-                    }
-                }
-            });
-
-
-
 
             edit.setFocusable(false); //fait en sorte qu'on ne puisse pas écrire dans l'édite texte
             edit.setClickable(true); //permet de cliquer sur l'edit text
@@ -124,88 +97,44 @@ public class PostFragment extends Fragment {
                     startActivity(new Intent(getActivity(), postMessage.class));
                 }
             });
-
-        }
-
+        setDocumentId();
     }
 
     public void setDocumentId(){
-       /* PostsHelper.getAllPost().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<Post> postDoc = new ArrayList<>();
-                if(!queryDocumentSnapshots.isEmpty()){
-                    for (DocumentSnapshot document : queryDocumentSnapshots) {
-                        Post post = document.toObject(Post.class);
-                        post.setId(document.getId());
-                        postDoc.add(post);
-
-                    }
-                }
-                postList = postDoc;
-                adapter = new PostListAdapter(postList,getActivity());
-                vue.setAdapter(adapter);
-                adapter.setOnClickListener(new PostListAdapter.OnClickListener() {
-                    @Override
-                    public void onItemClick(View view, Post obj, int pos) {
-                        if(adapter.getSelectedItemCount() > 0){
-                        }else{
-                            Intent intent = new Intent(getActivity(),PostPicSwipe.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("Post",postList.get(pos));
-                            PostFragment postFragment = new PostFragment();
-                            postFragment.setArguments(bundle);
-                            intent.putExtra("Post",(Serializable)postList.get(pos) );
-                            startActivity(intent);
-                        }
-                    }
-
-                    @Override
-                    public void onItemLongClick(View view, Post obj, int pos) {
-                        enableActionMode(pos);
-                    }
-                });
-            }
-        });*/
         PostsHelper.getAllPost().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                List<Post> postDoc = new ArrayList<>();
-                if(!queryDocumentSnapshots.isEmpty()){
+                if(queryDocumentSnapshots != null){
+                    List<Post> postDoc = new ArrayList<>();
                     for (DocumentSnapshot document : queryDocumentSnapshots) {
                         Post post = document.toObject(Post.class);
                         post.setId(document.getId());
                         postDoc.add(post);
 
                     }
-                }
-                postList = postDoc;
-                adapter = new PostListAdapter(postList,getActivity());
-                vue.setAdapter(adapter);
-                adapter.setOnClickListener(new PostListAdapter.OnClickListener() {
-                    @Override
-                    public void onItemClick(View view, Post obj, int pos) {
-                        if(adapter.getSelectedItemCount() > 0){
-                            enableActionMode(pos);
-                        }else{
-                            Intent intent = new Intent(getActivity(),PostPicSwipe.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("Post",postList.get(pos));
-                            PostFragment postFragment = new PostFragment();
-                            postFragment.setArguments(bundle);
-                            intent.putExtra("Post",(Serializable)postList.get(pos) );
-                            startActivity(intent);
+                    postList = postDoc;
+                    adapter = new PostListAdapter(postList,getContext());
+                    vue.setAdapter(adapter);
+                    adapter.setOnClickListener(new PostListAdapter.OnClickListener() {
+                        @Override
+                        public void onItemClick(View view, Post obj, int pos) {
+                            if(adapter.getSelectedItemCount() > 0){
+                                enableActionMode(pos);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onItemLongClick(View view, Post obj, int pos) {
-                        enableActionMode(pos);
-                    }
-                });
+                        @Override
+                        public void onItemLongClick(View view, Post obj, int pos) {
+                            enableActionMode(pos);
+                        }
+                    });
+                }
             }
         });
+
+
     }
+
 
     private void enableActionMode(final int position) {
         if (actionMode == null) {
@@ -262,6 +191,15 @@ public class PostFragment extends Fragment {
         }
     }
 
+    public void printInfo(){
+        final List<Integer> selectedItemPositions = adapter.getSelectedItems();
+
+        for (int i = 0; i <= selectedItemPositions.size(); i++) {
+            Toast.makeText(getActivity(), postList.get(i).getNomMoniteur(), Toast.LENGTH_SHORT).show();
+        }
+        adapter.notifyDataSetChanged();
+    }
+
 
     public void deletePost(){
         final List<Integer> selectedItemPositions = adapter.getSelectedItems();
@@ -270,7 +208,7 @@ public class PostFragment extends Fragment {
             if(postList.get(i).getIdMoniteur().equals(currentUser.getUid())){
                 adapter.deletePost(selectedItemPositions.get(i));
             }else{
-                Toast.makeText(getContext(), "Vous devez être l'auteur du post pour le supprimer", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Vous devez être l'auteur du post pour le supprimer\n"+currentUser.getUid()+"\n"+postList.get(i).getIdMoniteur(), Toast.LENGTH_SHORT).show();
             }
         }
         adapter.notifyDataSetChanged();

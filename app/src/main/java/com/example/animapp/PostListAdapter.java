@@ -1,11 +1,15 @@
 package com.example.animapp;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ViewUtils;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Activities.OtherUserProfil;
 import com.example.animapp.Activities.PostCommentaires;
+import com.example.animapp.Activities.PostPicSwipe;
 import com.example.animapp.Database.PostsHelper;
 import com.example.animapp.Fragments.PostFragment;
 import com.example.animapp.Model.Post;
@@ -32,6 +37,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.sdsmdg.harjot.vectormaster.VectorMasterView;
+import com.sdsmdg.harjot.vectormaster.models.PathModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +48,7 @@ import javax.annotation.Nullable;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHolder> {
     private Context mContext;
-    private int mRessource;
-    private int lastPosition=-1;
-    List<Post> posts;
+    private List<Post> posts;
     public static String postId;
 
 
@@ -51,7 +57,10 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
 
     private SparseBooleanArray selectedItems;
     private int currentSelectedIndx = -1;
-    private PostListAdapter.OnClickListener onClickListener = null;
+
+    private OnClickListener onClickListener = null;
+
+    boolean animation = false;
 
     public PostListAdapter(List<Post> posts, Context context) {
         this.posts = posts;
@@ -74,6 +83,10 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         } else {
             return POST_WITHOUT_PIC;
         }
+    }
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
     @NonNull
@@ -114,20 +127,55 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         }else{
             holder.nbrLike.setText("");
         }
-        holder.likeButton.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("ResourceAsColor")
+
+        final PathModel outline = holder.heartVector.getPathModelByName("outline");
+
+        // set the stroke color
+        outline.setStrokeColor(Color.parseColor("#1260E8"));
+
+        holder.heartVector.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if(PostFragment.clicked == 0){
+            public void onClick(View view) {
+
+                if(animation){
+                    ValueAnimator valueAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), Color.parseColor("#1260E8"),Color.WHITE);
+                    valueAnimator.setDuration(500);
+                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            // set fill color and update view
+                            outline.setFillColor((Integer) valueAnimator.getAnimatedValue());
+                            holder.heartVector.update();
+                        }
+                    });
+                    valueAnimator.start();
                     updateNbrLikeUp(post);
                     holder.nbrLike.setText(""+post.getNbrLike());
-                }else if(PostFragment.clicked == 1){
+                    animation = false;
+
+                }
+                    ValueAnimator valueAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), Color.WHITE, Color.parseColor("#1260E8"));
+                    valueAnimator.setDuration(500);
+
+                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                            // set fill color and update view
+                            outline.setFillColor((Integer) valueAnimator.getAnimatedValue());
+                            holder.heartVector.update();
+                        }
+                    });
+                    valueAnimator.start();
                     updateNbrLikeDown(post);
                     holder.nbrLike.setText(""+post.getNbrLike());
+
+                    animation = true;
+
                 }
 
-            }
         });
+
 
         if(post.getNbrCommentaire() > 0){
             holder.nbrCommentaire.setText(String.valueOf(post.getNbrCommentaire()));
@@ -162,20 +210,36 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         //imageLoader.displayImage(post.getImgurl(), holder.image, options);
 
 
-        ImageLoader imageLoader = ImageLoader.getInstance();
-        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                .cacheOnDisc(true).resetViewBeforeLoading(true).build();
+
         if(post.getImgurl() != null){
-            imageLoader.displayImage(post.getImgurl(), holder.image, options);
+
+            Picasso.get().load(post.getImgurl())
+                    .fit()
+                    .centerCrop()
+                    .into(holder.image);
 
             holder.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onClickListener == null) return;
-                    onClickListener.onItemClick(v, post, position);
+                    Intent intent = new Intent(mContext, PostPicSwipe.class);
+                            /*Bundle bundle = new Bundle();
+                            bundle.putSerializable("Post",postList.get(pos));
+                            PostFragment postFragment = new PostFragment();
+                            postFragment.setArguments(bundle);*/
+                    intent.putExtra("Post",post );
+                    mContext.startActivity(intent);
                 }
             });
         }
+
+        holder.parent.setActivated(selectedItems.get(position, false));
+        holder.parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onClickListener == null) return;
+                onClickListener.onItemClick(v, post, position);
+            }
+        });
 
         holder.parent.setOnLongClickListener(new View.OnLongClickListener() {
 
@@ -208,6 +272,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         });
 
 
+
         toggleChecked(holder,position);
 
     }
@@ -221,13 +286,18 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             if (currentSelectedIndx == position) resetCurrentIndex();
         }
     }
-    private void resetCurrentIndex() {
-        currentSelectedIndx = -1;
+
+    public void toggleSelection(int pos) {
+        currentSelectedIndx = pos;
+        if (selectedItems.get(pos, false)) {
+            selectedItems.delete(pos);
+
+        } else {
+            selectedItems.put(pos, true);
+        }
+        notifyItemChanged(pos);
     }
 
-    public void setOnClickListener(PostListAdapter.OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
-    }
     public void clearSelections() {
         selectedItems.clear();
         notifyDataSetChanged();
@@ -241,18 +311,17 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         return items;
     }
 
-    public void toggleSelection(int pos) {
-        currentSelectedIndx = pos;
-        if (selectedItems.get(pos, false)) {
-            selectedItems.delete(pos);
-
-        } else {
-            selectedItems.put(pos, true);
-        }
-        notifyItemChanged(pos);
+    private void resetCurrentIndex() {
+        currentSelectedIndx = -1;
     }
+
     public int getSelectedItemCount() {
         return selectedItems.size();
+    }
+
+    @Override
+    public int getItemCount() {
+        return posts.size();
     }
 
     public interface OnClickListener {
@@ -261,21 +330,15 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         void onItemLongClick(View view, Post obj, int pos);
     }
 
-    @Override
-    public int getItemCount() {
-        return posts.size();
-    }
-
-
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView moniteur;
         TextView date;
         TextView message, nbrLike, nbrCommentaire;
         ImageView image,monitImage;
         RelativeLayout commentaire;
-        ImageButton likeButton;
-        CardView parent;
+        View parent;
 
+        VectorMasterView heartVector;
 
         public ViewHolder(@NonNull View view) {
             super(view);
@@ -287,8 +350,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             nbrCommentaire = view.findViewById(R.id.nbrCommentaires);
             monitImage = view.findViewById(R.id.moniPhoto);
             commentaire = view.findViewById(R.id.commentaire);
-            likeButton = view.findViewById(R.id.likeButton);
             parent = view.findViewById(R.id.parent);
+            heartVector =  view.findViewById(R.id.heart_vector);
+
         }
     }
 
@@ -332,7 +396,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         PostsHelper.getAllPostComments(post).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(!queryDocumentSnapshots.isEmpty()){
+                if(queryDocumentSnapshots != null){
                     post.setNbrCommentaire(queryDocumentSnapshots.size());
                     PostsHelper.updateNbrCommentaire(post);
                 }

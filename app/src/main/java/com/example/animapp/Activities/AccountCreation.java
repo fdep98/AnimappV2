@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.animapp.Database.UserHelper;
+import com.example.animapp.MainFragmentActivity;
 import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 
@@ -134,20 +135,29 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
         final String inputSection = section.getSelectedItem().toString();
 
         if(inputName.isEmpty()){
-            emailTI.setError("veuillez entrer un nom");
+            nomTI.setError("veuillez entrer un nom");
             nom.requestFocus();
             return;
         }
         else if(inputPrenom.isEmpty()){
-            emailTI.setError("veuillez entrer un prenom");
+            prenomTI.setError("veuillez entrer un prenom");
             prenom.requestFocus();
             return;
         }
-        else if(!inputTel.equals("")&&inputTel.length()!=10){
-            emailTI.setError("Mot de passe trop court");
+        else if(inputMdp.length()<5){
+            mdpTI.setError("Mot de passe trop court");
+            mdp.requestFocus();
+            mdp.setText("");
+            return;
+        } else if(!inputTel.equals("")&&inputTel.length()!=10){
+            ngsmTI.setError("Format invalide");
             ngsm.requestFocus();
             ngsm.setText("");
             return;
+        }else if(inputUnite.isEmpty()){
+            Toast.makeText(this, "Veuillez choisir une unité", Toast.LENGTH_SHORT).show();
+        }else if(inputSection.isEmpty()){
+            Toast.makeText(this, "Veuillez choisir une section", Toast.LENGTH_SHORT).show();
         }else{
             mAuth.createUserWithEmailAndPassword(inputEmail, inputMdp)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -161,7 +171,7 @@ public class AccountCreation extends AppCompatActivity implements AdapterView.On
                                 UserHelper.createUser(new_user);
                                 Toast.makeText(AccountCreation.this, "Votre profil a été créer avec succès", Toast.LENGTH_SHORT).show();
                                 //insert l'utilisateur dans authentification de firebase
-                                Intent main = new Intent(AccountCreation.this, profil.class);
+                                Intent main = new Intent(AccountCreation.this, MainFragmentActivity.class);
                                 startActivity(main);
 
                             }else{

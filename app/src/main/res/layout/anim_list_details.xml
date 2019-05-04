@@ -22,9 +22,10 @@
             android:id="@+id/nom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="84dp"
+            android:layout_marginTop="16dp"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Nom" />
@@ -33,10 +34,11 @@
             android:id="@+id/totem"
             android:layout_width="wrap_content"
             android:layout_height="31dp"
-            android:layout_marginStart="60dp"
+            android:layout_marginStart="84dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_toStartOf="@+id/imageView3"
+            android:textColor="@color/bleu"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,14 +51,15 @@
             android:id="@+id/checked"
             android:layout_width="45dp"
             android:layout_height="46dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/ic_check"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/nom"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.652" />
+
+            app:layout_constraintVertical_bias="0.68" />
 
 
         <TextView
@@ -78,10 +81,12 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/bleuBlanc"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.652" />
+
+            app:layout_constraintVertical_bias="0.666" />
     </android.support.constraint.ConstraintLayout>
 
 </com.balysv.materialripple.MaterialRippleLayout>

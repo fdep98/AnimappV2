@@ -84,7 +84,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="35dp"
                     android:background="@color/fui_transparent"
-                    android:src="@drawable/ic_flag" />
+                    android:src="@drawable/flag_gold" />
 
                 <ImageView
                     android:id="@+id/parametre5"
@@ -96,7 +96,7 @@
                     android:layout_marginStart="35dp"
                     android:layout_marginTop="20dp"
                     android:background="@color/fui_transparent"
-                    android:src="@drawable/ic_medal" />
+                    android:src="@drawable/medal_gold" />
             </RelativeLayout>
 
 
@@ -121,6 +121,7 @@
                 tools:text="Totem" />
 
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -148,6 +149,7 @@
                     android:id="@+id/animSection"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/fui_bgAnonymous"
                     android:textSize="15sp"
                     tools:text="section" />
             </LinearLayout>
@@ -172,6 +174,7 @@
                     android:id="@+id/animUnite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/fui_bgAnonymous"
                     android:textSize="15sp"
                     tools:text="unité" />
             </LinearLayout>
@@ -196,12 +199,27 @@
                     android:id="@+id/animNbrAbs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/fui_bgAnonymous"
                     android:textSize="15sp"
                     tools:text="Nbr" />
             </LinearLayout>
 
 
         </LinearLayout>
+        <android.support.design.button.MaterialButton
+            android:id="@+id/retirer"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:elevation="3dp"
+            android:text="Retirer "
+            android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+            android:textStyle="bold"
+            app:backgroundTint="@color/bleu"
+            app:cornerRadius="20dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -220,7 +238,7 @@
                 android:text="Email:"
                 android:textColor="@color/bleu"
                 android:textSize="15dp"
-                android:textStyle="bold|italic"
+                android:textStyle="bold"
                 tools:text="Email:" />
 
             <TextView
@@ -229,7 +247,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:textSize="15dp"
-                android:textStyle="italic"
                 tools:text="Email" />
         </LinearLayout>
 
@@ -252,7 +269,7 @@
                 android:text="Numéro:"
                 android:textColor="@color/bleu"
                 android:textSize="15dp"
-                android:textStyle="bold|italic"
+                android:textStyle="bold"
                 tools:text="Numéro:" />
 
             <TextView
@@ -261,7 +278,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:textSize="15dp"
-                android:textStyle="italic"
                 tools:text="Numéro de gsm" />
         </LinearLayout>
 
@@ -282,7 +298,7 @@
                 android:text="Naissance:"
                 android:textColor="@color/bleu"
                 android:textSize="15dp"
-                android:textStyle="bold|italic"
+                android:textStyle="bold"
 
                 tools:text="Naissance:" />
 
@@ -292,11 +308,12 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:textSize="15dp"
-                android:textStyle="italic"
-                tools:text="Date d'anniversaire"
-                />
+                tools:text="Date d'anniversaire" />
 
         </LinearLayout>
+
+
+
 
 
     </LinearLayout>

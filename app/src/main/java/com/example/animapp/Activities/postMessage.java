@@ -15,6 +15,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -30,9 +32,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.animapp.Database.ImageHelper;
 import com.example.animapp.Database.PostsHelper;
 import com.example.animapp.Fragments.AnimListFragment;
+import com.example.animapp.Fragments.GalerieFragment;
+import com.example.animapp.Fragments.PostFragment;
 import com.example.animapp.MainFragmentActivity;
+import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.Model.Post;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -53,7 +59,12 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import eu.long1.spacetablayout.SpaceTabLayout;
+
 
 public class postMessage extends AppCompatActivity {
 
@@ -63,7 +74,7 @@ public class postMessage extends AppCompatActivity {
     EditText postMessage;
     TextView monitName, monitTotem, monitPrenom;
     MaterialButton publier;
-    ImageView monitImg;
+    ImageView monitImg, userPic;
     Toolbar messageToolbar;
     ImageView picToAdd, ToolbarImg;
     FloatingActionButton optionFAB, addPicViaCamFAB, addPicViaGalFAB;
@@ -98,6 +109,7 @@ public class postMessage extends AppCompatActivity {
         publier = findViewById(R.id.publier);
         monitImg = findViewById(R.id.monitImg);
         picToAdd = findViewById(R.id.picToShare);
+
         addPicViaCamFAB = findViewById(R.id.addPicViaCam);
         addPicViaGalFAB = findViewById(R.id.addPicViaGallery);
         optionFAB = findViewById(R.id.picOptionFAB);
@@ -108,9 +120,9 @@ public class postMessage extends AppCompatActivity {
         rotateBackward =  AnimationUtils.loadAnimation(this,R.anim.rotate_backward);
 
 
+
         //permet de retourner en arrire lorsqu'on appui sur la flèche (navigationIcon)
         messageToolbar = findViewById(R.id.messageToolbar);
-        //messageToolbar.setLogo(R.mipmap.ic_launcher_round);
 
         setSupportActionBar(messageToolbar);
         messageToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -148,6 +160,11 @@ public class postMessage extends AppCompatActivity {
                                 .load(currentUser.getPhotoUrl())
                                 .apply(RequestOptions.circleCropTransform())
                                 .into(monitImg);
+                        Glide.with(getApplicationContext())
+                                .load(currentUser.getPhotoUrl())
+                                .apply(RequestOptions.circleCropTransform())
+                                .into(userPic);
+
                     } else {
                         Glide.with(getApplicationContext())
                                 .load(documentSnapshot.getString("urlPhoto"))
@@ -253,6 +270,7 @@ public class postMessage extends AppCompatActivity {
                 public void onClick(View v) {
                     post = postMessage.getText().toString();
                         putImageInDb();
+
                 }
             });
         }
@@ -266,6 +284,7 @@ public class postMessage extends AppCompatActivity {
                 public void onClick(View v) {
                     post = postMessage.getText().toString();
                         putImageInDb();
+
                 }
             });
         }
@@ -277,23 +296,35 @@ public class postMessage extends AppCompatActivity {
         progressDialog.show();
         final long currentTime = System.currentTimeMillis();
 
-        storageRef.child(currentUser.getUid()+" Posts").child(currentTime+"."+getFileExtension(image))
+        storageRef.child(currentUser.getUid()).child(currentTime+"."+getFileExtension(image))
                 .putFile(image)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        storageRef.child(currentUser.getUid()+" Posts").child(currentTime+"."+getFileExtension(image))
+                        storageRef.child(currentUser.getUid()).child(currentTime+"."+getFileExtension(image))
                                 .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
                                 Post newPost = new Post(currentUser.getUid(),nom, prenom, totem,currentDate, post, uri.toString());
                                 newPost.setMonitPhoto(monitPhoto);
+
+                                ImageGalerie newImage = new ImageGalerie(currentUser.getUid(),uri.toString(),currentDate);
+                                ImageHelper.addImage(newImage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        if(documentReference != null){
+                                            documentReference.update("imgId",documentReference.getId());
+                                        }
+                                    }
+                                });
+
                                 PostsHelper.createUserPost(newPost);
                                 PostsHelper.updatePostId(newPost);
                                 progressDialog.dismiss();
                                 picToAdd.setImageResource(0);
                                 postMessage.setText("");
+                                startActivity(new Intent(postMessage.this,MainFragmentActivity.class));
                             }
                         });
 
@@ -305,7 +336,6 @@ public class postMessage extends AppCompatActivity {
                         Toast.makeText(postMessage.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 
     private String getFileExtension(Uri uri) {

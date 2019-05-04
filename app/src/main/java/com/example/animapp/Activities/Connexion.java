@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.animapp.MainFragmentActivity;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -63,7 +64,7 @@ public class Connexion extends AppCompatActivity {
         //updateUI(account);
         FirebaseUser currentuser = mAuth.getCurrentUser();
         if(currentuser != null){
-            startActivity(new Intent(Connexion.this, profil.class));
+            startActivity(new Intent(Connexion.this, MainFragmentActivity.class));
         }
     }
 
@@ -127,7 +128,7 @@ public class Connexion extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             //Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            startActivity(new Intent(Connexion.this, profil.class));
+                            startActivity(new Intent(Connexion.this, MainFragmentActivity.class));
                             //updateUI(user);
                         } else {
                             Toast.makeText(Connexion.this, "Problème de connexion", Toast.LENGTH_SHORT).show();

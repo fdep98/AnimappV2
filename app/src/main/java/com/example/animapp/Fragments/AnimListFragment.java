@@ -28,12 +28,14 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Activities.AddAnime;
 import com.example.animapp.Database.UserHelper;
 import com.example.animapp.AnimListAdapter;
+import com.example.animapp.MainFragmentActivity;
 import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -73,10 +75,10 @@ public class AnimListFragment extends Fragment {
     TextView animNom, animNbrAbsc, animDob, animSec, animUn, animTot, animEmail, animNgsm,  closePopup;
 
     private ActionMode actionMode;
-    Toolbar myToolbar, updateToolbar;
+    private Toolbar myToolbar, updateToolbar;
     Menu menu;
     MenuInflater inflateMe;
-    int switchToolbar = 0;
+
 
     @Nullable
     @Override
@@ -84,8 +86,6 @@ public class AnimListFragment extends Fragment {
         View v = inflater.inflate(R.layout.activity_anim_liste, container,false);
         setHasOptionsMenu(true);
         return v;
-
-
     }
 
     @SuppressLint("ResourceType")
@@ -97,7 +97,9 @@ public class AnimListFragment extends Fragment {
         list = view.findViewById(R.id.listRecyclerView);
         mDialog = new Dialog(getContext());
 
-
+        myToolbar = getView().findViewById(R.id.toolbarAnimList);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(myToolbar);
+        updateToolbar = getView().findViewById(R.id.updateAbsToolbar);
 
         list.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
@@ -105,11 +107,6 @@ public class AnimListFragment extends Fragment {
         list.addItemDecoration(dividerItemDecoration);
         list.setLayoutManager(layoutManager);
 
-
-
-        myToolbar = (Toolbar) getView().findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(myToolbar);
-        updateToolbar = (Toolbar) getView().findViewById(R.id.updateAbsToolbar);
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getInstance().getCurrentUser();
@@ -173,10 +170,10 @@ public class AnimListFragment extends Fragment {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 AnimListFragment backToAnimList= new AnimListFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment, backToAnimList)
-                        .addToBackStack(null)
-                        .commit();
+
+                Intent intent = new Intent(getActivity(), MainFragmentActivity.class);
+                intent.putExtra("FROM_ANIMLIST",2);
+                startActivity(intent);
                 return true; //false si on ne veut pas que ca se referme
             }
         });
@@ -190,57 +187,50 @@ public class AnimListFragment extends Fragment {
 
 
     public void bindAnimeList() {
+        UserHelper.getUser(currentUser.getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    final User curUser = documentSnapshot.toObject(User.class);
+                    UserHelper.getAnim(curUser).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                            if(queryDocumentSnapshots != null){
+                                List<User> user = new ArrayList<>();
+                                for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                                    if(!doc.getString("id").equals(curUser.getId())){
+                                        user.add(doc.toObject(User.class));
+                                    }
+                                }
+                                animListe = user; //copie des animés qui match dans animList
+                                adapter = new AnimListAdapter(animListe);
+                                list.setAdapter(adapter);
+                                adapter.setOnClickListener(new AnimListAdapter.OnClickListener() {
+                                    @Override
+                                    public void onItemClick(View view, User obj, int pos) {
+                                        if(adapter.getSelectedItemCount() > 0){
+                                            enableActionMode(pos);
 
-        monitRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        final String monitUnite = documentSnapshot.getString("unite");
-                        final String monitSection = documentSnapshot.getString("section");
-                        final String monitEmail = documentSnapshot.getString("email");
-
-                        UserHelper.getAllUsers()
-                                .whereEqualTo("unite",monitUnite)
-                                .whereEqualTo("section",monitSection)
-                                .whereEqualTo("anime",true)
-                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                            @Override
-                            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                                if(!queryDocumentSnapshots.isEmpty()){
-                                    List<User> user = new ArrayList<>();
-                                    for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                                        if(!doc.getString("email").equals(monitEmail)){
-                                            user.add(doc.toObject(User.class));
+                                        }else{
+                                            //Toast.makeText(getActivity(), "nothing selected", Toast.LENGTH_SHORT).show();
+                                            showPopup(pos);
                                         }
                                     }
-                                    animListe = user; //copie des animés qui match dans animList
-                                    adapter = new AnimListAdapter(animListe);
-                                    list.setAdapter(adapter);
-                                    adapter.setOnClickListener(new AnimListAdapter.OnClickListener() {
-                                        @Override
-                                        public void onItemClick(View view, User obj, int pos) {
-                                            if(adapter.getSelectedItemCount() > 0){
-                                                enableActionMode(pos);
 
-                                            }else{
-                                                //Toast.makeText(getActivity(), "nothing selected", Toast.LENGTH_SHORT).show();
-                                                showPopup(pos);
-                                            }
-                                        }
+                                    @Override
+                                    public void onItemLongClick(View view, User obj, int pos) {
+                                        myToolbar.setVisibility(View.GONE);
+                                        enableActionMode(pos);
 
-                                        @Override
-                                        public void onItemLongClick(View view, User obj, int pos) {
-                                            myToolbar.setVisibility(View.GONE);
-                                            enableActionMode(pos);
-                                        }
+                                    }
 
-                                    });
-                                }
+                                });
                             }
-                        });
+                        }
+                    });
 
-                    }
-                });
+                }
+            }});
 
     }
 
@@ -386,10 +376,19 @@ public class AnimListFragment extends Fragment {
 
     }
 
+    public void printInfo(){
+        final List<Integer> selectedItemPositions = adapter.getSelectedItems();
+
+        for (int i = 0; i <= selectedItemPositions.size() ; i++) {
+            Toast.makeText(getActivity(), animListe.get(i).getNom(), Toast.LENGTH_SHORT).show();
+        }
+        adapter.notifyDataSetChanged();
+    }
+
     public void deleteAnim(){
         final List<Integer> selectedItemPositions = adapter.getSelectedItems();
 
-        for (int i = 0; i <= selectedItemPositions.size() - 1; i++) {
+        for (int i = 0; i <= selectedItemPositions.size()-1; i++) {
           adapter.deleteAnime(selectedItemPositions.get(i));
         }
         adapter.notifyDataSetChanged();
@@ -398,7 +397,7 @@ public class AnimListFragment extends Fragment {
     public void decNbrAbsence(){
         final List<Integer> selectedItemPositions = adapter.getSelectedItems();
         //pour chaque item cliqué, mettre à jour le nbr d'abscences
-        for (int i = 0; i <= selectedItemPositions.size() - 1; i++) {
+        for (int i = 0; i <= selectedItemPositions.size()-1 ; i++) {
             adapter.decNbrAbsence(selectedItemPositions.get(i));
         }
         adapter.notifyDataSetChanged();

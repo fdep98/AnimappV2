@@ -56,7 +56,10 @@ public class LastPostAdapter extends ArrayAdapter<Post> {
         }
 
         holder.monitNom.setText(monitPost.getPrenomMoniteur());
-        holder.monitPost.setText(monitPost.getMessage());
+        if(!monitPost.getMessage().isEmpty() || monitPost.getMessage() != null) {
+            holder.monitPost.setText(monitPost.getMessage());
+        }
+
         String dateSubstrng = monitPost.getDate().substring(0,monitPost.getDate().indexOf('à'));
         holder.postDate.setText(dateSubstrng);
         return convertView;

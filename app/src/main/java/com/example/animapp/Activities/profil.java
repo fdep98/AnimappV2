@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -30,7 +30,6 @@ import com.example.animapp.Model.Post;
 import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -52,6 +51,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
 
     ImageView IVphoto, colleguePic;
     TextView TVnom, TVemail, TVpseudo, TVtotem, TVsection, TVngsm, TVdob, TVunite, TVanime, collegueEmail, collegueNom, colleguePrenom, collegueTotem, postDate, collegueSec, collegueUn, collegueNbrAn, colleguePostText;
+    TextView postNbrLike, postNbrCommentaire;
     private static final int SIGN_OUT_TASK = 10;
     private static final int DELETE_USER_TASK = 20;
     private static final int RC_SIGN_IN = 123;
@@ -71,6 +71,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
     TextView closePopup;
     static int nbrAnimes;
     RelativeLayout postInfo;
+    boolean isRotated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,15 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
         mDialog = new Dialog(this);
 
 
+        lastpostLV.setOnTouchListener(new View.OnTouchListener() {
+            // Setting on Touch Listener for handling the touch inside ScrollView
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Disallow the touch request for parent scroll on touch of child view
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
 
         rotateForward =  AnimationUtils.loadAnimation(this,R.anim.rotate_forward);
         rotateBackward =  AnimationUtils.loadAnimation(this,R.anim.rotate_backward);
@@ -104,6 +114,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
             update();
         }
         setup();
+
 
         animateParButton();
         showPopUp();
@@ -156,6 +167,15 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
                             TVdob.setText(user.getDateOfBirth());
                             TVunite.setText(user.getUnite());
                             TVsection.setText(user.getSection());
+
+                            IVphoto.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(profil.this,ProfilPicSwipe.class);
+                                    intent.putExtra("currentUser",user);
+                                    startActivity(intent);
+                                }
+                            });
 
 
 
@@ -237,6 +257,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
     public void goToMain(View v){
         Intent intent = new Intent(profil.this, MainFragmentActivity.class);
         startActivity(intent);
+        isRotated = false;
     }
 
     public void signout() {
@@ -330,7 +351,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 Post colleguePost;
                 //pour chaque moniteur on vérifie si le moniteur a un post, si oui, on l'ajoute dans
-                if(!queryDocumentSnapshots.isEmpty()){
+                if(queryDocumentSnapshots != null){
                     List<Post> colPost = new ArrayList<>();
                     for(User user : moniteurs){
                         for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
@@ -364,14 +385,15 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
     }
 
     public void showPopUp(){
-        mDialog.setContentView(R.layout.post_profil_custom_popup);
+        mDialog.setContentView(R.layout.last_post_popup);
         closePopup = mDialog.findViewById(R.id.closePopUp);
         colleguePic = mDialog.findViewById(R.id.colleguePic);
         collegueNom = mDialog.findViewById(R.id.collegueName);
         colleguePrenom = mDialog.findViewById(R.id.colleguePrenom);
         collegueTotem = mDialog.findViewById(R.id.collegueTotem);
         postDate = mDialog.findViewById(R.id.date);
-
+        postNbrLike = mDialog.findViewById(R.id.postNbrLike);
+        postNbrCommentaire = mDialog.findViewById(R.id.postNbrCommentaire);
         colleguePostText = mDialog.findViewById(R.id.colleguePostText);
         closePopup = mDialog.findViewById(R.id.closePopUp);
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -380,7 +402,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
                 mDialog.show();
-                Post colleguePost = (Post) adapter.getItemAtPosition(position);
+                final Post colleguePost = (Post) adapter.getItemAtPosition(position);
                 if(colleguePost.getMonitPhoto() != null){
                     Glide.with(getApplication())
                             .load(colleguePost.getMonitPhoto())
@@ -394,10 +416,32 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
                 }
 
                 collegueNom.setText(colleguePost.getNomMoniteur());
-                colleguePrenom.setText(colleguePost.getPrenomMoniteur());
                 collegueTotem.setText(colleguePost.getTotemMoniteur());
+                colleguePrenom.setText(colleguePost.getPrenomMoniteur());
                 postDate.setText(colleguePost.getDate());
                 colleguePostText.setText(colleguePost.getMessage());
+                colleguePic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String monitId = colleguePost.getIdMoniteur();
+                        Intent intent = new Intent(profil.this, OtherUserProfil.class);
+                        intent.putExtra("postOtherId",monitId);
+                        startActivity(intent);
+                    }
+                });
+
+                colleguePostText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Post monitPost = colleguePost;
+                        Intent intent = new Intent(profil.this, PostCommentaires.class);
+                        intent.putExtra("Post",monitPost);
+                        startActivity(intent);
+                    }
+                });
+
+                postNbrLike.setText(String.valueOf(colleguePost.getNbrLike()));
+                postNbrCommentaire.setText(String.valueOf(colleguePost.getNbrCommentaire()));
 
                 closePopup.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -405,6 +449,7 @@ public class profil extends AppCompatActivity implements PopupMenu.OnMenuItemCli
                         mDialog.dismiss();
                     }
                 });
+
             }
         });
 

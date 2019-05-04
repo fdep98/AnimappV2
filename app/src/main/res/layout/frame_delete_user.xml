@@ -2,8 +2,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dp"
     android:layout_height="200dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    tools:context="com.example.animapp.Fragments.ProfilFragment">
 
     <TextView
         android:id="@+id/frame_delete_text1"
@@ -23,21 +26,35 @@
         android:textAlignment="center"
         android:textStyle="italic" />
 
-    <Button
+    <android.support.design.button.MaterialButton
         android:id="@+id/frame_delete_confirm"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="130dp"
+        android:elevation="3dp"
+        android:text="Confirmer "
+        android:clickable="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textStyle="bold"
         android:onClick="confirm"
-        android:text="Confirmer" />
+        app:backgroundTint="@color/bleu"
+        app:cornerRadius="20dp" />
 
-    <Button
+    <android.support.design.button.MaterialButton
         android:id="@+id/frame_delete_cancel_button"
         android:layout_width="wrap_content"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_height="wrap_content"
         android:layout_marginLeft="180dp"
         android:layout_marginTop="130dp"
+        android:elevation="3dp"
+        android:text="Annuler "
+        android:clickable="true"
         android:onClick="cancel"
-        android:text="Annuler" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textStyle="bold"
+        app:backgroundTint="@color/bleu"
+        app:cornerRadius="20dp"/>
 </FrameLayout>

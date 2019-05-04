@@ -3,6 +3,7 @@ package com.example.animapp;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,8 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Database.UserHelper;
 import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
@@ -24,12 +27,14 @@ import com.example.animapp.animapp.R;
 
 public class AnimListAdapter extends RecyclerView.Adapter<AnimListAdapter.ViewHolder> implements Filterable {
 
-    private List<User> userList;
+    private final List<User> userList;
     private List<User> exampleList;
     private OnClickListener onClickListener = null;
 
     private SparseBooleanArray selectedItems;
     private int currentSelectedIndx = -1;
+
+    Context mContext;
 
     public AnimListAdapter(List<User> userList) {
         this.userList = userList;
@@ -46,6 +51,7 @@ public class AnimListAdapter extends RecyclerView.Adapter<AnimListAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.anim_list_details, viewGroup, false);
+        mContext = viewGroup.getContext();
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -57,6 +63,18 @@ public class AnimListAdapter extends RecyclerView.Adapter<AnimListAdapter.ViewHo
         holder.nom.setText(anim.getNom());
         holder.totem.setText(anim.getTotem());
         holder.nbrAbsences.setText("" + anim.getAbsences());
+
+        if(anim.getUrlPhoto() != null){
+            Glide.with(mContext)
+                    .load(anim.getUrlPhoto())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.animPhoto);
+        }else{
+            Glide.with(mContext)
+                    .load(R.drawable.logo)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.animPhoto);
+        }
 
         holder.parent.setActivated(selectedItems.get(position, false));
 

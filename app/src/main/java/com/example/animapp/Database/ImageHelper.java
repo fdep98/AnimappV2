@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class ImageHelper {
     private static final String COLLECTION_GALERIE_IMAGE = "galerieImages";
@@ -45,8 +46,12 @@ public class ImageHelper {
             }
         });
     }
-    public static Task<Void> deleteImage(String idImage) {
-        return ImageHelper.getImageCollection().document(idImage).delete();
+    public static Task<Void> deleteImage(ImageGalerie img) {
+        if(img.getImageUrl() != null){
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            storage.getReferenceFromUrl(img.getImageUrl()).delete();
+        }
+        return ImageHelper.getImageCollection().document(img.getImgId()).delete();
     }
 
 

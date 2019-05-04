@@ -1,29 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.animapp.MainFragmentActivity">
+    android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/fragment"
+    <!-- Other components and views -->
+
+    <!--<android.support.design.bottomappbar.BottomAppBar
+        android:id="@+id/bottomNav"
+        android:layout_width="445dp"
+        android:layout_height="51dp"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@color/bleuVif"
+        app:menu="@menu/bottom_nav_menu"
+        tools:ignore="BottomAppBar" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/bottomNav" />-->
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/BottomNav" />
+        android:layout_alignParentTop="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/BottomNav"
+        android:id="@+id/bottomNav"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/blanc"
-        android:visibility="visible"
-        app:elevation="4dp"
-        app:itemBackground="@color/blanc"
-        app:itemIconTint="@drawable/bottom_nav"
-        app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
-        app:itemTextColor="@drawable/bottom_nav"
-        app:menu="@menu/bottom_nav_menu"></android.support.design.widget.BottomNavigationView>
+        android:layout_height="55dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bottom_nav_gradient"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:itemTextColor="@color/fui_bgAnonymous"
+        app:itemIconTint="@color/bottom_nav_item_color"
+        tools:ignore="MissingConstraints" />
 
-</RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

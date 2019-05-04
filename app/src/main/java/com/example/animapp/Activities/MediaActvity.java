@@ -1,4 +1,4 @@
-package com.example.animapp.Fragments;
+package com.example.animapp.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -16,23 +16,22 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.button.MaterialButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.animapp.Database.ImageHelper;
+import com.example.animapp.Fragments.GalerieFragment;
+import com.example.animapp.MainFragmentActivity;
 import com.example.animapp.Model.ImageGalerie;
+import com.example.animapp.ViewPagerAdapter;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -52,7 +51,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MediaFragment extends Fragment {
+public class MediaActvity extends AppCompatActivity {
 
     static int IMAGE_INSERTED_CODE = 0;
     FirebaseStorage storage;
@@ -70,24 +69,15 @@ public class MediaFragment extends Fragment {
     AppCompatEditText description,date;
     final List<ImageGalerie> listImages = new ArrayList<>();
 
-
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_media, container,false);
-        setHasOptionsMenu(true);
-        return v;
-    }
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_media);
 
-    @SuppressLint("ResourceType")
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        picToAdd = view.findViewById(R.id.picToShare);
-        ajouter =view. findViewById(R.id.partagerImg);
-        description = view.findViewById(R.id.description);
-        date = view.findViewById(R.id.date);
+        picToAdd = findViewById(R.id.picToShare);
+        ajouter = findViewById(R.id.partagerImg);
+        description = findViewById(R.id.description);
+        date = findViewById(R.id.date);
 
         storage = FirebaseStorage.getInstance(); //instance de firebaseStorage;
         storageRef = storage.getReference(); //reférence vers l'emplacement de la ressource ( root)
@@ -95,32 +85,31 @@ public class MediaFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        Toolbar toolbar = (Toolbar) getView().findViewById(R.id.media_toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        if(getActivity() != null){
+        prog = new ProgressDialog(MediaActvity.this);
+
+        Toolbar toolbar = findViewById(R.id.media_toolbar);
+        setSupportActionBar(toolbar);
+
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @SuppressLint("ResourceType")
                 @Override
                 public void onClick(View v) {
-                    GalerieFragment goToGalerie= new GalerieFragment();
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment, goToGalerie)
-                            .addToBackStack(null)
-                            .commit();
+                    Intent intent = new Intent(MediaActvity.this, MainFragmentActivity.class);
+                    intent.putExtra("FROM_MEDIA",1);
+                    startActivity(intent);
                 }
             });
-        }
 
 
-        prog = new ProgressDialog(getContext());
+
         insertDate();
-
         addNewImage();
+
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.media_toolbar, menu);
-
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.media_toolbar,menu);
         MenuItem gallerie = menu.findItem(R.id.galerie);
         MenuItem camera = menu.findItem(R.id.camera);
 
@@ -142,7 +131,7 @@ public class MediaFragment extends Fragment {
                 return true;
             }
         });
-
+        return true;
     }
 
 
@@ -158,76 +147,22 @@ public class MediaFragment extends Fragment {
 
         if(requestCode == CAMERA_INTENT && resultCode == Activity.RESULT_OK){
             final Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-            Uri uri = getImageUri(getContext(),imageBitmap);
+            Uri uri = getImageUri(this,imageBitmap);
             image = uri;
             picToAdd.setImageURI(image);
         }
     }
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
 
     private String getFileExtension(Uri uri) {
-        ContentResolver cR = getActivity().getContentResolver();
+        ContentResolver cR = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
-    }
-
-
-    /*
-        Ajoute l'image dans la base de donnée
-     */
-    public void sharePic( @Nullable final Intent data){
-        //stockage dans la BDD
-        Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-        Uri uri = getImageUri(getContext(),imageBitmap);
-        StorageReference st = storageRef.child("photos").child(uri.getLastPathSegment()); //créer un dossier photos et met le chemin vers la photo comme child
-        st.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getActivity(), "photo added", Toast.LENGTH_SHORT).show();
-                prog.dismiss();
-            }
-        });
-    }
-
-    /*
-        Affiche un dialog demandant à l'utilisateur confirmation avant de partager une image
-     */
-    public void showDialog(View view,@Nullable final Intent data){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setCancelable(false);
-        builder.setTitle("Partager une image");
-        builder.setMessage("Etes vous sur de vouloir partager l'image? ");
-        builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                /*prog.setMessage("Téléchargement...");
-                prog.show();
-                //stockage dans la BDD
-                Uri uri = data.getData(); //on stock l'image enregistrée
-                StorageReference st = storageRef.child("photos").child(uri.getLastPathSegment()); //créer un dossier photos et met le chemin vers la photo comme child
-                st.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(MediaActivity.this, "photo added", Toast.LENGTH_SHORT).show();
-                        prog.dismiss();
-                    }
-                });*/
-            }
-        })
-                .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                       //fermer le dialogue
-                    }
-                });
-
-        //creation et affichage du builder
-        builder.create().show();
     }
 
     public void insertDate(){
@@ -249,7 +184,7 @@ public class MediaFragment extends Fragment {
 
                 };
 
-                new DatePickerDialog(getActivity(), date, calendar
+                new DatePickerDialog(MediaActvity.this, date, calendar
                         .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -305,7 +240,7 @@ public class MediaFragment extends Fragment {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MediaActvity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -316,7 +251,7 @@ public class MediaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(image == null){
-                    Toast.makeText(getActivity(), "Veuillez choisir une image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MediaActvity.this, "Veuillez choisir une image", Toast.LENGTH_SHORT).show();
                 }else{
                     putImageInDb();
 

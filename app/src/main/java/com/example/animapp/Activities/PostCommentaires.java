@@ -20,8 +20,10 @@ import com.example.animapp.Model.User;
 import com.example.animapp.PostCommentaireAdapter;
 import com.example.animapp.PostListAdapter;
 import com.example.animapp.animapp.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -44,7 +46,7 @@ public class PostCommentaires extends AppCompatActivity {
     public FirebaseAuth mAuth;
     FirebaseUser currentUser;
     User currentMonit;
-    String commentaireId;
+    String postId;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView commentairesRecyclerView;
     PostCommentaireAdapter commentaireAdapter;
@@ -69,7 +71,7 @@ public class PostCommentaires extends AppCompatActivity {
         commentaire = findViewById(R.id.commentaire);
 
         commenter = findViewById(R.id.commenter);
-        commentaireId = PostListAdapter.postId;
+        postId = PostListAdapter.postId;
 
 
         commentairesRecyclerView.setHasFixedSize(true);
@@ -83,85 +85,98 @@ public class PostCommentaires extends AppCompatActivity {
         //récupère les information sur l'utilisateur
         UserHelper.getCurrentUser(currentUser.getUid()).
                 addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(!queryDocumentSnapshots.isEmpty()){
-                    for(DocumentSnapshot doc : queryDocumentSnapshots){
-                        currentMonit = doc.toObject(User.class);
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if(!queryDocumentSnapshots.isEmpty()){
+                            for(DocumentSnapshot doc : queryDocumentSnapshots){
+                                currentMonit = doc.toObject(User.class);
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
 
         CommentsHelper.getAllPostComments()
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                final List<PostCommentaire> com = new ArrayList<>();
-                PostCommentaire post;
-                if(!queryDocumentSnapshots.isEmpty()) {
-                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                        if(getIntent().getExtras() != null){
-                            post = (doc.toObject(PostCommentaire.class));
-                            if(post.getIdCommentaire().equals(postSend.getId())){
-                                com.add(post);
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        final List<PostCommentaire> com = new ArrayList<>();
+                        PostCommentaire post;
+                        if(queryDocumentSnapshots != null) {
+                            for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                                post = (doc.toObject(PostCommentaire.class));
+                                if(getIntent().getExtras() != null){
+                                    if(post.getIdPost().equals(postSend.getId())){
+                                        com.add(post);
+
+                                    }
+                                }else{
+                                    if(post.getIdPost().equals(PostListAdapter.postId)){
+                                        com.add(post);
+
+                                    }
+                                }
 
                             }
-                        }else{
-                            post = (doc.toObject(PostCommentaire.class));
-                            if(post.getIdCommentaire().equals(PostListAdapter.postId)){
-                                com.add(post);
+                            usersComs = com;
+                        }
+                        commenter.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                date = new Date();
+                                currentDate = df.format(date);
+
+                                if(!commentaire.getText().toString().isEmpty()){
+                                    PostCommentaire newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(),currentDate,commentaire.getText().toString(),postId);
+                                    newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
+                                    com.add(newComment);
+
+                                    CommentsHelper.createUserComment(newComment).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            if(documentReference != null){
+                                                documentReference.update("idCommentaire",documentReference.getId());
+                                            }
+                                        }
+                                    });
+                                    commentaire.setText("");
+                                }else{
+                                    Toast.makeText(PostCommentaires.this, "Veuillez entrer un commentaire avant l'envoi", Toast.LENGTH_SHORT).show();
+                                }
+
+                                usersComs = com;
+                                nbrCommentaire = usersComs.size();
 
                             }
-                        }
+                        });
+
+                        commentaireAdapter = new PostCommentaireAdapter(getApplicationContext(), usersComs);
+                        commentairesRecyclerView.setAdapter(commentaireAdapter);
+                        commentaireAdapter.setOnClickListener(new PostCommentaireAdapter.OnClickListener() {
+                            @Override
+                            public void onItemClick(View view, PostCommentaire obj, int pos) {
+                                if(commentaireAdapter.getSelectedItemCount() > 0){
+                                    enableActionMode(pos);
+                                }
+                            }
+
+                            @Override
+                            public void onItemLongClick(View view, PostCommentaire obj, int pos) {
+                                enableActionMode(pos);
+                            }
+                        });
 
                     }
-                    usersComs = com;
-                }
-                commenter.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        date = new Date();
-                        currentDate = df.format(date);
 
-                        if(!commentaire.getText().toString().isEmpty()){
-                            PostCommentaire newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(),currentDate,commentaire.getText().toString(),commentaireId);
-                            newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
-                            com.add(newComment);
-
-                            CommentsHelper.createUserComment(newComment);
-                            commentaire.setText("");
-                        }else{
-                            Toast.makeText(PostCommentaires.this, "Veuillez entrer un commentaire avant l'envoi", Toast.LENGTH_SHORT).show();
-                        }
-
-                        usersComs = com;
-                        nbrCommentaire = usersComs.size();
-
-                    }
                 });
-
-                commentaireAdapter = new PostCommentaireAdapter(getApplicationContext(), usersComs);
-                commentairesRecyclerView.setAdapter(commentaireAdapter);
-                commentaireAdapter.setOnClickListener(new PostCommentaireAdapter.OnClickListener() {
-                    @Override
-                    public void onItemClick(View view, PostCommentaire obj, int pos) {
-                        if(commentaireAdapter.getSelectedItemCount() > 0){
-                            enableActionMode(pos);
-                        }
-                    }
-
-                    @Override
-                    public void onItemLongClick(View view, PostCommentaire obj, int pos) {
-                        enableActionMode(pos);
-                    }
-                });
-
-                }
-
-        });
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        currentUser = mAuth.getCurrentUser();
+    }
+
     private void enableActionMode(final int position) {
         if (actionMode == null) {
             ActionMode.Callback actionModeCallback = new ActionMode.Callback(){
@@ -221,7 +236,7 @@ public class PostCommentaires extends AppCompatActivity {
 
         for (int i = 0; i <= selectedItemPositions.size() - 1; i++) {
             if(usersComs.get(i).getIdMoniteur().equals(currentUser.getUid())){
-                commentaireAdapter.deleteAnime(selectedItemPositions.get(i));
+                commentaireAdapter.deleteComment(selectedItemPositions.get(i));
             }else{
                 Toast.makeText(this, "Vous devez être l'auteur du post pour le supprimer", Toast.LENGTH_SHORT).show();
             }

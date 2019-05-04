@@ -146,8 +146,10 @@ public class PostCommentaireAdapter extends RecyclerView.Adapter<PostCommentaire
         void onItemLongClick(View view, PostCommentaire obj, int pos);
     }
 
-    public void deleteAnime(int pos){
-        CommentsHelper.deleteComment(postCommentaires.get(pos).getIdCommentaire());
+    public void deleteComment(int pos){
+        String idPost = postCommentaires.get(pos).getIdPost();
+        String idCommentaire = postCommentaires.get(pos).getIdCommentaire();
+        CommentsHelper.deleteComment(idPost,idCommentaire);
         resetCurrentIndex();
     }
 
@@ -163,6 +165,8 @@ public class PostCommentaireAdapter extends RecyclerView.Adapter<PostCommentaire
             date = view.findViewById(R.id.date);
             parent = view.findViewById(R.id.parent);
             monitPic = view.findViewById(R.id.monitPic);
+
+
         }
     }
 }

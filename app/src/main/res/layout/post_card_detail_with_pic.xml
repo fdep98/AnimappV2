@@ -31,6 +31,8 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="16dp"
             android:text="Nom du moniteur"
+            android:textColor="@color/fui_bgGitHub"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/moniPhoto"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,34 +51,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="88dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.105"
+            app:layout_constraintHorizontal_bias="0.121"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.009"
             tools:text="Message du post" />
 
-
-        <ImageButton
-            android:id="@+id/likeButton"
+        <com.sdsmdg.harjot.vectormaster.VectorMasterView
+            android:id="@+id/heart_vector"
             android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:background="@color/transparent"
+            android:layout_height="25dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardImage"
-            app:srcCompat="@drawable/ic_love"
+            app:layout_constraintVertical_bias="1.0"
+            app:vector_src="@drawable/ic_heart"
             tools:ignore="MissingConstraints" />
+
 
         <TextView
             android:id="@+id/nbrLike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/likeButton"
-            android:layout_marginBottom="1dp"
+            app:layout_constraintStart_toEndOf="@+id/heart_vector"
             tools:text="nbrLike" />
 
 
@@ -99,9 +111,13 @@
                 android:layout_height="26dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="128dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="11dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginBottom="0dp"
                 android:background="@color/transparent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_comment" />
@@ -110,13 +126,15 @@
                 android:id="@+id/nbrCommentaires"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="17dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="2dp"
-                android:layout_marginBottom="1dp"
-                android:layout_toEndOf="@+id/imageButton"
+                android:layout_marginBottom="6dp"
                 android:text="Nbr"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/imageButton" />
 
             <TextView
@@ -124,10 +142,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="17dp"
-                android:layout_marginBottom="2dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="38dp"
+                android:layout_marginBottom="6dp"
                 android:layout_toEndOf="@+id/nbrCommentaires"
+                android:gravity="center"
                 android:text="Commentaires"
                 app:layout_constraintEnd_toStartOf="@+id/imageButton" />
 
@@ -137,11 +159,11 @@
             android:id="@+id/cardImage"
             android:layout_width="0dp"
             android:layout_height="170dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="5dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.296"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardMessage"
             tools:srcCompat="@drawable/logo" />

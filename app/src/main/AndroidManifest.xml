@@ -4,7 +4,7 @@
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="true" />
+        android:required="false" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,11 +21,14 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.animapp.Activities.OtherUserProfil"></activity>
+        <activity android:name="com.example.animapp.Activities.ProfilPicSwipe"></activity>
+        <activity android:name="com.example.animapp.Activities.OtherUserProfil" />
         <activity android:name="com.example.animapp.Activities.PostPicSwipe" />
         <activity android:name="com.example.animapp.Activities.swipePic" />
+        <activity android:name="com.example.animapp.Activities.MediaActvity" />
         <activity android:name="com.example.animapp.Activities.PostCommentaires" />
         <activity android:name="com.example.animapp.Activities.UpdateProfil" />
+        <activity android:name="com.example.animapp.Activities.DeleteAccount" />
         <activity android:name="com.example.animapp.Activities.postMessage" />
         <activity android:name="com.example.animapp.MainFragmentActivity" />
         <activity android:name="com.example.animapp.Activities.AddAnime" />
