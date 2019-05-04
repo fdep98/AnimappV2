@@ -16,9 +16,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import com.example.animapp.Activities.MediaActvity;
 
 import com.example.animapp.Activities.postMessage;
+
 import com.example.animapp.Activities.swipePic;
+import com.example.animapp.Database.ImageHelper;
 import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.ImageGridItemDecoration;
 import com.example.animapp.StaggeredGridLayout.StaggeredGalerieImageCardRecyclerViewAdapter;
@@ -28,13 +34,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,73 +52,32 @@ public class GalerieFragment extends Fragment {
     public FirebaseUser currentUser;
     public DocumentReference galerieRef;
     private CollectionReference imageRef;
-    public static List<ImageGalerie> galerieList = new ArrayList<>();
+    private List<ImageGalerie> galerieList = new ArrayList<>();
     RecyclerView recyclerView;
     StaggeredGalerieImageCardRecyclerViewAdapter adapter;
     private ActionMode actionMode;
-    Toolbar toolbar;
+    private ImageView addPic;
+    LinearLayout addPicParent;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.galerie_fragment, container,false);
 
-        View view = inflater.inflate(R.layout.fragment_gallery, container,false);
-
-        //setUp du toolbar
-        toolbar = view.findViewById(R.id.galerie_toolbar);
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        if(activity != null){
-            activity.setSupportActionBar(toolbar);
-        }
-
+        addPic = view.findViewById(R.id.goToMedia);
+        addPicParent = view.findViewById(R.id.addPicParent);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         storage = FirebaseStorage.getInstance().getReference();
 
-        if(currentUser != null){
-            imageRef = FirebaseFirestore.getInstance().collection("galerieImages");
-                imageRef.orderBy("date").addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                        for (QueryDocumentSnapshot image : queryDocumentSnapshots) {
-                            ImageGalerie img = image.toObject(ImageGalerie.class);
-                            if(img.getMonitId().equals(currentUser.getUid())){
-                                galerieList.add(img);
-                            }
-                        }
-                        adapter = new StaggeredGalerieImageCardRecyclerViewAdapter(galerieList,getActivity());
-                        recyclerView.setAdapter(adapter);
-                        adapter.setOnClickListener(new StaggeredGalerieImageCardRecyclerViewAdapter.OnClickListener() {
-                            @Override
-                            public void onItemClick(View view, ImageGalerie obj, int pos) {
-                                if(adapter.getSelectedItemCount() > 0){
-                                    enableActionMode(pos);
-                                }else{
-                                    startActivity(new Intent(getActivity(), swipePic.class));
-                                }
-                            }
-
-                            @Override
-                            public void onItemLongClick(View view, ImageGalerie obj, int pos) {
-                                toolbar.setVisibility(View.GONE);
-                                enableActionMode(pos);
-                            }
-                        });
-                    }
-                });
-
-            }
-
-
 
         //set up du recycler view
-         recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2,GridLayoutManager.HORIZONTAL,false);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -129,27 +94,51 @@ public class GalerieFragment extends Fragment {
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.grid_spacing_small);
         recyclerView.addItemDecoration(new ImageGridItemDecoration(largePadding, smallPadding));
 
+
+        addPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),MediaActvity.class));
+            }
+        });
+
+        ImageHelper.getAllImages().orderBy("date").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if(queryDocumentSnapshots != null){
+                    List<ImageGalerie> imgLst = new ArrayList<>();
+                    ImageGalerie img;
+                    for (QueryDocumentSnapshot image : queryDocumentSnapshots) {
+                        img = image.toObject(ImageGalerie.class);
+                        if(img.getMonitId().equals(currentUser.getUid())){
+                            imgLst.add(img);
+                        }
+                    }
+                    galerieList = imgLst;
+                    //Toast.makeText(getActivity(), String.valueOf(galerieList.size()), Toast.LENGTH_SHORT).show();
+                    adapter = new StaggeredGalerieImageCardRecyclerViewAdapter(galerieList,getActivity());
+                    recyclerView.setAdapter(adapter);
+                    adapter.setOnClickListener(new StaggeredGalerieImageCardRecyclerViewAdapter.OnClickListener() {
+                        @Override
+                        public void onItemClick(View view, ImageGalerie obj, int pos) {
+                            if(adapter.getSelectedItemCount() > 0){
+                                enableActionMode(pos);
+                            }
+                        }
+
+                        @Override
+                        public void onItemLongClick(View view, ImageGalerie obj, int pos) {
+                            addPicParent.setVisibility(View.GONE);
+                            enableActionMode(pos);
+                        }
+                    });
+                }
+
+            }
+        });
         return view;
     }
 
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.galerie_toolbar_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-        MenuItem appPic = menu.findItem(R.id.add_pic);
-        appPic.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                MediaFragment goToMedia = new MediaFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment, goToMedia)
-                        .addToBackStack(null)
-                        .commit();
-                return true;
-            }
-        });
-    }
 
     private void enableActionMode(final int position) {
         if (actionMode == null) {
@@ -175,12 +164,14 @@ public class GalerieFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                         return true;
                     }
+
+                    addPicParent.setVisibility(View.VISIBLE);
                     if(id == R.id.share){
                         sharePic();
                         mode.finish();
                         return true;
                     }
-                    toolbar.setVisibility(View.VISIBLE);
+                    addPicParent.setVisibility(View.VISIBLE);
                     return false;
                 }
 
@@ -189,7 +180,7 @@ public class GalerieFragment extends Fragment {
                     adapter.clearSelections();
                     actionMode = null;
 
-                    toolbar.setVisibility(View.VISIBLE);
+                    addPicParent.setVisibility(View.VISIBLE);
                 }
             };
             actionMode = getActivity().startActionMode(actionModeCallback);
@@ -205,7 +196,6 @@ public class GalerieFragment extends Fragment {
         if (count == 0) {
             actionMode.finish();
         } else {
-            actionMode.setTitle("Supprimer une image");
             actionMode.setSubtitle(String.valueOf(count)+" sélectionné");
             actionMode.invalidate();
         }
