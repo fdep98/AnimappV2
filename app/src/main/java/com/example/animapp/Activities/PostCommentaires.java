@@ -1,15 +1,21 @@
 package com.example.animapp.Activities;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.animapp.Database.CommentsHelper;
@@ -37,10 +43,15 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import butterknife.ButterKnife;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class PostCommentaires extends AppCompatActivity {
 
     private List<PostCommentaire> usersComs = new ArrayList<>();
-    ImageButton commenter;
+    ImageButton commenter, add;
     EditText commentaire;
     String currentDate;
     public FirebaseAuth mAuth;
@@ -55,22 +66,74 @@ public class PostCommentaires extends AppCompatActivity {
     Post postSend;
     ActionMode actionMode;
 
+    BottomSheetBehavior sheetBehavior;  // provides callbacks and make the BottomSheet work with CoordinatorLayout.
+
+    @BindView(R.id.bottom_sheet_popup)
+    LinearLayout layoutBottomSheet;
+
+    @BindView(R.id.bottomSheetParent)
+    CoordinatorLayout bottomSheetParent;
+
     private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy"+" à "+ "HH:mm:ss");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_commentaire);
+        ButterKnife.bind(this);
 
-
-
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-
+        sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
         commentairesRecyclerView = findViewById(R.id.recycler_view);
         commentaire = findViewById(R.id.commentaire);
 
         commenter = findViewById(R.id.commenter);
+        add = findViewById(R.id.add);
+
+        /**
+         * bottom sheet state change listener
+         * we are changing button text when sheet changed state
+         * */
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED: {
+                        //view.setText("Close Sheet");
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_COLLAPSED: {
+                       // view.setText("Expand Sheet");
+                        bottomSheetParent.setVisibility(View.GONE);
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+
+            }
+        });
+
+        commentaire.setClickable(true);
+        commentaire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetParent.setVisibility(View.GONE);
+            }
+        });
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+
         postId = PostListAdapter.postId;
 
 
@@ -78,9 +141,29 @@ public class PostCommentaires extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         commentairesRecyclerView.setLayoutManager(layoutManager);
 
+
         if(getIntent().getExtras() != null){
             postSend = (Post) getIntent().getExtras().getSerializable("Post");
         }
+
+        /**
+         * manually opening / closing bottom sheet on button click
+         */
+
+        bottomSheetParent.setVisibility(View.GONE);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    bottomSheetParent.setVisibility(View.VISIBLE);
+                } else {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    bottomSheetParent.setVisibility(View.GONE);
+                }
+            }
+        });
+
 
         //récupère les information sur l'utilisateur
         UserHelper.getCurrentUser(currentUser.getUid()).

@@ -1,5 +1,4 @@
 package com.example.animapp.Activities;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -35,7 +34,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Database.ImageHelper;
 import com.example.animapp.Database.PostsHelper;
 import com.example.animapp.Fragments.AnimListFragment;
-import com.example.animapp.Fragments.GalerieFragment;
 import com.example.animapp.Fragments.PostFragment;
 import com.example.animapp.MainFragmentActivity;
 import com.example.animapp.Model.ImageGalerie;
@@ -208,7 +206,7 @@ public class postMessage extends AppCompatActivity {
                         date = new Date();
                     } else if(imageUrl != null){
                         putImageInDb();
-                    }else if((post.isEmpty()) && image == null && imageUrl == null){
+                    }else if((post.isEmpty()) && image == null && imageUrl.isEmpty()){
                         Toast.makeText(postMessage.this, "veuillez entrer un message ou une image avant la publication", Toast.LENGTH_SHORT).show();
                     }
                 }
