@@ -52,7 +52,7 @@ public class GalerieFragment extends Fragment {
     public FirebaseUser currentUser;
     public DocumentReference galerieRef;
     private CollectionReference imageRef;
-    private List<ImageGalerie> galerieList = new ArrayList<>();
+    public static List<ImageGalerie> galerieList = new ArrayList<>();
     RecyclerView recyclerView;
     StaggeredGalerieImageCardRecyclerViewAdapter adapter;
     private ActionMode actionMode;

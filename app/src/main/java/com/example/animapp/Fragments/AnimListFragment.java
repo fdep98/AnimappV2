@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.button.MaterialButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -49,6 +50,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,13 +73,15 @@ public class AnimListFragment extends Fragment {
 
     Dialog mDialog;
     ImageView animPic;
-    ImageButton parametre;
+    MaterialButton parametre;
     TextView animNom, animNbrAbsc, animDob, animSec, animUn, animTot, animEmail, animNgsm,  closePopup;
 
     private ActionMode actionMode;
     private Toolbar myToolbar, updateToolbar;
     Menu menu;
     MenuInflater inflateMe;
+
+
 
 
     @Nullable
@@ -116,7 +120,6 @@ public class AnimListFragment extends Fragment {
             userRef = firestoreDb.collection("users");
             monitRef = firestoreDb.collection("users").document(currentUser.getUid()); //réference vers le doc du moniteur connecté
         }
-
         bindAnimeList();
 
 
@@ -364,6 +367,34 @@ public class AnimListFragment extends Fragment {
                 startActivity(new Intent(getActivity(),AddAnime.class));
             }
         });
+
+
+    }
+
+    public void showDialog(){
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.delete_anim_dialog);
+        dialog.setTitle("Supprimer un animé...");
+        MaterialButton confirmer = dialog.findViewById(R.id.confirmer);
+        MaterialButton annuler = dialog.findViewById(R.id.annuler);
+        dialog.show();
+
+        confirmer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               deleteAnim();
+                dialog.dismiss();
+            }
+        });
+
+        annuler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
     }
 
     public void incNbrAbsence(){

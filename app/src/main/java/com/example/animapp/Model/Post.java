@@ -56,7 +56,7 @@ public class Post implements Serializable {
     //}
 
     public String getIdMoniteur() {
-        return idMoniteur;
+        return this.idMoniteur;
     }
 
     public void setIdMoniteur(String idMoniteur) {

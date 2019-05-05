@@ -204,8 +204,7 @@ public class ProfilFragment extends Fragment {
             userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                    if(documentSnapshot.exists()){
-                        if(documentSnapshot.exists()){
+                    if(documentSnapshot != null){
                             final User user = documentSnapshot.toObject(User.class);
                             curUser = user;
 
@@ -263,9 +262,12 @@ public class ProfilFragment extends Fragment {
                             UserHelper.getAnim(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                                    int nbrAnime = queryDocumentSnapshots.size();
-                                    nbrAnimes = nbrAnime;
-                                    TVanime.setText(String.valueOf(nbrAnime));
+                                   if(queryDocumentSnapshots != null){
+                                       int nbrAnime = queryDocumentSnapshots.size();
+                                       nbrAnimes = nbrAnime;
+                                       TVanime.setText(String.valueOf(nbrAnime));
+                                   }
+
                                 }
                             });
 
@@ -281,7 +283,6 @@ public class ProfilFragment extends Fragment {
                             //Toast.makeText(profil.getActivity(), "le document n'existe pas", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }
             });
 
         }else{

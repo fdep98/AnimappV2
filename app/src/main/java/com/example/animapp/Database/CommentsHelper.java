@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 
 import javax.annotation.Nullable;
 
@@ -39,10 +40,18 @@ public class CommentsHelper {
                             if(queryDocumentSnapshots != null){
                                 for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
                                     doc.getReference().delete();
+
+                                   /* if(doc.toObject(PostCommentaire.class).getImageUrl() != null){
+                                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                                        storage.getReferenceFromUrl(doc.toObject(PostCommentaire.class).getImageUrl()).delete();
+                                        //ImageHelper.getImageCollection().document().delete();
+                                    }*/
+
                                 }
                             }
                         }
                     });
+
 
         }
 

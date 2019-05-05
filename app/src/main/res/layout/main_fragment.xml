@@ -4,24 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!-- Other components and views -->
-
-    <!--<android.support.design.bottomappbar.BottomAppBar
-        android:id="@+id/bottomNav"
-        android:layout_width="445dp"
-        android:layout_height="51dp"
-        android:layout_gravity="bottom"
-        android:backgroundTint="@color/bleuVif"
-        app:menu="@menu/bottom_nav_menu"
-        tools:ignore="BottomAppBar" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_anchor="@id/bottomNav" />-->
+    android:layout_height="match_parent"
+    tools:context="com.example.animapp.MainFragmentActivity">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
@@ -37,12 +21,12 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_gravity="bottom"
-        android:background="@drawable/bottom_nav_gradient"
+        android:background="#fdfefe"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:itemTextColor="@color/blanc"
+        app:itemTextColor="@color/bleu"
         app:itemIconTint="@color/bottom_nav_item_color"
         tools:ignore="MissingConstraints" />
 

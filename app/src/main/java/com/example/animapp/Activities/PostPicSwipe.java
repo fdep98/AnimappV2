@@ -33,6 +33,7 @@ public class PostPicSwipe extends AppCompatActivity {
     private LinearLayout commentaires;
     private ImageButton likeButton;
     int resultCode = 45;
+
     Post post;
 
     @Override
@@ -57,10 +58,10 @@ public class PostPicSwipe extends AppCompatActivity {
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (PostFragment.clicked == 0) {
+                if (PostListAdapter.clicked == 0) {
                     PostListAdapter.updateNbrLikeUp(post);
                     nbrLikes.setText(String.valueOf(post.getNbrLike()));
-                } else if (PostFragment.clicked == 1) {
+                } else if (PostListAdapter.clicked == 1) {
                     PostListAdapter.updateNbrLikeDown(post);
                     nbrLikes.setText(String.valueOf(post.getNbrLike()));
                 }

@@ -7,7 +7,7 @@ public class PostCommentaire {
     private String commentaire;
     private String monitPicUrl;
     private String idCommentaire;
-    private String commentaireImgUrl;
+    private String imageUrl;
     private String idPost;
 
     public PostCommentaire(String nomMoniteur, String idMoniteur,String date, String commentaire, String idPost, String commentaireImgUrl) {
@@ -15,7 +15,7 @@ public class PostCommentaire {
         this.date = date;
         this.commentaire = commentaire;
         this.idPost = idPost;
-        this.commentaireImgUrl = commentaireImgUrl;
+        this.imageUrl = commentaireImgUrl;
         this.idMoniteur = idMoniteur;
     }
 
@@ -85,11 +85,11 @@ public class PostCommentaire {
         this.idPost = idPost;
     }
 
-    public String getCommentaireImgUrl() {
-        return commentaireImgUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setCommentaireImgUrl(String commentaireImgUrl) {
-        this.commentaireImgUrl = commentaireImgUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

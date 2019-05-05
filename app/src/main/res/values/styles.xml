@@ -12,6 +12,7 @@
         <item name="android:textColor">@color/rouge</item>
         <item name="android:textSize">12sp</item>
     </style>
+
     <style name="add" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/blanc</item>
         <item name="android:textSize">12sp</item>
@@ -26,12 +27,14 @@
     <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">13dp</item>
     </style>
+
     <dimen name="grid_spacing_large">30dp</dimen>
     <dimen name="grid_spacing_small">26dp</dimen>
 
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">17sp</item>
     </style>
+
     <style name="RippleStyleWhite">
         <item name="mrl_rippleOverlay">true</item>
         <item name="mrl_rippleColor">#80FFFFFF</item>
@@ -41,6 +44,36 @@
 
     <style name="RippleStyleBlack" parent="RippleStyleWhite">
         <item name="mrl_rippleColor">#8096989A</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="BottomSheetAppBarStyle" parent="Widget.Design.AppBarLayout">
+        <item name="android:theme">@style/Theme.AppCompat.Light</item>
+    </style>
+
+    <style name="MainTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="MainTabLayoutStyle" parent="Widget.Design.TabLayout">
+        <item name="tabPaddingStart">12dp</item>
+        <item name="tabPaddingEnd">12dp</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabGravity">fill</item>
+        <item name="tabBackground">?attr/selectableItemBackground</item>
+        <item name="tabTextAppearance">@style/MainTabTextAppearance</item>
+    </style>
+
+    <style name="BottomSheetTabLayoutStyle" parent="MainTabLayoutStyle">
+        <item name="tabIndicatorColor">?attr/colorPrimaryDark</item>
     </style>
 
 </resources>

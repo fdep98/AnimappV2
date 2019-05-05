@@ -29,6 +29,8 @@ public class PostCommentaireAdapter extends RecyclerView.Adapter<PostCommentaire
     private SparseBooleanArray selectedItems;
     private int currentSelectedIndx = -1;
     private OnClickListener onClickListener = null;
+    private static final int COMMENT_WITH_PIC = 1;
+    private static final int COMMENT_WITHOUT_PIC = 2;
 
     public PostCommentaireAdapter(Context mContext, List<PostCommentaire> postCommentaires) {
         this.mContext = mContext;
@@ -49,13 +51,30 @@ public class PostCommentaireAdapter extends RecyclerView.Adapter<PostCommentaire
         return postCommentaires.get(position);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        final PostCommentaire commentaire = getItem(position);
 
+        if ( commentaire.getImageUrl() == null) {
+            return COMMENT_WITH_PIC;
+        } else {
+            return COMMENT_WITHOUT_PIC;
+        }
+    }
     // Inflates the appropriate layout according to the ViewType.
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.commentaire_detail, parent, false);
-        PostCommentaireAdapter.ViewHolder holder = new PostCommentaireAdapter.ViewHolder(view);
-        return holder;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
+        View view;
+        if (position == COMMENT_WITH_PIC) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.commentaire_detail, parent, false);
+            return new ViewHolder(view);
+        } else if (position == COMMENT_WITHOUT_PIC) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.commentaire_avec_img_detail, parent, false);
+            return new ViewHolder(view);
+        }
+        return null;
     }
 
     @Override
@@ -63,7 +82,12 @@ public class PostCommentaireAdapter extends RecyclerView.Adapter<PostCommentaire
         final PostCommentaire postCommentaire = getItem(position);
 
         holder.monitNom.setText(postCommentaire.getNomMoniteur());
-        holder.monitCommentaire.setText(postCommentaire.getCommentaire());
+        if(!postCommentaire.getCommentaire().isEmpty()){
+            holder.monitCommentaire.setText(postCommentaire.getCommentaire());
+        }else {
+            holder.monitCommentaire.setVisibility(View.GONE);
+        }
+
         holder.date.setText(postCommentaire.getDate());
         holder.parent.setActivated(selectedItems.get(position, false));
 
@@ -94,6 +118,10 @@ public class PostCommentaireAdapter extends RecyclerView.Adapter<PostCommentaire
                 return true;
             }
         });
+        if(postCommentaire.getImageUrl() != null){
+            Picasso.get().load(postCommentaire.getImageUrl()).into(holder.image);
+        }
+
         toggleCheckedIcon(holder,position);
 
     }
@@ -157,6 +185,7 @@ public class PostCommentaireAdapter extends RecyclerView.Adapter<PostCommentaire
         TextView monitNom, monitCommentaire, date;
         ImageView monitPic;
         ConstraintLayout parent;
+        ImageView image;
 
         public ViewHolder(@NonNull View view) {
             super(view);
@@ -165,6 +194,7 @@ public class PostCommentaireAdapter extends RecyclerView.Adapter<PostCommentaire
             date = view.findViewById(R.id.date);
             parent = view.findViewById(R.id.parent);
             monitPic = view.findViewById(R.id.monitPic);
+            image = view.findViewById(R.id.image);
 
 
         }

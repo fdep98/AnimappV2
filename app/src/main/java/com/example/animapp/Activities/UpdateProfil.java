@@ -83,7 +83,6 @@ public class UpdateProfil extends AppCompatActivity {
     ProgressDialog progressDialog;
     FragmentManager fragmentManager = getSupportFragmentManager();
     ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(fragmentManager);
-    ViewPager viewPager = MainFragmentActivity.viewPager;
     // FirebaseUser currentUser;
     String currentDate;
     Date date;

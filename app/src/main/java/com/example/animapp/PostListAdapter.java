@@ -28,8 +28,12 @@ import com.example.animapp.Database.PostsHelper;
 import com.example.animapp.Fragments.PostFragment;
 import com.example.animapp.Model.Post;
 import com.example.animapp.animapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -59,8 +63,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     private int currentSelectedIndx = -1;
 
     private OnClickListener onClickListener = null;
+    public static int clicked = 0;
 
-    boolean animation = false;
 
     public PostListAdapter(List<Post> posts, Context context) {
         this.posts = posts;
@@ -134,42 +138,16 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             @Override
             public void onClick(View view) {
 
-                if(animation){
-                    ValueAnimator valueAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), Color.parseColor("#1260E8"),Color.WHITE);
-                    valueAnimator.setDuration(500);
-                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            // set fill color and update view
-                            outline.setFillColor((Integer) valueAnimator.getAnimatedValue());
-                            holder.heartVector.update();
-                        }
-                    });
-                    valueAnimator.start();
+                if(clicked == 0){
                     updateNbrLikeUp(post);
                     holder.nbrLike.setText(""+post.getNbrLike());
-                    animation = false;
-
-                }
-                    ValueAnimator valueAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), Color.WHITE, Color.parseColor("#1260E8"));
-                    valueAnimator.setDuration(500);
-
-                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
-
-                            // set fill color and update view
-                            outline.setFillColor((Integer) valueAnimator.getAnimatedValue());
-                            holder.heartVector.update();
-                        }
-                    });
-                    valueAnimator.start();
+                    //setNbrLike(post,holder);
+                }else if(clicked == 1){
                     updateNbrLikeDown(post);
                     holder.nbrLike.setText(""+post.getNbrLike());
-
-                    animation = true;
-
+                    //setNbrCommentaire(post,holder);
                 }
+            }
 
         });
 
@@ -372,7 +350,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         post.setNbrLike(post.getNbrLike()+1);
         if(post.getNbrLike() >= 0){
             PostsHelper.updateNbrLike(post);
-            PostFragment.clicked = 1;
+            clicked = 1;
         }
 
     }
@@ -380,7 +358,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         if(post.getNbrLike() > 0){
             post.setNbrLike(post.getNbrLike()-1);
             PostsHelper.updateNbrLike(post);
-            PostFragment.clicked = 0;
+            clicked = 0;
         }
 
     }
@@ -401,5 +379,36 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         PostsHelper.deletePost(posts.get(pos));
         resetCurrentIndex();
     }
+
+    /*public void setNbrLike(Post post, ViewHolder holder){
+        PostsHelper.getAllPostComments(post).whereEqualTo("id",post.getId()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots != null){
+                    for(QueryDocumentSnapshot doc :queryDocumentSnapshots){
+                        Post post = doc.toObject(Post.class);
+                        holder.nbrLike.setText(""+post.getNbrLike());
+                    }
+
+                }
+            }
+        });
+
+    }*/
+
+    /*public void setNbrCommentaire(Post post, ViewHolder holder){
+        PostsHelper.getAllPostComments(post).whereEqualTo("id",post.getId()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots != null){
+                    for(QueryDocumentSnapshot doc :queryDocumentSnapshots){
+                        Post post = doc.toObject(Post.class);
+                        holder.nbrCommentaire.setText(""+post.getNbrCommentaire());
+                    }
+
+                }
+            }
+        });
+    }*/
 
 }

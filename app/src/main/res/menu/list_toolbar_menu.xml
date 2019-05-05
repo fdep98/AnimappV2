@@ -16,7 +16,7 @@
         android:id="@+id/ajouter"
         android:enabled="true"
         android:icon="@drawable/ic_add_anime"
-        android:title="absences"
+        android:title="Ajouter"
         app:showAsAction="ifRoom"/>
 
 

@@ -22,53 +22,23 @@ import com.example.animapp.Fragments.GalerieFragment;
 import com.example.animapp.Fragments.PostFragment;
 import com.example.animapp.Fragments.ProfilFragment;
 import com.example.animapp.animapp.R;
-import com.sdsmdg.harjot.vectormaster.models.PathModel;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import eu.long1.spacetablayout.SpaceTabLayout;
-
-public class MainFragmentActivity extends AppCompatActivity {
-    BottomNavigationView bottomNavigationView;
-    public static ViewPager viewPager;
+public class MainFragmentActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+    private BottomNavigationView bottomNavigationView;
+    public  ViewPager viewPager;
     MenuItem prevMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_fragment);
+
         bottomNavigationView = findViewById(R.id.bottomNav);
         viewPager = findViewById(R.id.viewpager);
 
-        bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu);
-
-
         setupViewPager(viewPager);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-               /* if(menuItem.getItemId() == R.id.action_profil){
-                    startActivity(new Intent(getApplicationContext(), profil.class));
-                }else{*/
-                    switch (menuItem.getItemId()) {
-                        case R.id.action_menu:
-                            viewPager.setCurrentItem(0);
-                            break;
-                        case R.id.action_photo:
-                            viewPager.setCurrentItem(1);
-                            break;
-                        case R.id.action_list:
-                            viewPager.setCurrentItem(2);
-                            break;
-                        case R.id.action_profil:
-                            viewPager.setCurrentItem(3);
-                            break;
-                    }
-                return false;
-
-            }
-        });
+        bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
 
         Bundle extras = getIntent().getExtras();
@@ -127,7 +97,6 @@ public class MainFragmentActivity extends AppCompatActivity {
                 moveTaskToBack(true); //il met l'application en arriere plan
             }
             return true;
-
         } else {
             return super.onKeyDown(keyCode, event);
         }
@@ -152,4 +121,22 @@ public class MainFragmentActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.action_menu:
+                viewPager.setCurrentItem(0);
+                break;
+            case R.id.action_photo:
+                viewPager.setCurrentItem(1);
+                break;
+            case R.id.action_list:
+                viewPager.setCurrentItem(2);
+                break;
+            case R.id.action_profil:
+                viewPager.setCurrentItem(3);
+                break;
+        }
+        return false;
+    }
 }
