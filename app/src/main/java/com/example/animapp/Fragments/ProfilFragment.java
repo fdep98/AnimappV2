@@ -206,90 +206,90 @@ public class ProfilFragment extends Fragment {
                 public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
                     if(documentSnapshot != null){
                             final User user = documentSnapshot.toObject(User.class);
-                            curUser = user;
+                            if(user != null){
+                                curUser = user;
 
-                            //récupère et met à jour la photo de profil
-                            if(currentUser.getPhotoUrl() != null){
-                                Glide.with(getActivity())
-                                        .load(currentUser.getPhotoUrl())
-                                        .apply(RequestOptions.circleCropTransform())
-                                        .into(IVphoto);
-                            }else{
-                                if(getActivity() != null){
+                                //récupère et met à jour la photo de profil
+                                if(currentUser.getPhotoUrl() != null){
                                     Glide.with(getActivity())
-                                            .load(user.getUrlPhoto())
+                                            .load(currentUser.getPhotoUrl())
                                             .apply(RequestOptions.circleCropTransform())
                                             .into(IVphoto);
-                                }
-
-                            }
-
-                            TVnom.setText(user.getNom());
-                            TVpseudo.setText(user.getPrenom());
-                            TVtotem.setText(user.getTotem());
-                            TVemail.setText(user.getEmail());
-                            TVngsm.setText(user.getNgsm());
-                            TVdob.setText(user.getDateOfBirth());
-                            TVunite.setText(user.getUnite());
-                            TVsection.setText(user.getSection());
-
-                            IVphoto.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(getActivity(), ProfilPicSwipe.class);
-                                    intent.putExtra("currentUser",user);
-                                    startActivity(intent);
-                                }
-                            });
-
-
-
-                            UserHelper.getCollegue(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                @Override
-                                public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                                    if(queryDocumentSnapshots != null){
-                                        String id;
-                                        List<User> col = new ArrayList<>();
-                                        for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
-                                            id = doc.getString("id");
-                                            col.add(doc.toObject(User.class));
-                                        }
-                                        collegue = col;
-                                        bindLastPost(collegue);
+                                }else{
+                                    if(getActivity() != null){
+                                        Glide.with(getActivity())
+                                                .load(user.getUrlPhoto())
+                                                .apply(RequestOptions.circleCropTransform())
+                                                .into(IVphoto);
                                     }
 
                                 }
-                            });
+
+                                TVnom.setText(user.getNom());
+                                TVpseudo.setText(user.getPrenom());
+                                TVtotem.setText(user.getTotem());
+                                TVemail.setText(user.getEmail());
+                                TVngsm.setText(user.getNgsm());
+                                TVdob.setText(user.getDateOfBirth());
+                                TVunite.setText(user.getUnite());
+                                TVsection.setText(user.getSection());
+
+                                IVphoto.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(getActivity(), ProfilPicSwipe.class);
+                                        intent.putExtra("currentUser",user);
+                                        startActivity(intent);
+                                    }
+                                });
 
 
-                            UserHelper.getAnim(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                @Override
-                                public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                                   if(queryDocumentSnapshots != null){
-                                       int nbrAnime = queryDocumentSnapshots.size();
-                                       nbrAnimes = nbrAnime;
-                                       TVanime.setText(String.valueOf(nbrAnime));
-                                   }
 
-                                }
-                            });
+                                UserHelper.getCollegue(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                                        if(queryDocumentSnapshots != null){
+                                            String id;
+                                            List<User> col = new ArrayList<>();
+                                            for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                                                id = doc.getString("id");
+                                                col.add(doc.toObject(User.class));
+                                            }
+                                            collegue = col;
+                                            bindLastPost(collegue);
+                                        }
 
-                        }else{
-                            TVnom.setText(currentUser.getDisplayName());
-                            //TVpseudo.setText(currentUser);
-                            //TVtotem.setText(inTotem);
-                            TVemail.setText(currentUser.getEmail());
-                            TVngsm.setText(currentUser.getPhoneNumber());
-                            //TVdob.setText(currentUser.get);
-                            //TVunite.setText(inUnite);
-                            //TVsection.setText(inSection);
-                            //Toast.makeText(profil.getActivity(), "le document n'existe pas", Toast.LENGTH_SHORT).show();
-                        }
+                                    }
+                                });
+
+
+                                UserHelper.getAnim(user).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                                        if(queryDocumentSnapshots != null){
+                                            int nbrAnime = queryDocumentSnapshots.size();
+                                            nbrAnimes = nbrAnime;
+                                            TVanime.setText(String.valueOf(nbrAnime));
+                                        }
+
+                                    }
+                                });
+
+                            }else{
+                                TVnom.setText(currentUser.getDisplayName());
+                                //TVpseudo.setText(currentUser);
+                                //TVtotem.setText(inTotem);
+                                TVemail.setText(currentUser.getEmail());
+                                TVngsm.setText(currentUser.getPhoneNumber());
+                                //TVdob.setText(currentUser.get);
+                                //TVunite.setText(inUnite);
+                                //TVsection.setText(inSection);
+                                //Toast.makeText(profil.getActivity(), "le document n'existe pas", Toast.LENGTH_SHORT).show();
+                            }
+                            }
+
                     }
             });
-
-        }else{
-            //Toast.makeText(getActivity(), "current user null", Toast.LENGTH_SHORT).show();
         }
     }
 
