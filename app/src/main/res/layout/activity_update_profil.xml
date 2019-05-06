@@ -66,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/bleuBlanc"
-                android:hint="email"
+                android:hint=""
                 android:textColorHint="@color/brunRouge"
                 app:errorEnabled="true">
 

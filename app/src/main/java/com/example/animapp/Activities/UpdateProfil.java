@@ -2,9 +2,12 @@ package com.example.animapp.Activities;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.button.MaterialButton;
@@ -16,17 +19,25 @@ import android.webkit.MimeTypeMap;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.animapp.Database.UserHelper;
 import com.example.animapp.Model.User;
 import com.example.animapp.animapp.R;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -63,12 +74,17 @@ public class UpdateProfil extends AppCompatActivity{
 
     EditText email,mdp,nom,prenom,totem,ngsm, dob;
     public TextInputLayout emailTI, mdpTI, nomTI, prenomTI, totemTI, ngsmTI, dobTI;
+    EditText auth_email,auth_mdp;
+    public TextInputLayout auth_emailTI, auth_mdpTI;
+    TextView auth_closePopup;
     Spinner unite,section;
-    MaterialButton update;
+    MaterialButton update, auth_button;
     private ArrayList<String> unitList = new ArrayList<>();
     private ArrayList<String> sectionList = new ArrayList<>();
     Uri image;
     ProgressDialog progressDialog ;
+
+    Dialog mDialog;
 
     // FirebaseUser currentUser;
 
@@ -101,15 +117,35 @@ public class UpdateProfil extends AppCompatActivity{
         ngsmTI =  findViewById(R.id.ngsmTI);
         dobTI = findViewById(R.id.dobTI);
 
-        progressDialog = new ProgressDialog(UpdateProfil.this);
         curUser = (User) getIntent().getExtras().getSerializable("User");
-        setup();
 
+        nom.setHint(curUser.getNom());
+        nomTI.setHint("");
+        prenom.setHint(curUser.getPrenom());
+        prenomTI.setHint("");
+        email.setHint(curUser.getEmail());
+        emailTI.setHint("");
+        if(!curUser.getNgsm().isEmpty()){
+            ngsm.setHint(curUser.getNgsm());
+            ngsmTI.setHint("");
+        }
+        if(!curUser.getTotem().isEmpty()){
+            totem.setHint(curUser.getTotem());
+            totemTI.setHint("");
+        }
+        if(!curUser.getDateOfBirth().isEmpty()){
+            dob.setHint(curUser.getDateOfBirth());
+            dobTI.setHint("");
+        }
+
+        mDialog = new Dialog(this);
+        progressDialog = new ProgressDialog(UpdateProfil.this);
+        setup();
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addData();
+                showPopup();
             }
         });
     }
@@ -119,10 +155,117 @@ public class UpdateProfil extends AppCompatActivity{
         mdp.setText("");
     }
 
-    public void addData(){
+    public void showPopup(){
+        mDialog.setContentView(R.layout.authentification_popup);
+
+        auth_email =  mDialog.findViewById(R.id.auth_emailET);
+        auth_mdp =  mDialog.findViewById(R.id.auth_mdpET);
+        auth_emailTI =  mDialog.findViewById(R.id.auth_emailTI);
+        auth_mdpTI =  mDialog.findViewById(R.id.auth_mdpTI);
+
+        auth_closePopup = mDialog.findViewById(R.id.auth_closePopUp);
+        auth_button = mDialog.findViewById(R.id.auth_button);
+
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mDialog.show();
+
+        auth_closePopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+
+        auth_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AuthCredential credential = EmailAuthProvider.getCredential(auth_email.getText().toString(), auth_mdp.getText().toString());
+                mDialog.dismiss();
+                currentUser.reauthenticate(credential)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    checkEmail();
+                                }
+                                else{
+                                    Toast.makeText(UpdateProfil.this, "Echec de l'authentification", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
+    }
+
+    public void checkEmail(){
         inputEmail =  email.getText().toString();
+        if(inputEmail.isEmpty()){
+            checkPassword(curUser.getEmail());
+        }
+        else{
+            currentUser.updateEmail(inputEmail)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                email.setText("");
+                                checkPassword(inputEmail);
+                            }
+                            else {
+                                String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                switch (errorCode) {
+                                    case "ERROR_EMAIL_ALREADY_IN_USE":
+                                        emailTI.setError("Cette adresse email est déjà utilisée");
+                                        email.requestFocus();
+                                        email.setText("");
+                                        break;
+                                    case "ERROR_INVALID_EMAIL":
+                                        email.setError("Cette adresse email est invalide");
+                                        email.requestFocus();
+                                        break;
+                                    default:
+                                        Toast.makeText(UpdateProfil.this, "Une erreur inattendue s'est produite" + task.getException(), Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+                        }
+                    });
+        }
+    }
+
+    public void checkPassword(final String inputEmail){
         inputMdp = mdp.getText().toString();
-        //TODO ajouter un confirm password
+        if(!inputMdp.isEmpty()){
+            currentUser.updatePassword(inputMdp)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                mdp.setText("");
+                                addData(inputEmail);
+                            }
+                            else {
+                                String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                switch (errorCode) {
+                                    case "ERROR_WEAK_PASSWORD":
+                                        mdpTI.setError("Votre mot de passe n'est pas assez robuste");
+                                        mdp.requestFocus();
+                                        mdp.setText("");
+                                        break;
+                                    default:
+                                        Toast.makeText(UpdateProfil.this, "Une erreur inattendue s'est produite" + task.getException(), Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+                        }
+                    });
+        }
+        else {
+            addData(inputEmail);
+        }
+    }
+
+    public void addData(String inputEmail){
         inputName = nom.getText().toString();
         inputPrenom = prenom.getText().toString();
         inputTotem =  totem.getText().toString();
@@ -130,19 +273,15 @@ public class UpdateProfil extends AppCompatActivity{
         inputDob =  dob.getText().toString();
         inputUnite = curUser.getUnite();
         inputSection = curUser.getSection();
-        if(inputEmail.isEmpty() && inputName.isEmpty() && inputDob.isEmpty() && inputTel.isEmpty() && inputMdp.isEmpty() && inputPrenom.isEmpty() && inputTotem.isEmpty() && image == null){
-            Toast.makeText(this, "Pour la mise à jour, veuillez entrer des données", Toast.LENGTH_SHORT).show();
-        }else if(!inputMdp.isEmpty() && inputMdp.length() > 5){
-            mdpTI.setError("Mot de passe trop court");
-            mdp.setText("");
+
+        if(inputEmail.isEmpty() && inputName.isEmpty() && inputDob.isEmpty() && inputTel.isEmpty() && inputPrenom.isEmpty() && inputTotem.isEmpty() && image == null){
+            //Toast.makeText(this, "Pour la mise à jour, veuillez entrer des données", Toast.LENGTH_SHORT).show();
         }else if(!(inputTel.isEmpty()) && inputTel.length()!=10){
             ngsmTI.setError("Numéro invalide");
             ngsm.requestFocus();
             ngsm.setText("");
         }else{
-            if(image == null){
-                new_user.setUrlPhoto(curUser.getUrlPhoto());
-            }
+
             if(inputName.isEmpty()){
                 inputName = curUser.getNom();
             }
@@ -152,44 +291,30 @@ public class UpdateProfil extends AppCompatActivity{
             if(inputTel.isEmpty()){
                 inputTel = curUser.getNgsm();
             }
-            if(inputMdp.isEmpty()){
-                inputMdp = curUser.getMdp();
-            }
             if(inputTotem.isEmpty()){
                 inputTotem = curUser.getTotem();
             }
             if(inputDob.isEmpty()){
                 inputDob = curUser.getDateOfBirth();
             }
-            if(inputPrenom.isEmpty()){
-                inputPrenom = curUser.getPrenom();
-            }
-            if(inputEmail.isEmpty()){
-                inputEmail = curUser.getEmail();
-            }
+
             new_user= new User(inputName, inputPrenom, inputTotem, inputEmail, inputTel, inputDob, inputUnite, inputSection);
             new_user.setId(curUser.getId());
 
             if(!new_user.getId().isEmpty()){
                 if(image != null){
                     putImageInDb(new_user);
-                    Toast.makeText(UpdateProfil.this, "Votre profil a été mis à jour", Toast.LENGTH_SHORT).show();
-                    //insert l'utilisateur dans authentification de firebase
-                    Intent main = new Intent(UpdateProfil.this, profil.class);
-                    startActivity(main);
-                }else{
-                    UserHelper.updateUser(new_user);
-                    Toast.makeText(UpdateProfil.this, "Votre profil a été mis à jour", Toast.LENGTH_SHORT).show();
-                    //insert l'utilisateur dans authentification de firebase
-                    Intent main = new Intent(UpdateProfil.this, profil.class);
-                    startActivity(main);
+                    new_user.setUrlPhoto(curUser.getUrlPhoto());
                 }
-
+                UserHelper.updateUser(new_user);
+                Toast.makeText(UpdateProfil.this, "Votre profil a été mis à jour", Toast.LENGTH_SHORT).show();
+                Intent main = new Intent(UpdateProfil.this, profil.class);
+                startActivity(main);
             }
         }
 
-
     }
+
     public void putImageInDb(final User user){
         progressDialog.setTitle("Téléchargement");
         progressDialog.setMessage("Ajout de l'image...");
