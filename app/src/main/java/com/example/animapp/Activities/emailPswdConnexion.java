@@ -1,19 +1,27 @@
 package com.example.animapp.Activities;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.animapp.MainFragmentActivity;
 import com.example.animapp.animapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +34,12 @@ public class emailPswdConnexion extends AppCompatActivity implements View.OnClic
     private FirebaseAuth mAuth;
     private TextInputEditText email, mdp;
     private TextInputLayout emailTI, mdpTI;
+
+    EditText res_email;
+    public TextInputLayout res_emailTI;
+    TextView reset_link, res_closePopup;
+    MaterialButton res_button;
+    Dialog mDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +50,15 @@ public class emailPswdConnexion extends AppCompatActivity implements View.OnClic
         mdp = findViewById(R.id.mdpET);
         emailTI = findViewById(R.id.emailTI);
         mdpTI = findViewById(R.id.mdpTI);
+
+        mDialog = new Dialog(this);
+        reset_link = findViewById(R.id.reset_link);
+        reset_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reset();
+            }
+        });
 
         findViewById(R.id.suivant).setOnClickListener(this);
         findViewById(R.id.annuler).setOnClickListener(this);
@@ -95,6 +118,45 @@ public class emailPswdConnexion extends AppCompatActivity implements View.OnClic
                         }
                     }
                 });
+    }
+
+    public void reset(){
+        mDialog.setContentView(R.layout.reset_popup);
+
+        res_email =  mDialog.findViewById(R.id.res_emailET);
+        res_emailTI =  mDialog.findViewById(R.id.res_emailTI);
+
+        res_closePopup = mDialog.findViewById(R.id.res_closePopUp);
+        res_button = mDialog.findViewById(R.id.res_button);
+
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mDialog.show();
+
+        res_closePopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+
+        res_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.sendPasswordResetEmail(res_email.getText().toString())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(emailPswdConnexion.this, "Mail a été envoyer sur votre adresse email", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(emailPswdConnexion.this, "Ce compte n'existe pas", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                mDialog.dismiss();
+            }
+        });
     }
 
     public void goToProfil(){
