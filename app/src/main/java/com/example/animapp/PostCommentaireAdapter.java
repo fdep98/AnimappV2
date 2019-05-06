@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.animapp.Activities.PostCommentaires;
 import com.example.animapp.Database.CommentsHelper;
 import com.example.animapp.Model.PostCommentaire;
 import com.example.animapp.animapp.R;
@@ -177,7 +178,7 @@ public class PostCommentaireAdapter extends RecyclerView.Adapter<PostCommentaire
     public void deleteComment(int pos){
         String idPost = postCommentaires.get(pos).getIdPost();
         String idCommentaire = postCommentaires.get(pos).getIdCommentaire();
-        CommentsHelper.deleteComment(idPost,idCommentaire);
+        CommentsHelper.deleteComment(idPost,idCommentaire, PostCommentaires.currentUserId);
         resetCurrentIndex();
     }
 

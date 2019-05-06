@@ -30,10 +30,11 @@ public class CommentsHelper {
         }
 
 
-        public static void deleteComment(String idPost, String idCommentaire) {
+        public static void deleteComment(String idPost, String idCommentaire, String idMoniteur) {
             CommentsHelper.getCommentsCollection()
                     .whereEqualTo("idCommentaire",idCommentaire)
                     .whereEqualTo("idPost",idPost)
+                    .whereEqualTo("idMoniteur",idMoniteur)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {

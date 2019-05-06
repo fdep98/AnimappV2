@@ -35,6 +35,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -150,6 +152,20 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             }
 
         });
+
+       /* holder.likeButton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                updateNbrLikeUp(post);
+                holder.nbrLike.setText(""+post.getNbrLike());
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                updateNbrLikeDown(post);
+                holder.nbrLike.setText(""+post.getNbrLike());
+            }
+        });*/
 
 
             holder.nbrCommentaire.setText(String.valueOf(post.getNbrCommentaire()));
@@ -307,6 +323,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         ImageView image,monitImage;
         RelativeLayout commentaire;
         View parent;
+        LikeButton likeButton;
 
         VectorMasterView heartVector;
 
@@ -322,6 +339,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             commentaire = view.findViewById(R.id.commentaire);
             parent = view.findViewById(R.id.parent);
             heartVector =  view.findViewById(R.id.heart_vector);
+            //likeButton = view.findViewById(R.id.likeButton);
 
         }
     }
@@ -376,7 +394,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     }
 
     public void deletePost(int pos){
-        PostsHelper.deletePost(posts.get(pos));
+        PostsHelper.deletePost(posts.get(pos),PostFragment.currentUserId);
         resetCurrentIndex();
     }
 
