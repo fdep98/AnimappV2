@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Activities.AddAnime;
+import com.example.animapp.Activities.UpdateAnime;
 import com.example.animapp.Database.UserHelper;
 import com.example.animapp.AnimListAdapter;
 import com.example.animapp.MainFragmentActivity;
@@ -52,11 +53,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class AnimListFragment extends Fragment {
+public class AnimListFragment extends Fragment implements Serializable {
 
     private RecyclerView list;
     private FirebaseUser currentUser;
@@ -364,7 +366,9 @@ public class AnimListFragment extends Fragment {
         parametre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),AddAnime.class));
+                Intent intent = new Intent(getActivity(), UpdateAnime.class);
+                intent.putExtra("anime", anim);
+                startActivity(intent);
             }
         });
 
