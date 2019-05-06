@@ -187,8 +187,8 @@ public class BottomSheetGallery extends Fragment {
 
             while (!mergeCursor.isAfterLast()){
                 pathOfImage = mergeCursor.getString(mergeCursor.getColumnIndex(MediaStore.MediaColumns.DATA));
-                int lastPoint = pathOfImage.lastIndexOf(".");
-                pathOfImage = pathOfImage.substring(0,lastPoint)+pathOfImage.substring(lastPoint).toLowerCase();
+                //int lastPoint = pathOfImage.lastIndexOf(".");
+                //pathOfImage = pathOfImage.substring(0,lastPoint)+pathOfImage.substring(lastPoint).toLowerCase();
                 listOfAllImages.add(pathOfImage);
                 listUriImages.add(Uri.fromFile(new File(pathOfImage)));
                 mergeCursor.moveToNext();
@@ -220,6 +220,7 @@ public class BottomSheetGallery extends Fragment {
 
                             }
                         });
+                        progressDialog.dismiss();
                     }
                 });
     }
