@@ -207,13 +207,16 @@ public class PostCommentaires extends AppCompatActivity {
                 Bundle b = intent.getExtras();
                 fromOnlineGal = b.getString("From_Online_Gallery");
                 fromGal = b.getString("From_Gallery");
-
+                fromCam = b.getString("From_Camera");
+                Toast.makeText(PostCommentaires.this, fromCam, Toast.LENGTH_SHORT).show();
                 //imageFromCam = (Uri) b.get("From_Camera");
                 //imageFromGallery = (Uri) b.get("From_Gallery");
             }
         };
 
         registerReceiver(br, new IntentFilter("broadCastName"));
+
+
 
         /**
          * manually opening / closing bottom sheet on button click
@@ -224,6 +227,8 @@ public class PostCommentaires extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
                     sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     bottomSheetParent.setVisibility(View.VISIBLE);
@@ -278,15 +283,15 @@ public class PostCommentaires extends AppCompatActivity {
                                 date = new Date();
                                 currentDate = df.format(date);
 
-                                if (!commentaire.getText().toString().isEmpty() || fromOnlineGal != null || fromCam != null || fromGal != null) {
+                                if (!commentaire.getText().toString().isEmpty() || (fromOnlineGal != null || fromCam != null || fromGal != null)) {
                                     PostCommentaire newComment;
                                     if (fromOnlineGal != null) {
                                         newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(), currentDate, commentaire.getText().toString(), postId, fromOnlineGal);
                                         newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
-                                    } else if (fromGal != null) {
+                                    }else if (fromGal != null) {
                                         newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(), currentDate, commentaire.getText().toString(), postId, fromGal);
                                         newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
-                                    } else  if (fromCam != null) {
+                                    }else if (fromCam != null) {
                                         newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(), currentDate, commentaire.getText().toString(), postId, fromCam);
                                         newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
                                     }else{
@@ -304,7 +309,7 @@ public class PostCommentaires extends AppCompatActivity {
                                         }
                                     });
                                     commentaire.setText("");
-                                }else if(commentaire.getText().toString().isEmpty() && imageFromGallery == null && imageFromCam == null && fromOnlineGal.isEmpty()) {
+                                }else{
                                     Toast.makeText(PostCommentaires.this, "Veuillez entrer un commentaire avant l'envoi", Toast.LENGTH_SHORT).show();
                                 }
 

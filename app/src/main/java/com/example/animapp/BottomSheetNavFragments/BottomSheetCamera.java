@@ -98,6 +98,7 @@ public class BottomSheetCamera extends Fragment {
             Intent intent = new Intent("broadCastName");
             intent.putExtra("From_Camera",imgUrl);
             getActivity().sendBroadcast(intent);
+
         }
     }
 
@@ -120,6 +121,7 @@ public class BottomSheetCamera extends Fragment {
 
                             }
                         });
+                        progressDialog.dismiss();
                     }
                 });
     }
