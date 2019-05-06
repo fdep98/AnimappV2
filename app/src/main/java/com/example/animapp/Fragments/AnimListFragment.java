@@ -342,10 +342,18 @@ public class AnimListFragment extends Fragment implements Serializable {
         mDialog.show();
         User anim = animListe.get(position);
 
-        Glide.with(getContext())
-                .load(R.mipmap.ic_launcher)
-                .apply(RequestOptions.circleCropTransform())
-                .into(animPic);
+        if(anim.getUrlPhoto() != null){
+            Glide.with(getContext())
+                    .load(anim.getUrlPhoto())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(animPic);
+        }else{
+            Glide.with(getContext())
+                    .load(R.drawable.logo)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(animPic);
+        }
+
 
         animNom.setText(anim.getNom());
         animTot.setText(anim.getTotem());

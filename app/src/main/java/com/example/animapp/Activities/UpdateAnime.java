@@ -59,10 +59,10 @@ public class UpdateAnime extends AppCompatActivity implements Serializable {
     private FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
 
     User anime, curAnim;
-    String inputEmail, inputMdp, inputName, inputPrenom, inputTotem, inputTel, inputDob, inputUnite, inputSection;
+    String inputEmail, inputName, inputTotem, inputTel, inputDob, inputUnite, inputSection;
 
-    EditText email, mdp, nom, prenom, totem, ngsm, dob;
-    public TextInputLayout emailTI, mdpTI, nomTI, prenomTI, totemTI, ngsmTI, dobTI;
+    EditText email, nom, totem, ngsm, dob;
+    public TextInputLayout emailTI, nomTI, totemTI, ngsmTI, dobTI;
 
     MaterialButton update;
     Uri image;
@@ -80,23 +80,20 @@ public class UpdateAnime extends AppCompatActivity implements Serializable {
         db = FirebaseDatabase.getInstance().getReference(); //instance de la BDD
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        User curAnim = (User) getIntent().getSerializableExtra("anime");
+        curAnim = (User) getIntent().getSerializableExtra("anime");
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference(); //reférence vers l'emplacement de la ressource ( root)
         databaseRef = FirebaseDatabase.getInstance().getReference("users");
 
         update = findViewById(R.id.updateProfil);
+
         nom = findViewById(R.id.nomET);
-        prenom = findViewById(R.id.prenomET);
-        mdp = findViewById(R.id.mdpET);
         totem = findViewById(R.id.totemET);
         email = findViewById(R.id.emailET);
         ngsm = findViewById(R.id.ngsmET);
         dob = findViewById(R.id.dobET);
 
         nomTI = findViewById(R.id.nomTI);
-        prenomTI = findViewById(R.id.prenomTI);
-        mdpTI = findViewById(R.id.mdpTI);
         totemTI = findViewById(R.id.totemTI);
         emailTI = findViewById(R.id.emailTI);
         ngsmTI = findViewById(R.id.ngsmTI);
@@ -117,37 +114,23 @@ public class UpdateAnime extends AppCompatActivity implements Serializable {
         });
     }
 
-    public void onResume() {
-        super.onResume();
-        mdp.setText("");
-    }
-
     public void addData() {
         inputEmail = email.getText().toString();
-        inputMdp = mdp.getText().toString();
-        //TODO ajouter un confirm password
         inputName = nom.getText().toString();
-        inputPrenom = prenom.getText().toString();
         inputTotem = totem.getText().toString();
         inputTel = ngsm.getText().toString();
         inputDob = dob.getText().toString();
         inputUnite = curAnim.getUnite();
         inputSection = curAnim.getSection();
-        if (inputEmail.isEmpty() && inputName.isEmpty() && inputDob.isEmpty() && inputTel.isEmpty() && inputMdp.isEmpty() && inputPrenom.isEmpty() && inputTotem.isEmpty() && image == null) {
+        if (inputEmail.isEmpty() && inputName.isEmpty() && inputDob.isEmpty() && inputTel.isEmpty() && inputTotem.isEmpty() && image == null) {
             Toast.makeText(this, "Pour la mise à jour, veuillez entrer des données", Toast.LENGTH_SHORT).show();
         } else if (!(inputTel.isEmpty()) && inputTel.length() != 10) {
             ngsmTI.setError("Numéro invalide");
             ngsm.requestFocus();
             ngsm.setText("");
         } else {
-            if (image == null) {
-                anime.setUrlPhoto(curAnim.getUrlPhoto());
-            }
             if (inputName.isEmpty()) {
                 inputName = curAnim.getNom();
-            }
-            if (inputPrenom.isEmpty()) {
-                inputPrenom = curAnim.getPrenom();
             }
             if (inputTel.isEmpty()) {
                 inputTel = curAnim.getNgsm();
@@ -158,14 +141,14 @@ public class UpdateAnime extends AppCompatActivity implements Serializable {
             if (inputDob.isEmpty()) {
                 inputDob = curAnim.getDateOfBirth();
             }
-            if (inputPrenom.isEmpty()) {
-                inputPrenom = curAnim.getPrenom();
-            }
             if (inputEmail.isEmpty()) {
                 inputEmail = curAnim.getEmail();
             }
-            anime = new User(inputName, inputPrenom, inputTotem, inputEmail, inputTel, inputDob, inputUnite, inputSection);
+            anime = new User(inputName, null, inputTotem, inputEmail, inputTel, inputDob, inputUnite, inputSection);
             anime.setId(curAnim.getId());
+            if (image == null) {
+                anime.setUrlPhoto(curAnim.getUrlPhoto());
+            }
 
             if (!anime.getId().isEmpty()) {
                 if (image != null) {
