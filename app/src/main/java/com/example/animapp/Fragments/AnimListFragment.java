@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Activities.AddAnime;
+import com.example.animapp.Activities.AnimListSwipe;
 import com.example.animapp.Activities.UpdateAnime;
 import com.example.animapp.Database.UserHelper;
 import com.example.animapp.AnimListAdapter;
@@ -347,12 +348,23 @@ public class AnimListFragment extends Fragment implements Serializable {
                     .load(anim.getUrlPhoto())
                     .apply(RequestOptions.circleCropTransform())
                     .into(animPic);
+
+            animPic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), AnimListSwipe.class);
+                    intent.putExtra("currentAnim",anim);
+                    startActivity(intent);
+                }
+            });
+
         }else{
             Glide.with(getContext())
                     .load(R.drawable.logo)
                     .apply(RequestOptions.circleCropTransform())
                     .into(animPic);
         }
+
 
 
         animNom.setText(anim.getNom());

@@ -126,6 +126,17 @@ public class UserHelper {
             }
         });
 
+        CommentsHelper.getAllComments().whereEqualTo("idMoniteur",user.getId()).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if(queryDocumentSnapshots != null){
+                    for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                        doc.getReference().update("monitPicUrl",user.getUrlPhoto());
+                    }
+                }
+            }
+        });
+
     }
 
     //Récupère les animés du moniteur

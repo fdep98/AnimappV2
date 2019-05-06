@@ -5,28 +5,28 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.animapp.Model.User;
 import com.example.animapp.TouchImageView;
 import com.example.animapp.animapp.R;
 
-public class ProfilPicSwipe extends AppCompatActivity {
+public class AnimListSwipe extends AppCompatActivity {
 
     private TouchImageView postImg;
-    private User currentUser;
+    private User currentAnim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profil_pic_swipe);
-        postImg = findViewById(R.id.postImg);
+        setContentView(R.layout.activity_anim_list_swipe);
+
+        postImg = findViewById(R.id.animImg);
 
 
 
         if(getIntent().getExtras()!=null){
-            currentUser = (User) getIntent().getSerializableExtra("currentUser");
+            currentAnim = (User) getIntent().getSerializableExtra("currentAnim");
             Glide.with(getApplicationContext())
-                    .load(currentUser.getUrlPhoto())
+                    .load(currentAnim.getUrlPhoto())
                     .into(postImg);
 
         }

@@ -49,13 +49,14 @@ public class BottomSheetGallery extends Fragment {
     private ArrayList<String> listImages;
     private ArrayList<Uri> listUriImages = new ArrayList<>();
     private GridView grilleImages;
-    public static String urlImgSelected;
+    public String urlImgSelected;
     FirebaseStorage storage;
     StorageReference storageRef;
     ProgressDialog progressDialog;
     public FirebaseAuth mAuth;
     FirebaseUser currentUser;
-    String imgUrl;
+    public static String imgUrl;
+
 
 
     @Override
@@ -95,9 +96,6 @@ public class BottomSheetGallery extends Fragment {
                     @Override
                     public void onClick(View v) {
                         putImageInDb(listUriImages.get(position));
-                        Intent intent = new Intent("broadCastName");
-                        intent.putExtra("From_Gallery",imgUrl);
-                        getActivity().sendBroadcast(intent);
                         dialog.dismiss();
                     }
                 });
@@ -202,6 +200,7 @@ public class BottomSheetGallery extends Fragment {
     }
 
     public void putImageInDb(Uri image){
+
         progressDialog.setTitle("Téléchargement");
         progressDialog.setMessage("Téléchargement de l'image...");
         progressDialog.show();
@@ -217,10 +216,13 @@ public class BottomSheetGallery extends Fragment {
                             @Override
                             public void onSuccess(Uri uri) {
                                 imgUrl = uri.toString();
-
+                                Intent intent = new Intent("broadCastName");
+                                intent.putExtra("From_Gallery",imgUrl);
+                                getActivity().sendBroadcast(intent);
                             }
                         });
                         progressDialog.dismiss();
+
                     }
                 });
     }

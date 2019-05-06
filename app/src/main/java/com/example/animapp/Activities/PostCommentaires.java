@@ -209,6 +209,7 @@ public class PostCommentaires extends AppCompatActivity {
                 fromGal = b.getString("From_Gallery");
                 fromCam = b.getString("From_Camera");
                 Toast.makeText(PostCommentaires.this, fromCam, Toast.LENGTH_SHORT).show();
+                Toast.makeText(PostCommentaires.this, fromGal, Toast.LENGTH_SHORT).show();
                 //imageFromCam = (Uri) b.get("From_Camera");
                 //imageFromGallery = (Uri) b.get("From_Gallery");
             }
@@ -268,9 +269,8 @@ public class PostCommentaires extends AppCompatActivity {
 
                                     }
                                 }else{
-                                    if(post.getIdPost().equals(PostListAdapter.postId)){
+                                    if(post.getIdPost() != null && post.getIdPost().equals(PostListAdapter.postId)){
                                         com.add(post);
-
                                     }
                                 }
 
@@ -282,9 +282,10 @@ public class PostCommentaires extends AppCompatActivity {
                             public void onClick(View v) {
                                 date = new Date();
                                 currentDate = df.format(date);
-
-                                if (!commentaire.getText().toString().isEmpty() || (fromOnlineGal != null || fromCam != null || fromGal != null)) {
-                                    PostCommentaire newComment;
+                                PostCommentaire newComment = new PostCommentaire();
+                                if((fromOnlineGal == null && fromCam == null && fromGal == null) && commentaire.getText().toString().isEmpty()){
+                                    Toast.makeText(PostCommentaires.this, "Veuillez entrer un message avant de commenter", Toast.LENGTH_SHORT).show();
+                                }else if ((fromOnlineGal != null || fromCam != null || fromGal != null) || !commentaire.getText().toString().isEmpty()){
                                     if (fromOnlineGal != null) {
                                         newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(), currentDate, commentaire.getText().toString(), postId, fromOnlineGal);
                                         newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
@@ -294,12 +295,11 @@ public class PostCommentaires extends AppCompatActivity {
                                     }else if (fromCam != null) {
                                         newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(), currentDate, commentaire.getText().toString(), postId, fromCam);
                                         newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
-                                    }else{
-                                        newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(), currentDate, commentaire.getText().toString(), postId);
-                                        newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
+                                    }else if(!commentaire.getText().toString().isEmpty()){
+                                            newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(), currentDate, commentaire.getText().toString(), postId);
+                                            newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
                                     }
                                     com.add(newComment);
-
                                     CommentsHelper.createUserComment(newComment).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
@@ -309,9 +309,12 @@ public class PostCommentaires extends AppCompatActivity {
                                         }
                                     });
                                     commentaire.setText("");
-                                }else{
-                                    Toast.makeText(PostCommentaires.this, "Veuillez entrer un commentaire avant l'envoi", Toast.LENGTH_SHORT).show();
+
+                                /*}else{
+                                    Toast.makeText(PostCommentaires.this, "Veuillez entrer un commentaire avant l'envoi", Toast.LENGTH_SHORT).show();*/
                                 }
+
+
 
                                 usersComs = com;
                                 nbrCommentaire = usersComs.size();

@@ -215,10 +215,13 @@ public class ProfilFragment extends Fragment {
                                         .apply(RequestOptions.circleCropTransform())
                                         .into(IVphoto);
                             }else{
-                                Glide.with(getActivity())
-                                        .load(user.getUrlPhoto())
-                                        .apply(RequestOptions.circleCropTransform())
-                                        .into(IVphoto);
+                                if(getActivity() != null){
+                                    Glide.with(getActivity())
+                                            .load(user.getUrlPhoto())
+                                            .apply(RequestOptions.circleCropTransform())
+                                            .into(IVphoto);
+                                }
+
                             }
 
                             TVnom.setText(user.getNom());

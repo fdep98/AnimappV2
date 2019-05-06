@@ -44,13 +44,14 @@ public class BottomSheetCamera extends Fragment {
     private ImageView imgPicked;
     public static final int CAMERA_INTENT = 14;
     Uri image;
-    String imgUrl;
+    public String imgUrl;
     FloatingActionButton camera;
     FirebaseStorage storage;
     StorageReference storageRef;
     ProgressDialog progressDialog;
     public FirebaseAuth mAuth;
     FirebaseUser currentUser;
+    String imageUrl;
 
 
     public BottomSheetCamera() {
@@ -95,9 +96,7 @@ public class BottomSheetCamera extends Fragment {
             image= getImageUri(getContext(), imageBitmap);
             Picasso.get().load(image).into(imgPicked);
             putImageInDb(image);
-            Intent intent = new Intent("broadCastName");
-            intent.putExtra("From_Camera",imgUrl);
-            getActivity().sendBroadcast(intent);
+
 
         }
     }
@@ -118,10 +117,13 @@ public class BottomSheetCamera extends Fragment {
                             @Override
                             public void onSuccess(Uri uri) {
                                imgUrl = uri.toString();
-
+                                Intent intent = new Intent("broadCastName");
+                                intent.putExtra("From_Camera",imgUrl);
+                                getActivity().sendBroadcast(intent);
                             }
                         });
                         progressDialog.dismiss();
+
                     }
                 });
     }

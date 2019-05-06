@@ -72,7 +72,7 @@
                 android:layout_height="44dp"
                 android:layout_gravity="center"
                 android:background="@color/blanc"
-                android:inputType="textEmailAddress"
+                android:inputType="textPassword"
                 android:textAlignment="viewStart"
                 tools:ignore="RtlCompat" />
         </android.support.design.widget.TextInputLayout>
