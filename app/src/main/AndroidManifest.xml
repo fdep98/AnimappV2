@@ -29,6 +29,7 @@
         <activity android:name="com.example.animapp.Activities.MediaActvity" />
         <activity android:name="com.example.animapp.Activities.PostCommentaires" />
         <activity android:name="com.example.animapp.Activities.UpdateProfil" />
+        <activity android:name="com.example.animapp.Activities.UpdateAnime" />
         <activity android:name="com.example.animapp.Activities.DeleteAccount" />
         <activity android:name="com.example.animapp.Activities.postMessage" />
         <activity android:name="com.example.animapp.MainFragmentActivity" />

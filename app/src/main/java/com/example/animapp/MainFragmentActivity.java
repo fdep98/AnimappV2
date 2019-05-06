@@ -47,10 +47,12 @@ public class MainFragmentActivity extends AppCompatActivity implements BottomNav
             int value2 = extras.getInt("FROM_UPDATE_ACCOUT",9);
             int value3 = extras.getInt("FROM_DELETE_ACCOUNT",8);
             int value4 = extras.getInt("FROM_ANIMLIST",7);
+            int value5 = extras.getInt("FROM_UPDATE_ANIM",20);
             viewPager.setCurrentItem(value1);
             viewPager.setCurrentItem(value2);
             viewPager.setCurrentItem(value3);
             viewPager.setCurrentItem(value4);
+            viewPager.setCurrentItem(value5);
         }
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
