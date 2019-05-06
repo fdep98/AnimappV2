@@ -90,6 +90,16 @@
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:id="@+id/reset_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="reset"
+            android:text="J'ai oublié mon mot de passe"
+            android:textColor="@color/bleu"
+            android:textStyle="italic" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
