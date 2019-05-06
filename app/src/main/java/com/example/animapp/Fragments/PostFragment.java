@@ -158,7 +158,10 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
             }
         });
-
+        getActivity().finish();
+        getActivity().overridePendingTransition( 0, 0);
+        startActivity(getActivity().getIntent());
+        getActivity().overridePendingTransition( 0, 0);
         refreshLayout.setRefreshing(false);
     }
 
