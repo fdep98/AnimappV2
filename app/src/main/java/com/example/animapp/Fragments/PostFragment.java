@@ -62,15 +62,12 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     FirebaseFirestore firestoreDb; //instance de la BDD firestore
     private ActionMode actionMode;
     SwipeRefreshLayout refreshLayout;
+    public static String currentUserId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
-        if(mAuth != null){
-            currentUser = mAuth.getCurrentUser();
-        }
-
         firestoreDb = FirebaseFirestore.getInstance();
     }
 
@@ -113,15 +110,23 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     startActivity(new Intent(getActivity(), postMessage.class));
                 }
             });
-        setDocumentId();
+
 
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-       // getActivity().finish();
-       // startActivity(getActivity().getIntent());
+    public void onStart() {
+        super.onStart();
+        if(mAuth != null){
+            currentUser = mAuth.getCurrentUser();
+            currentUserId = currentUser.getUid();
+        }else{
+            Toast.makeText(getActivity(), "Problème de connexion", Toast.LENGTH_SHORT).show();
+        }
+        // Check if user is signed in (non-null) and update UI accordingly.
+        if(currentUser != null){
+            setDocumentId();
+        }
     }
 
     @Override
@@ -139,7 +144,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
                         }
                         postList = postDoc;
-                        adapter = new PostListAdapter(postList,getContext());
+                        adapter = new PostListAdapter(postList,getActivity());
                         vue.setAdapter(adapter);
                         adapter.setOnClickListener(new PostListAdapter.OnClickListener() {
                             @Override
@@ -273,10 +278,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         final List<Integer> selectedItemPositions = adapter.getSelectedItems();
 
         for (int i = 0; i <= selectedItemPositions.size() - 1; i++) {
-            if(postList.get(i).getIdMoniteur().equals(currentUser.getUid())){
+            if(postList.get(i).getIdMoniteur().equals(currentUserId)){
                 adapter.deletePost(selectedItemPositions.get(i));
-            }else{
-                Toast.makeText(getContext(), "Vous devez être l'auteur du post pour le supprimer\n", Toast.LENGTH_SHORT).show();
             }
         }
         adapter.notifyDataSetChanged();

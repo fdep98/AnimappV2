@@ -93,8 +93,7 @@ public class PostCommentaires extends AppCompatActivity {
     Date date;
     Post postSend;
     ActionMode actionMode;
-    FirebaseStorage storage;
-    StorageReference storageRef;
+
     Uri imageFromCam, imageFromGallery;
 
     BottomSheetBehavior sheetBehavior;  // provides callbacks and make the BottomSheet work with CoordinatorLayout.
@@ -116,7 +115,8 @@ public class PostCommentaires extends AppCompatActivity {
     private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy"+" à "+ "HH:mm:ss");
 
     String fromCam,fromGal, fromOnlineGal;
-    ProgressDialog progressDialog;
+    public static String currentUserId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,13 +128,12 @@ public class PostCommentaires extends AppCompatActivity {
         commentairesRecyclerView = findViewById(R.id.recycler_view);
         commentaire = findViewById(R.id.commentaire);
 
+
         commenter = findViewById(R.id.commenter);
         add = findViewById(R.id.add);
 
-        storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReference();
-        progressDialog = new ProgressDialog(PostCommentaires.this);
-
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
         /**
          * bottom sheet state change listener
          * we are changing button text when sheet changed state
@@ -187,9 +186,6 @@ public class PostCommentaires extends AppCompatActivity {
             }
         });
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-
 
         postId = PostListAdapter.postId;
 
@@ -209,12 +205,11 @@ public class PostCommentaires extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Bundle b = intent.getExtras();
-                String imgUrlOnlineGal = b.getString("From_Online_Gallery");
-                String imgUrlGal = b.getString("From_Gallery");
-                fromOnlineGal = imgUrlOnlineGal;
-                fromGal = imgUrlGal;
-                imageFromCam = (Uri) b.get("From_Camera");
-                imageFromGallery = (Uri) b.get("From_Gallery");
+                fromOnlineGal = b.getString("From_Online_Gallery");
+                fromGal = b.getString("From_Gallery");
+
+                //imageFromCam = (Uri) b.get("From_Camera");
+                //imageFromGallery = (Uri) b.get("From_Gallery");
             }
         };
 
@@ -283,12 +278,18 @@ public class PostCommentaires extends AppCompatActivity {
                                 date = new Date();
                                 currentDate = df.format(date);
 
-                                if (!commentaire.getText().toString().isEmpty() || fromOnlineGal != null) {
+                                if (!commentaire.getText().toString().isEmpty() || fromOnlineGal != null || fromCam != null || fromGal != null) {
                                     PostCommentaire newComment;
                                     if (fromOnlineGal != null) {
                                         newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(), currentDate, commentaire.getText().toString(), postId, fromOnlineGal);
                                         newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
-                                    } else {
+                                    } else if (fromGal != null) {
+                                        newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(), currentDate, commentaire.getText().toString(), postId, fromGal);
+                                        newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
+                                    } else  if (fromCam != null) {
+                                        newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(), currentDate, commentaire.getText().toString(), postId, fromCam);
+                                        newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
+                                    }else{
                                         newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(), currentDate, commentaire.getText().toString(), postId);
                                         newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
                                     }
@@ -303,11 +304,7 @@ public class PostCommentaires extends AppCompatActivity {
                                         }
                                     });
                                     commentaire.setText("");
-                                } else if (!commentaire.getText().toString().isEmpty() || imageFromCam != null) {
-                                    putImageInDb(imageFromCam, commentaire.getText().toString(), com);
-                                } else if (!commentaire.getText().toString().isEmpty() || imageFromGallery != null) {
-                                    putImageInDb(imageFromGallery, commentaire.getText().toString(), com);
-                                } else if (commentaire.getText().toString().isEmpty() && imageFromGallery == null && imageFromCam == null && fromOnlineGal.isEmpty()) {
+                                }else if(commentaire.getText().toString().isEmpty() && imageFromGallery == null && imageFromCam == null && fromOnlineGal.isEmpty()) {
                                     Toast.makeText(PostCommentaires.this, "Veuillez entrer un commentaire avant l'envoi", Toast.LENGTH_SHORT).show();
                                 }
 
@@ -355,7 +352,13 @@ public class PostCommentaires extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        //currentUser = mAuth.getCurrentUser();
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth != null){
+            currentUser = mAuth.getCurrentUser();
+        }
+        if(currentUser != null){
+            currentUserId = currentUser.getUid();
+        }
     }
 
     @Override
@@ -421,7 +424,7 @@ public class PostCommentaires extends AppCompatActivity {
         final List<Integer> selectedItemPositions = commentaireAdapter.getSelectedItems();
 
         for (int i = 0; i <= selectedItemPositions.size() - 1; i++) {
-            if(usersComs.get(i).getIdMoniteur().equals(currentUser.getUid())){
+            if(usersComs.get(i).getIdMoniteur().equals(currentUserId)){
                 commentaireAdapter.deleteComment(selectedItemPositions.get(i));
             }else{
                 Toast.makeText(this, "Vous devez être l'auteur du commentaire pour le supprimer", Toast.LENGTH_SHORT).show();
@@ -456,51 +459,6 @@ public class PostCommentaires extends AppCompatActivity {
         BottomSheetUtils.setupViewPager(bottomSheetViewPager);
     }
 
-    public void putImageInDb(Uri image, String msg,List<PostCommentaire> list){
-        progressDialog.setTitle("Téléchargement");
-        progressDialog.setMessage("Téléchargement de l'image...");
-        progressDialog.show();
-        final long currentTime = System.currentTimeMillis();
-
-        storageRef.child(currentUser.getUid()).child(currentTime + "." + getFileExtension(image))
-                .putFile(image)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        storageRef.child(currentUser.getUid()).child(currentTime + "." + getFileExtension(image))
-                                .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                PostCommentaire newComment = new PostCommentaire(currentMonit.getNom(), currentMonit.getId(),currentDate,msg,postId,uri.toString());
-                                newComment.setMonitPicUrl(currentMonit.getUrlPhoto());
-                                list.add(newComment);
-                               // ImageGalerie newImage = new ImageGalerie(currentUser.getUid(), uri.toString(), currentDate);
-                               /* ImageHelper.addImage(newImage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        if (documentReference != null) {
-                                            documentReference.update("imgId", documentReference.getId());
-                                        }
-
-                                    }
-                                });*/
-                                CommentsHelper.createUserComment(newComment).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        if(documentReference != null){
-                                            documentReference.update("idCommentaire",documentReference.getId());
-                                        }
-                                        progressDialog.dismiss();
-                                        commentaire.setText("");
-                                    }
-                                });
-
-                            }
-                        });
-                    }
-                });
-    }
     private String getFileExtension(Uri uri) {
         ContentResolver cR = this.getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();

@@ -13,6 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+
         <com.sdsmdg.harjot.vectormaster.VectorMasterView
             android:id="@+id/heart_vector"
             android:layout_width="35dp"

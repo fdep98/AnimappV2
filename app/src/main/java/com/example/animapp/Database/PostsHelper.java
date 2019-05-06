@@ -1,6 +1,9 @@
 package com.example.animapp.Database;
 
 
+import android.content.Context;
+import android.widget.Toast;
+
 import com.example.animapp.Model.Post;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -54,10 +57,10 @@ public class PostsHelper {
     }
 
 
-    public static void deletePost(Post post) {
+    public static void deletePost(Post post, String idMoniteur) {
         PostsHelper.getPostCollection()
                 .whereEqualTo("id",post.getId())
-                .whereEqualTo("idMoniteur",post.getIdMoniteur())
+                .whereEqualTo("idMoniteur",idMoniteur)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {

@@ -2,6 +2,8 @@ package com.example.animapp.BottomSheetNavFragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,6 +18,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
@@ -26,6 +29,12 @@ import com.bumptech.glide.Glide;
 import com.example.animapp.Activities.PostCommentaires;
 import com.example.animapp.Model.ImageGalerie;
 import com.example.animapp.animapp.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 
@@ -41,7 +50,12 @@ public class BottomSheetGallery extends Fragment {
     private ArrayList<Uri> listUriImages = new ArrayList<>();
     private GridView grilleImages;
     public static String urlImgSelected;
-
+    FirebaseStorage storage;
+    StorageReference storageRef;
+    ProgressDialog progressDialog;
+    public FirebaseAuth mAuth;
+    FirebaseUser currentUser;
+    String imgUrl;
 
 
     @Override
@@ -53,6 +67,13 @@ public class BottomSheetGallery extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         grilleImages = view.findViewById(R.id.grilleImages);
+
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+        progressDialog = new ProgressDialog(getContext());
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
         grilleImages.setAdapter(new GrilleImagesAdapter(getActivity()));
         grilleImages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,20 +87,22 @@ public class BottomSheetGallery extends Fragment {
                 dialog.setTitle("Vous avez choisi...");
                 ImageView imgPicked = dialog.findViewById(R.id.imgPicked);
                 MaterialButton ok = dialog.findViewById(R.id.ok);
-                //imgPicked.setImageURI(Uri.fromFile(new File(listImages.get(position))));
+                dialog.show();
                 Picasso.get().load(listUriImages.get(position)).into(imgPicked);
+                //imgPicked.setImageURI(Uri.fromFile(new File(listImages.get(position))));
 
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        putImageInDb(listUriImages.get(position));
                         Intent intent = new Intent("broadCastName");
-                        intent.putExtra("From_Gallery",listUriImages.get(position));
+                        intent.putExtra("From_Gallery",imgUrl);
                         getActivity().sendBroadcast(intent);
                         dialog.dismiss();
                     }
                 });
 
-                dialog.show();
+
                 //Toast.makeText(getActivity(), String.valueOf(listUriImages), Toast.LENGTH_SHORT).show();
             }
         });
@@ -176,6 +199,35 @@ public class BottomSheetGallery extends Fragment {
             Collections.reverse(listImages);
             return listUriImages;
         }
+    }
+
+    public void putImageInDb(Uri image){
+        progressDialog.setTitle("Téléchargement");
+        progressDialog.setMessage("Téléchargement de l'image...");
+        progressDialog.show();
+        final long currentTime = System.currentTimeMillis();
+        storageRef.child(currentUser.getUid()).child(currentTime + "." + getFileExtension(image))
+                .putFile(image)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        storageRef.child(currentUser.getUid()).child(currentTime + "." + getFileExtension(image))
+                                .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                imgUrl = uri.toString();
+
+                            }
+                        });
+                    }
+                });
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getActivity().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
     }
 
 }
